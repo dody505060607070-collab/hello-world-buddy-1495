@@ -76,8 +76,6 @@ export function PropertyMap({
       }).addTo(map);
       L.control.zoom({ position: "bottomleft" }).addTo(map);
       L.control.scale({ position: "bottomright", imperial: false }).addTo(map);
-      map.on("click", () => map.scrollWheelZoom.enable());
-      map.on("mouseout", () => map.scrollWheelZoom.disable());
       mapRef.current = map;
       layerRef.current = L.layerGroup().addTo(map);
 
