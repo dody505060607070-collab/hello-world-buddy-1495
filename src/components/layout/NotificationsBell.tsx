@@ -50,6 +50,15 @@ export function NotificationsBell() {
         void qc.invalidateQueries({ queryKey: ["my-notifications", userId] });
         void qc.invalidateQueries({ queryKey: ["notifications-center"] });
         toast(notification.title, { description: notification.body ?? undefined });
+        try {
+          const AudioContextCtor = window.AudioContext ?? (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+          if (AudioContextCtor) {
+            const context = new AudioContextCtor(); const oscillator = context.createOscillator(); const gain = context.createGain();
+            oscillator.frequency.setValueAtTime(880, context.currentTime); oscillator.frequency.exponentialRampToValueAtTime(1320, context.currentTime + 0.18);
+            gain.gain.setValueAtTime(0.22, context.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.45);
+            oscillator.connect(gain); gain.connect(context.destination); oscillator.start(); oscillator.stop(context.currentTime + 0.45);
+          }
+        } catch { /* قد يمنع المتصفح الصوت قبل أول تفاعل */ }
         if ("Notification" in window && Notification.permission === "granted") new Notification(notification.title, { body: notification.body ?? "لديك إشعار جديد" });
       })
       .subscribe();

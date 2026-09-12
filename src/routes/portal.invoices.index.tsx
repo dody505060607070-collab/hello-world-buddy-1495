@@ -26,7 +26,7 @@ const statusChip: Record<string, { label: string; cls: string }> = {
   paid: { label: "مدفوعة", cls: "bg-emerald-50 text-emerald-700" },
   sent: { label: "مرسلة", cls: "bg-amber-50 text-amber-700" },
   unpaid: { label: "بانتظار السداد", cls: "bg-amber-50 text-amber-700" },
-  overdue: { label: "متأخرة", cls: "bg-red-50 text-red-700" },
+  overdue: { label: "متأخرة", cls: "bg-destructive/10 text-destructive" },
   cancelled: { label: "ملغاة", cls: "bg-muted text-muted-foreground" },
 };
 
