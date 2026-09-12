@@ -20,6 +20,7 @@ import { Field, inputClass, textareaClass } from "@/components/kit/Modal";
 import { PageHero } from "@/components/kit/PageHero";
 import { supabase } from "@/integrations/supabase/client";
 import { priorityLabels, taskStatusLabels } from "@/lib/labels";
+import { notifyTaskNow } from "@/lib/tasks.functions";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/task-form")({
@@ -238,13 +239,29 @@ function TaskFormPage() {
           .in("user_id", toRemove);
         if (error) throw error;
       }
-      return taskId;
+      // إرسال فوري على واتساب للمكلّفين الجدد (أو كل المكلّفين عند الإنشاء).
+      const notifyIds = id ? toAdd : assignees;
+      let notified: { sent: number; failed: number; skipped: number } | null = null;
+      if (taskId && notifyIds.length) {
+        try {
+          const res = await notifyTaskNow({ data: { taskId, userIds: notifyIds } });
+          notified = { sent: res.sent, failed: res.failed, skipped: res.skipped };
+        } catch {
+          notified = null;
+        }
+      }
+      return { taskId, notified };
     },
-    onSuccess: (newId) => {
+    onSuccess: ({ taskId: newId, notified }) => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       queryClient.invalidateQueries({ queryKey: ["nav-counts"] });
       queryClient.invalidateQueries({ queryKey: ["task-assignees", newId] });
       toast.success(id ? "تم تحديث المهمة" : "تم إنشاء المهمة وتكليف الفريق");
+      if (notified) {
+        if (notified.sent > 0) toast.success(`تم إرسال المهمة على واتساب لـ ${notified.sent} موظف`);
+        if (notified.failed > 0) toast.error(`تعذّر إرسال واتساب لـ ${notified.failed} موظف`);
+        if (notified.skipped > 0) toast.warning(`${notified.skipped} موظف بدون رقم واتساب مفعّل`);
+      }
       if (!id && newId) navigate({ to: "/task-form", search: { id: newId } });
     },
     onError: (err) => toast.error(err instanceof Error ? err.message : "تعذّر الحفظ"),
