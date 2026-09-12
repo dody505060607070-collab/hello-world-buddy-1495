@@ -49,7 +49,9 @@ const EMOJIS = ["👍", "🙏", "🔥", "✅", "❤️", "😀", "😅", "🎉",
 function TeamChatPage() {
   const qc = useQueryClient();
   const { userId, isSuperAdmin } = useCurrentUser();
-  const [activeChannel, setActiveChannel] = useState<"rashoudi" | "mithraa" | "shared">("rashoudi");
+  const { mithraaUser, ready } = useMithraaSession();
+  const chatUserId = mithraaUser?.id;
+  const [activeChannel, setActiveChannel] = useState<"rashoudi" | "shared">("rashoudi");
   const [body, setBody] = useState("");
   const [search, setSearch] = useState("");
   const [replyTo, setReplyTo] = useState<Msg | null>(null);
@@ -60,10 +62,11 @@ function TeamChatPage() {
   const bottom = useRef<HTMLDivElement>(null);
 
   const messages = useQuery({
-    queryKey: ["group-messages", activeChannel],
+    queryKey: ["group-messages", activeChannel, chatUserId],
+    enabled: Boolean(chatUserId),
     refetchInterval: 4000,
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await mithraa
         .from("group_messages")
         .select("id, sender_id, body, reply_to, is_pinned, deleted_at, created_at, channel, attachment_path, attachment_name, edited_at, sender:sender_id(full_name, job_title, avatar_url)")
         .eq("channel", activeChannel)
@@ -75,31 +78,33 @@ function TeamChatPage() {
   });
 
   const staff = useQuery({
-    queryKey: ["profiles", "team-chat", activeChannel],
+    queryKey: ["profiles", "team-chat", activeChannel, chatUserId],
+    enabled: Boolean(chatUserId),
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await mithraa
         .from("profiles")
         .select("id, full_name, job_title, avatar_url, org")
         .eq("is_active", true)
-        .in("org", activeChannel === "shared" ? ["rashoudi", "mithraa"] : [activeChannel])
+        .in("org", activeChannel === "shared" ? ["rashoudi", "mithraa"] : ["rashoudi"])
         .order("full_name");
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []) as { id: string; full_name: string; job_title: string | null; avatar_url: string | null; org: string }[];
     },
   });
 
-  // بث لحظي لرسائل المجموعة
+  // بث لحظي لرسائل المجموعة من قاعدة مثراء
   useEffect(() => {
-    const channel = supabase
+    if (!chatUserId) return;
+    const channel = mithraa
       .channel("group-messages-live")
       .on("postgres_changes", { event: "*", schema: "public", table: "group_messages" }, () => {
-        qc.invalidateQueries({ queryKey: ["group-messages", activeChannel] });
+        qc.invalidateQueries({ queryKey: ["group-messages", activeChannel, chatUserId] });
       })
       .subscribe();
     return () => {
-      void supabase.removeChannel(channel);
+      void mithraa.removeChannel(channel);
     };
-  }, [qc, activeChannel]);
+  }, [qc, activeChannel, chatUserId]);
 
   const all = messages.data ?? [];
   const byId = useMemo(() => new Map(all.map((m) => [m.id, m])), [all]);
