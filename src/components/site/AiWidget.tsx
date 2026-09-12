@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Loader2, Send, Sparkles, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import markAsset from "@/assets/rushdy-logo-transparent.png.asset.json";
+import markAsset from "@/assets/rashudi-logo.webp.asset.json";
 import { askPublicAi } from "@/lib/ai.functions";
 import { cn } from "@/lib/utils";
 

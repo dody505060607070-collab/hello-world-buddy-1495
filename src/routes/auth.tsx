@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Building2, LockKeyhole, Mail, ShieldCheck, UserRound } from "lucide-react";
 import { toast } from "sonner";
 
-import logoAsset from "@/assets/rushdy-logo-transparent.png.asset.json";
+import logoAsset from "@/assets/rashudi-logo.webp.asset.json";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
