@@ -10,6 +10,8 @@ import { PageHero } from "@/components/kit/PageHero";
 import { PrimaryButton, inputClass } from "@/components/kit/Modal";
 import { useCurrentUser } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { mithraa } from "@/integrations/mithraa/client";
+import { signInToMithraa, signOutMithraa, useMithraaSession } from "@/integrations/mithraa/useMithraaSession";
 import { sendPushToUsers } from "@/lib/push.functions";
 import { cn } from "@/lib/utils";
 
@@ -47,7 +49,9 @@ const EMOJIS = ["👍", "🙏", "🔥", "✅", "❤️", "😀", "😅", "🎉",
 function TeamChatPage() {
   const qc = useQueryClient();
   const { userId, isSuperAdmin } = useCurrentUser();
-  const [activeChannel, setActiveChannel] = useState<"rashoudi" | "mithraa" | "shared">("rashoudi");
+  const { mithraaUser, ready } = useMithraaSession();
+  const chatUserId = mithraaUser?.id;
+  const [activeChannel, setActiveChannel] = useState<"rashoudi" | "shared">("rashoudi");
   const [body, setBody] = useState("");
   const [search, setSearch] = useState("");
   const [replyTo, setReplyTo] = useState<Msg | null>(null);
@@ -58,10 +62,11 @@ function TeamChatPage() {
   const bottom = useRef<HTMLDivElement>(null);
 
   const messages = useQuery({
-    queryKey: ["group-messages", activeChannel],
+    queryKey: ["group-messages", activeChannel, chatUserId],
+    enabled: Boolean(chatUserId),
     refetchInterval: 4000,
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await mithraa
         .from("group_messages")
         .select("id, sender_id, body, reply_to, is_pinned, deleted_at, created_at, channel, attachment_path, attachment_name, edited_at, sender:sender_id(full_name, job_title, avatar_url)")
         .eq("channel", activeChannel)
@@ -73,31 +78,33 @@ function TeamChatPage() {
   });
 
   const staff = useQuery({
-    queryKey: ["profiles", "team-chat", activeChannel],
+    queryKey: ["profiles", "team-chat", activeChannel, chatUserId],
+    enabled: Boolean(chatUserId),
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await mithraa
         .from("profiles")
         .select("id, full_name, job_title, avatar_url, org")
         .eq("is_active", true)
-        .in("org", activeChannel === "shared" ? ["rashoudi", "mithraa"] : [activeChannel])
+        .in("org", activeChannel === "shared" ? ["rashoudi", "mithraa"] : ["rashoudi"])
         .order("full_name");
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []) as { id: string; full_name: string; job_title: string | null; avatar_url: string | null; org: string }[];
     },
   });
 
-  // بث لحظي لرسائل المجموعة
+  // بث لحظي لرسائل المجموعة من قاعدة مثراء
   useEffect(() => {
-    const channel = supabase
+    if (!chatUserId) return;
+    const channel = mithraa
       .channel("group-messages-live")
       .on("postgres_changes", { event: "*", schema: "public", table: "group_messages" }, () => {
-        qc.invalidateQueries({ queryKey: ["group-messages", activeChannel] });
+        qc.invalidateQueries({ queryKey: ["group-messages", activeChannel, chatUserId] });
       })
       .subscribe();
     return () => {
-      void supabase.removeChannel(channel);
+      void mithraa.removeChannel(channel);
     };
-  }, [qc, activeChannel]);
+  }, [qc, activeChannel, chatUserId]);
 
   const all = messages.data ?? [];
   const byId = useMemo(() => new Map(all.map((m) => [m.id, m])), [all]);
@@ -115,29 +122,32 @@ function TeamChatPage() {
     mutationFn: async () => {
       const text = body.trim();
       if (!text) return;
+      if (!chatUserId) throw new Error("سجّل الدخول إلى الشات المشترك أولًا");
       if (editing) {
-        const { error } = await supabase
+        const { error } = await mithraa
           .from("group_messages")
           .update({ body: text, edited_at: new Date().toISOString() })
           .eq("id", editing.id);
         if (error) throw error;
         return;
       }
-      const { error } = await supabase.from("group_messages").insert({
-        sender_id: userId!,
+      const { error } = await mithraa.from("group_messages").insert({
+        sender_id: chatUserId,
         body: text,
         reply_to: replyTo?.id ?? null,
         channel: activeChannel,
       });
       if (error) throw error;
+
+      // الإشعارات المحلية للموظفين في قاعدة الرشودي فقط
       const mentions = text.match(/@([\p{L}\d_]+)/gu) ?? [];
-      const { data: staff } = await supabase
+      const { data: local } = await supabase
         .from("profiles")
         .select("id, full_name")
         .eq("is_active", true)
-        .in("org", activeChannel === "shared" ? ["rashoudi", "mithraa"] : [activeChannel]);
+        .eq("org", "rashoudi");
       if (mentions.length) {
-        const targets = (staff ?? []).filter(
+        const targets = (local ?? []).filter(
           (s) => s.id !== userId && mentions.some((m) => s.full_name.includes(m.slice(1))),
         );
         if (targets.length) {
@@ -151,7 +161,7 @@ function TeamChatPage() {
           );
         }
       }
-      const others = (staff ?? []).map((s) => s.id).filter((id) => id !== userId);
+      const others = (local ?? []).map((s) => s.id).filter((id) => id !== userId);
       if (others.length) {
         void sendPushToUsers({
           data: {
@@ -168,27 +178,31 @@ function TeamChatPage() {
       setBody("");
       setReplyTo(null);
       setEditing(null);
-      qc.invalidateQueries({ queryKey: ["group-messages", activeChannel] });
+      qc.invalidateQueries({ queryKey: ["group-messages", activeChannel, chatUserId] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
 
   const patch = useMutation({
     mutationFn: async ({ id, values }: { id: string; values: { is_pinned?: boolean; deleted_at?: string | null } }) => {
-      const { error } = await supabase.from("group_messages").update(values).eq("id", id);
+      const { error } = await mithraa.from("group_messages").update(values).eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["group-messages", activeChannel] }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["group-messages", activeChannel, chatUserId] }),
     onError: (e: Error) => toast.error(e.message),
   });
 
   const sendFile = async (file: File) => {
+    if (!chatUserId) {
+      toast.error("سجّل الدخول إلى الشات المشترك أولًا");
+      return;
+    }
     setUploading(true);
     try {
       const path = `team-chat/${Date.now()}-${file.name.replace(/[^\w.\-]/g, "_")}`;
       await uploadMedia("internal-files", path, file);
-      const { error } = await supabase.from("group_messages").insert({
-        sender_id: userId!,
+      const { error } = await mithraa.from("group_messages").insert({
+        sender_id: chatUserId,
         body: body.trim() || null,
         attachment_path: path,
         attachment_name: file.name,
@@ -198,7 +212,7 @@ function TeamChatPage() {
       if (error) throw error;
       setBody("");
       setReplyTo(null);
-      qc.invalidateQueries({ queryKey: ["group-messages", activeChannel] });
+      qc.invalidateQueries({ queryKey: ["group-messages", activeChannel, chatUserId] });
     } catch (e) {
       toast.error((e as Error).message);
     } finally {
@@ -224,16 +238,27 @@ function TeamChatPage() {
         stats={[{ value: String(all.length), label: "رسالة" }]}
       />
 
+      {ready && !chatUserId ? <MithraaSignIn /> : null}
+
       <div className="surface-card flex h-[calc(100dvh-15rem)] min-h-[560px] flex-col overflow-hidden">
-        <nav className="flex gap-2 overflow-x-auto border-b border-border p-3">
+        <nav className="flex items-center gap-2 overflow-x-auto border-b border-border p-3">
           {([
             ["rashoudi", "فريق الرشودي"],
             ["shared", "الشات المشترك"],
-            ...(isSuperAdmin ? [["mithraa", "فريق مثراء"]] : []),
-          ] as ["rashoudi" | "mithraa" | "shared", string][]).map(([value, label]) => (
+          ] as ["rashoudi" | "shared", string][]).map(([value, label]) => (
             <button key={value} type="button" onClick={() => setActiveChannel(value)} className={cn("shrink-0 rounded-full px-4 py-2 text-xs font-bold", activeChannel === value ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground")}>{label}</button>
           ))}
+          {chatUserId ? (
+            <button
+              type="button"
+              onClick={() => void signOutMithraa()}
+              className="ms-auto shrink-0 rounded-full border border-border px-3 py-1.5 text-[11px] text-muted-foreground"
+            >
+              فصل حساب الشات
+            </button>
+          ) : null}
         </nav>
+
         <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border bg-accent/40 px-4 py-3">
           <div className="relative min-w-0">
             <Search className="pointer-events-none absolute end-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -275,7 +300,7 @@ function TeamChatPage() {
 
         <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-4">
           {rows.map((m) => {
-            const mine = m.sender_id === userId;
+            const mine = m.sender_id === chatUserId;
             const parent = m.reply_to ? byId.get(m.reply_to) : null;
             return (
               <div key={m.id} className={cn("flex gap-2", mine ? "justify-start" : "justify-end")}>
@@ -435,5 +460,40 @@ function TeamChatPage() {
 
       <DirectChats />
     </>
+  );
+}
+
+/** بطاقة ربط حساب الشات المشترك (قاعدة مثراء). */
+function MithraaSignIn() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const submit = async () => {
+    setBusy(true);
+    try {
+      await signInToMithraa(email.trim(), password);
+      toast.success("تم ربط حساب الشات المشترك");
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="surface-card mb-4 space-y-3 p-4">
+      <h2 className="text-sm font-bold">ربط حساب الشات المشترك</h2>
+      <p className="text-[12.5px] text-muted-foreground">
+        سجّل دخولك ببيانات حسابك لدى منصة مثراء لعرض قناتي «فريق الرشودي» و«الشات المشترك».
+      </p>
+      <div className="grid gap-2 sm:grid-cols-[1fr_1fr_auto]">
+        <input className={inputClass} type="email" placeholder="البريد الإلكتروني" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input className={inputClass} type="password" placeholder="كلمة المرور" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <PrimaryButton onClick={() => void submit()} disabled={busy || !email || !password}>
+          {busy ? <Loader2 className="size-4 animate-spin" /> : "ربط"}
+        </PrimaryButton>
+      </div>
+    </div>
   );
 }
