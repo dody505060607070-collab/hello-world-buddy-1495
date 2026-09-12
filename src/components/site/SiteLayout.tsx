@@ -4,6 +4,7 @@ import { useEffect, useState, type ReactNode } from "react";
 
 import footerImage from "@/assets/bg-footer.jpg";
 import logoAsset from "@/assets/rashudi-logo.webp.asset.json";
+import logoWhiteAsset from "@/assets/rashudi-logo-white.png.asset.json";
 import { FloatingActions, ScrollProgress } from "@/components/site/Chrome";
 import { AiWidget } from "@/components/site/AiWidget";
 import { useSession } from "@/hooks/useAuth";
@@ -26,39 +27,9 @@ function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-primary-foreground/10 bg-primary text-primary-foreground shadow-md">
-      <div className="mx-auto flex h-[74px] max-w-6xl items-center justify-between gap-4 px-4">
-        <div className="flex items-center gap-2">
-          <Link
-            to="/list-property"
-            className="hidden rounded-lg border border-primary-foreground/35 px-4 py-2 text-[13px] font-semibold transition-colors hover:bg-primary-foreground/10 md:inline-flex"
-          >
-            اعرض | اطلب عقارك
-          </Link>
-          <ThemeToggle showLabel className="hidden border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 sm:inline-flex" />
-          <Link
-            to="/favorites"
-            aria-label="المفضلة"
-            className="grid size-9 place-items-center rounded-lg border border-primary-foreground/30 transition-colors hover:bg-primary-foreground/10"
-          >
-            <Heart className="size-4.5" />
-          </Link>
-          <Link
-            to={session ? "/dashboard" : "/auth"}
-            className="inline-flex shrink-0 whitespace-nowrap rounded-lg bg-gold px-3 py-2 text-[12px] font-bold text-gold-foreground transition-opacity hover:opacity-90 sm:px-4 sm:text-[13px]"
-          >
-            {session ? "لوحة التحكم" : "تسجيل الدخول"}
-          </Link>
-          <button
-            type="button"
-            onClick={() => setOpen((v) => !v)}
-            aria-label="القائمة"
-            className="grid size-9 place-items-center rounded-lg border border-primary-foreground/30 lg:hidden"
-          >
-            {open ? <X className="size-5" /> : <Menu className="size-5" />}
-          </button>
-        </div>
-
-        <nav className="hidden items-center gap-6 lg:flex">
+      <div className="relative mx-auto flex h-[74px] max-w-6xl items-center justify-between gap-4 px-4">
+        {/* يمين الشريط: روابط الصفحات */}
+        <nav className="hidden items-center gap-7 lg:flex">
           {navLinks.map((item) => (
             <Link
               key={item.to}
@@ -75,15 +46,52 @@ function SiteHeader() {
           ))}
         </nav>
 
-        <Link to="/" aria-label="الرشودي للعقارات">
+        {/* منتصف الشريط: الشعار الأبيض */}
+        <Link
+          to="/"
+          aria-label="الرشودي للعقارات"
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        >
           <img
-            src={logoAsset.url}
+            src={logoWhiteAsset.url}
             alt="الرشودي للعقارات"
-            width={680}
-            height={510}
-            className="h-12 w-auto transition-transform duration-300 hover:scale-105 md:h-14"
+            width={360}
+            height={112}
+            className="h-11 w-auto transition-transform duration-300 hover:scale-105 md:h-14"
           />
         </Link>
+
+        {/* يسار الشريط: زر اعرض/اطلب + أدوات */}
+        <div className="flex items-center gap-2">
+          <Link
+            to="/list-property"
+            className="inline-flex shrink-0 whitespace-nowrap rounded-full border border-primary-foreground/40 px-4 py-2 text-[13px] font-semibold transition-colors hover:bg-primary-foreground/10"
+          >
+            اعرض | اطلب عقارك
+          </Link>
+          <ThemeToggle className="hidden border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 sm:inline-flex" />
+          <Link
+            to="/favorites"
+            aria-label="المفضلة"
+            className="hidden size-9 place-items-center rounded-full border border-primary-foreground/30 transition-colors hover:bg-primary-foreground/10 sm:grid"
+          >
+            <Heart className="size-4.5" />
+          </Link>
+          <Link
+            to={session ? "/dashboard" : "/auth"}
+            className="hidden shrink-0 whitespace-nowrap rounded-full bg-gold px-4 py-2 text-[13px] font-bold text-gold-foreground transition-opacity hover:opacity-90 md:inline-flex"
+          >
+            {session ? "لوحة التحكم" : "تسجيل الدخول"}
+          </Link>
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="القائمة"
+            className="grid size-9 place-items-center rounded-full border border-primary-foreground/30 lg:hidden"
+          >
+            {open ? <X className="size-5" /> : <Menu className="size-5" />}
+          </button>
+        </div>
       </div>
 
       {open ? (
