@@ -12,12 +12,12 @@ import { publicPropertiesQuery } from "@/lib/site-data";
 export const Route = createFileRoute("/favorites")({
   head: () => ({
     meta: [
-      { title: "عقاراتي المفضلة | مثراء العقارية" },
+      { title: "عقاراتي المفضلة | الرشودي للعقارات" },
       {
         name: "description",
-        content: "العقارات التي حفظتها من موقع مثراء العقارية في بريدة لمتابعتها ومقارنتها لاحقاً.",
+        content: "العقارات التي حفظتها من موقع الرشودي للعقارات في بريدة لمتابعتها ومقارنتها لاحقاً.",
       },
-      { property: "og:title", content: "عقاراتي المفضلة | مثراء العقارية" },
+      { property: "og:title", content: "عقاراتي المفضلة | الرشودي للعقارات" },
       { property: "og:description", content: "قائمة العقارات المحفوظة على جهازك." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

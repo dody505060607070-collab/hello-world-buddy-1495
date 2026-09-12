@@ -37,9 +37,9 @@ type Row = {
 export const Route = createFileRoute("/_authenticated/owners/")({
   head: () => ({
     meta: [
-      { title: "الملاك | مثراء العقارية" },
+      { title: "الملاك | الرشودي للعقارات" },
       { name: "description", content: "سجل الملاك وبيانات التواصل والعقارات والعقود المرتبطة بهم." },
-      { property: "og:title", content: "الملاك | مثراء العقارية" },
+      { property: "og:title", content: "الملاك | الرشودي للعقارات" },
       { property: "og:description", content: "سجل الملاك وبيانات التواصل والعقارات المرتبطة." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

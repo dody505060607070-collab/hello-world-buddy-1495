@@ -3,7 +3,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { Bell, ChevronDown, LogOut, Menu, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
-import logoAsset from "@/assets/mithra-logo.png.asset.json";
+import logoAsset from "@/assets/rushdy-logo-transparent.png.asset.json";
 import { navGroups } from "@/data/nav";
 import { signOut, useCurrentUser } from "@/hooks/useAuth";
 import { navCountsQuery } from "@/lib/counts";
@@ -148,7 +148,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         >
           <img
             src={logoAsset.url}
-            alt="مثراء العقارية"
+            alt="الرشودي للعقارات"
             width={1152}
             height={576}
             className="h-9 w-auto md:h-[96px]"

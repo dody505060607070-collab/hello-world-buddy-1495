@@ -18,12 +18,12 @@ export const Route = createFileRoute("/_authenticated/employee-form")({
   }),
   head: () => ({
     meta: [
-      { title: "بيانات الموظف والصلاحيات | مثراء العقارية" },
+      { title: "بيانات الموظف والصلاحيات | الرشودي للعقارات" },
       {
         name: "description",
         content: "نموذج الموظف الكامل: البيانات الأساسية، بيانات الدخول، الصلاحيات والملاحظات الإدارية.",
       },
-      { property: "og:title", content: "بيانات الموظف والصلاحيات | مثراء العقارية" },
+      { property: "og:title", content: "بيانات الموظف والصلاحيات | الرشودي للعقارات" },
       { property: "og:description", content: "إضافة موظف وتحديد صلاحياته على كل قسم بدقة." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

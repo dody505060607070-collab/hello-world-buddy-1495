@@ -13,12 +13,12 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/crm")({
   head: () => ({
     meta: [
-      { title: "نظام CRM | مثراء العقارية" },
+      { title: "نظام CRM | الرشودي للعقارات" },
       {
         name: "description",
         content: "مركز إدارة العلاقات: العملاء، الفرص، المتابعات والتقارير في شاشة واحدة.",
       },
-      { property: "og:title", content: "نظام CRM | مثراء العقارية" },
+      { property: "og:title", content: "نظام CRM | الرشودي للعقارات" },
       { property: "og:description", content: "العملاء والفرص والمتابعات ومؤشرات الأداء." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

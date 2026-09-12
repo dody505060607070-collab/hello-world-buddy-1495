@@ -15,9 +15,9 @@ type Item = { description: string; quantity: string; unit_price: string };
 export const Route = createFileRoute("/_authenticated/invoice-form")({
   validateSearch: (search: Record<string, unknown>) => ({ id: typeof search["id"] === "string" ? search["id"] as string : "", ownerId: typeof search["ownerId"] === "string" ? search["ownerId"] as string : "" }),
   head: () => ({ meta: [
-    { title: "إنشاء فاتورة | مثراء العقارية" },
+    { title: "إنشاء فاتورة | الرشودي للعقارات" },
     { name: "description", content: "إنشاء فاتورة وإضافة البنود والضريبة والملاحظات." },
-    { property: "og:title", content: "إنشاء فاتورة | مثراء العقارية" },
+    { property: "og:title", content: "إنشاء فاتورة | الرشودي للعقارات" },
     { property: "og:description", content: "نموذج الفاتورة الكامل." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary" },

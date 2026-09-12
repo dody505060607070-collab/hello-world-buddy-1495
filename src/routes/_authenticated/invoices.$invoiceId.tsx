@@ -14,9 +14,9 @@ import { invoiceStatusLabels } from "@/lib/labels";
 
 export const Route = createFileRoute("/_authenticated/invoices/$invoiceId")({
   head: () => ({ meta: [
-    { title: "تفاصيل الفاتورة | مثراء العقارية" },
+    { title: "تفاصيل الفاتورة | الرشودي للعقارات" },
     { name: "description", content: "عرض الفاتورة وبنودها والمدفوعات المسجلة." },
-    { property: "og:title", content: "تفاصيل الفاتورة | مثراء العقارية" },
+    { property: "og:title", content: "تفاصيل الفاتورة | الرشودي للعقارات" },
     { property: "og:description", content: "تفاصيل الفاتورة وسجل السداد." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary" },

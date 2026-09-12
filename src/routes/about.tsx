@@ -9,13 +9,13 @@ import { whatsappLink } from "@/lib/site-data";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "من نحن | مثراء العقارية في بريدة" },
+      { title: "من نحن | الرشودي للعقارات في بريدة" },
       {
         name: "description",
         content:
-          "تعرّف على مؤسسة مثراء العقارية: أكثر من 8 سنوات في سوق بريدة، إيجار وبيع وإدارة أملاك بخدمة موثوقة.",
+          "تعرّف على مؤسسة الرشودي للعقارات: أكثر من 8 سنوات في سوق بريدة، إيجار وبيع وإدارة أملاك بخدمة موثوقة.",
       },
-      { property: "og:title", content: "من نحن | مثراء العقارية في بريدة" },
+      { property: "og:title", content: "من نحن | الرشودي للعقارات في بريدة" },
       {
         property: "og:description",
         content: "خبرة محلية في عقارات بريدة: إيجار، بيع، إدارة أملاك ومتابعة عقود.",
@@ -41,7 +41,7 @@ function AboutPage() {
     <SiteLayout>
       <PageHero
         image={heroImage}
-        eyebrow="مؤسسة مثراء العقارية"
+        eyebrow="مؤسسة الرشودي للعقارات"
         title="من نحن"
         subtitle="خبرة محلية في بريدة، وقرار عقاري أوضح لعملائنا — إيجار وبيع وإدارة أملاك بمعايير مهنية."
         height="lg"
@@ -87,7 +87,7 @@ function AboutPage() {
 
         <div className="mt-10 flex flex-wrap justify-center gap-3">
           <a
-            href={whatsappLink(null, "مرحباً، أرغب بالتحدث مع فريق مثراء العقارية")}
+            href={whatsappLink(null, "مرحباً، أرغب بالتحدث مع فريق الرشودي للعقارات")}
             target="_blank"
             rel="noreferrer"
             className="rounded-lg bg-primary px-6 py-3 text-[14px] font-bold text-primary-foreground"

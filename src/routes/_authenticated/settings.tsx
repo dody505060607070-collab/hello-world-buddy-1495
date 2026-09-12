@@ -27,9 +27,9 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/settings")({
   head: () => ({
     meta: [
-      { title: "إعدادات الموقع — مثراء العقارية" },
+      { title: "إعدادات الموقع — الرشودي للعقارات" },
       { name: "description", content: "التحكم في بيانات الموقع والتواصل وإعدادات التشغيل." },
-      { property: "og:title", content: "إعدادات الموقع — مثراء العقارية" },
+      { property: "og:title", content: "إعدادات الموقع — الرشودي للعقارات" },
       { property: "og:description", content: "الهوية البصرية وبيانات التواصل والروابط والإحصائيات." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -109,7 +109,7 @@ function SettingsPage() {
     else if (data === null)
       setForm({
         id: true,
-        company_name: "مثراء العقارية",
+        company_name: "الرشودي للعقارات",
         logo_url: null,
         phone: null,
         whatsapp_number: null,
@@ -136,7 +136,7 @@ function SettingsPage() {
       if (!form) return;
       const payload = {
         id: true,
-        company_name: form.company_name?.trim() || "مثراء العقارية",
+        company_name: form.company_name?.trim() || "الرشودي للعقارات",
         logo_url: form.logo_url?.trim() || null,
         phone: form.phone?.trim() || null,
         whatsapp_number: form.whatsapp_number?.trim() || null,

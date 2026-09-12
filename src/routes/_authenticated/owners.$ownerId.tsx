@@ -37,9 +37,9 @@ import { ImportDialog } from "@/routes/_authenticated/contracts.index";
 export const Route = createFileRoute("/_authenticated/owners/$ownerId")({
   head: () => ({
     meta: [
-      { title: "ملف المالك | مثراء العقارية" },
+      { title: "ملف المالك | الرشودي للعقارات" },
       { name: "description", content: "ملف المالك وعقاراته ووحداته وعقوده وفواتيره وجدول دفعاته." },
-      { property: "og:title", content: "ملف المالك | مثراء العقارية" },
+      { property: "og:title", content: "ملف المالك | الرشودي للعقارات" },
       { property: "og:description", content: "تفاصيل المالك المالية والعقارية وجدول الدفعات." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

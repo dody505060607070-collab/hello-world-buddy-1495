@@ -11,12 +11,12 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/ai")({
   head: () => ({
     meta: [
-      { title: "مساعد مثراء الذكي | مثراء العقارية" },
+      { title: "مساعد الرشودي للعقارات الذكي | الرشودي للعقارات" },
       {
         name: "description",
         content: "شات ذكي داخل لوحة التحكم: اسحب أي صف أو بيانات إليه ليحللها ويقترح الخطوة التالية.",
       },
-      { property: "og:title", content: "مساعد مثراء الذكي | مثراء العقارية" },
+      { property: "og:title", content: "مساعد الرشودي للعقارات الذكي | الرشودي للعقارات" },
       { property: "og:description", content: "مساعد ذكي يفهم صفحات لوحة التحكم ويحلل البيانات المسحوبة." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -77,7 +77,7 @@ function AiPage() {
   return (
     <>
       <PageHero
-        title="مساعد مثراء الذكي"
+        title="مساعد الرشودي للعقارات الذكي"
         subtitle="اسحب أي صف من أي جدول في لوحة التحكم وأفلته هنا، ثم اسأل المساعد عنه."
         icon={Sparkles}
         stats={[

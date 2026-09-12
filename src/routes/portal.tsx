@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 import { FileText, Home, LogOut, Receipt, User } from "lucide-react";
 
-import logoAsset from "@/assets/mithra-logo-transparent.png.asset.json";
+import logoAsset from "@/assets/rushdy-logo-transparent.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
 
 
@@ -34,10 +34,10 @@ function PortalLayout() {
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-4 py-3">
           <div className="flex items-center gap-2">
             <span className="grid h-10 w-10 place-items-center rounded-lg bg-white/15 p-1">
-              <img src={logoAsset.url} alt="مثراء العقارية" className="h-full w-full object-contain" />
+              <img src={logoAsset.url} alt="الرشودي للعقارات" className="h-full w-full object-contain" />
             </span>
             <div className="leading-tight">
-              <p className="text-sm font-bold">مثراء العقارية</p>
+              <p className="text-sm font-bold">الرشودي للعقارات</p>
               <p className="text-[11px] text-white/70">بوابة العميل</p>
             </div>
           </div>

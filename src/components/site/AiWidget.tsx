@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Loader2, Send, Sparkles, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import markAsset from "@/assets/mithra-mark.png.asset.json";
+import markAsset from "@/assets/rushdy-logo-transparent.png.asset.json";
 import { askPublicAi } from "@/lib/ai.functions";
 import { cn } from "@/lib/utils";
 
@@ -20,7 +20,7 @@ export function AiWidget() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "مرحبًا بك في مثراء العقارية 👋 أنا المساعد الذكي، كيف أخدمك اليوم؟",
+      content: "مرحبًا بك في الرشودي للعقارات 👋 أنا المساعد الذكي، كيف أخدمك اليوم؟",
     },
   ]);
   const scroller = useRef<HTMLDivElement>(null);
@@ -97,7 +97,7 @@ export function AiWidget() {
       >
         <button
           type="button"
-          aria-label="مثراء AI — المساعد الذكي"
+          aria-label="الرشودي للعقارات AI — المساعد الذكي"
           className="glass shine group flex flex-col items-center gap-0.5 rounded-2xl px-2 pb-1.5 pt-2 shadow-float sm:gap-1 sm:rounded-3xl sm:px-3 sm:pb-2 sm:pt-3"
         >
           <span className="grid size-9 place-items-center rounded-xl bg-white/70 ring-1 ring-primary/15 sm:size-14 sm:rounded-2xl">
@@ -115,7 +115,7 @@ export function AiWidget() {
             )}
           </span>
           <span className="text-[9px] font-extrabold tracking-wide text-primary sm:text-[11px]">
-            مثراء AI
+            الرشودي للعقارات AI
           </span>
         </button>
       </div>
@@ -127,7 +127,7 @@ export function AiWidget() {
         >
           <header className="flex items-center gap-2 bg-primary px-4 py-3 text-primary-foreground">
             <Sparkles className="size-4 text-gold" />
-            <h2 className="text-[13.5px] font-bold">مساعد مثراء الذكي</h2>
+            <h2 className="text-[13.5px] font-bold">مساعد الرشودي للعقارات الذكي</h2>
           </header>
 
           <div ref={scroller} className="flex-1 space-y-3 overflow-y-auto px-3 py-3">

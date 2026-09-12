@@ -16,9 +16,9 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/team-chat")({
   head: () => ({
     meta: [
-      { title: "شات الموظفين | مثراء العقارية" },
+      { title: "شات الموظفين | الرشودي للعقارات" },
       { name: "description", content: "محادثة جماعية داخلية لجميع موظفي الشركة." },
-      { property: "og:title", content: "شات الموظفين | مثراء العقارية" },
+      { property: "og:title", content: "شات الموظفين | الرشودي للعقارات" },
       { property: "og:description", content: "محادثة جماعية داخلية لجميع موظفي الشركة." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

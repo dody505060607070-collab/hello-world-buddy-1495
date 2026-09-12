@@ -391,7 +391,7 @@ export const finalizeContractImport = createServerFn({ method: "POST" })
       if (!tenantPhone) warnings.push("لا يوجد رقم جوال للمستأجر — لن تُرسل التذكيرات.");
     }
     if (firstPayment && tenantPhone && tenantId) {
-      const body = `تحية طيبة ${tenantName}،\nنذكّركم بموعد سداد الدفعة رقم ${firstPayment.payment_number} بقيمة ${firstPayment.amount_due} ريال بتاريخ ${firstPayment.due_date} عن العقد ${contractIns.data.contract_number}.\nمثراء العقارية`;
+      const body = `تحية طيبة ${tenantName}،\nنذكّركم بموعد سداد الدفعة رقم ${firstPayment.payment_number} بقيمة ${firstPayment.amount_due} ريال بتاريخ ${firstPayment.due_date} عن العقد ${contractIns.data.contract_number}.\nالرشودي للعقارات`;
       await db.from("reminder_followups").insert({
         contract_id: contractId,
         payment_id: null,
