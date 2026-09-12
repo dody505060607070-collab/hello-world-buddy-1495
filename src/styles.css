@@ -61,8 +61,8 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  --shadow-card: 0 1px 2px oklch(0.28 0.05 262 / 6%), 0 8px 24px oklch(0.28 0.05 262 / 4%);
-  --shadow-float: 0 10px 30px oklch(0.28 0.05 262 / 10%);
+  --shadow-card: 0 1px 2px oklch(0.28 0.05 22 / 6%), 0 8px 24px oklch(0.28 0.05 22 / 4%);
+  --shadow-float: 0 10px 30px oklch(0.28 0.05 22 / 10%);
 }
 
 :root {
@@ -202,7 +202,7 @@
 
 @utility glass-dark {
   border: 1px solid oklch(1 0 0 / 18%);
-  background: oklch(0.22 0.02 262 / 45%);
+  background: oklch(0.22 0.02 22 / 45%);
   backdrop-filter: blur(20px) saturate(160%);
 }
 
@@ -259,9 +259,9 @@
 
 @utility mesh-bg {
   background:
-    radial-gradient(60% 70% at 15% 10%, oklch(0.93 0.05 262 / 70%) 0%, transparent 60%),
+    radial-gradient(60% 70% at 15% 10%, oklch(0.93 0.05 22 / 70%) 0%, transparent 60%),
     radial-gradient(50% 60% at 90% 0%, oklch(0.93 0.06 75 / 55%) 0%, transparent 60%),
-    radial-gradient(70% 70% at 50% 100%, oklch(0.95 0.03 262 / 60%) 0%, transparent 65%);
+    radial-gradient(70% 70% at 50% 100%, oklch(0.95 0.03 22 / 60%) 0%, transparent 65%);
 }
 
 @keyframes float-slow {
