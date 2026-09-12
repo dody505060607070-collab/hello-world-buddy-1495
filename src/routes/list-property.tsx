@@ -52,8 +52,8 @@ function ListPropertyPage() {
   const switchMode = (next: Mode) => { setMode(next); setForm((prev) => ({ ...prev, purpose: next === "offer" ? "sale" : "rent" })); };
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (!form.full_name.trim() || !form.phone.trim()) return toast.error("الاسم ورقم الجوال مطلوبان");
-    if (mode === "offer" && (!form.property_type || !form.description || !form.asking_price || !form.map_url)) return toast.error("أكمل بيانات العقار المطلوبة");
+    if (!form.full_name.trim() || !form.phone.trim()) { toast.error("الاسم ورقم الجوال مطلوبان"); return; }
+    if (mode === "offer" && (!form.property_type || !form.description || !form.asking_price || !form.map_url)) { toast.error("أكمل بيانات العقار المطلوبة"); return; }
     setBusy(true);
     try {
       if (mode === "offer") {
