@@ -50,6 +50,13 @@
       "when": 1789245870839,
       "tag": "0006_secure_listing_request_media",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1789246582594,
+      "tag": "0007_harden_task_whatsapp_automation",
+      "breakpoints": true
     }
   ]
 }
