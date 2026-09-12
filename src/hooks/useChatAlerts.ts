@@ -187,7 +187,9 @@ function systemNotify(title: string, body: string) {
 async function senderName(id: string | null | undefined) {
   if (!id) return "زميل";
   const { data } = await supabase.from("profiles").select("full_name").eq("id", id).maybeSingle();
-  return data?.full_name ?? "زميل";
+  if (data?.full_name) return data.full_name;
+  const { data: m } = await mithraa.from("profiles").select("full_name").eq("id", id).maybeSingle();
+  return (m?.full_name as string | undefined) ?? "زميل";
 }
 
 /** إشعار وصوت لأي رسالة جديدة في شات الموظفين أو محادثات الأنشطة. */
