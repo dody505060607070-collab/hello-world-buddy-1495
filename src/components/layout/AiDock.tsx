@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Trash2, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
+import logoAsset from "@/assets/rashudi-logo.webp.asset.json";
 import { askAdminAi } from "@/lib/ai.functions";
 import { cn } from "@/lib/utils";
 import { Conversation, ConversationContent, ConversationScrollButton } from "@/components/ai-elements/conversation";
@@ -115,11 +116,15 @@ export function AiDock() {
         aria-label="المساعد الذكي"
         title="اسحب لتحريك المساعد • اضغط للفتح"
         className={cn(
-          "grid size-14 touch-none select-none place-items-center rounded-full bg-primary text-primary-foreground shadow-float transition-transform hover:scale-105",
+          "grid size-16 touch-none select-none place-items-center overflow-hidden rounded-full bg-white shadow-float ring-2 ring-primary/30 transition-transform hover:scale-105",
           dropping && "scale-110 ring-4 ring-primary/25",
         )}
       >
-        {open ? <X className="size-5" /> : <span className="text-[13px] font-black">AI</span>}
+        {open ? (
+          <X className="size-5 text-primary" />
+        ) : (
+          <img src={logoAsset.url} alt="الرشودي للعقارات" className="size-full object-cover" draggable={false} />
+        )}
       </button>
 
       {open ? (
