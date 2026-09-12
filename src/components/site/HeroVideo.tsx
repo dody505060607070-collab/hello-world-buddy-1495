@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 import desktopVideo from "@/assets/hero-desktop.mp4.asset.json";
 import mobileVideo from "@/assets/hero-mobile.mp4.asset.json";
+import logo from "@/assets/rushdy-logo-transparent.png.asset.json";
 
 export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -50,9 +51,12 @@ export function HeroVideo() {
       />
 
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-4 px-6 pb-12 text-center">
-            <h1 className="animate-pop-in max-w-full font-display text-4xl font-extrabold leading-tight text-primary-foreground drop-shadow-lg sm:text-5xl md:text-6xl lg:text-7xl">
-              الرشودي للعقارات
-            </h1>
+            <h1 className="sr-only">الرشودي للعقارات</h1>
+            <img
+              src={logo.url}
+              alt="الرشودي للعقارات - ALRASHUDI REAL ESTATE"
+              className="animate-pop-in w-56 max-w-[78vw] rounded-2xl shadow-2xl ring-1 ring-white/15 sm:w-64 md:w-80"
+            />
             <p
               className="animate-pop-in max-w-2xl text-[15px] font-semibold leading-8 text-primary-foreground/85 md:text-[19px]"
               style={{ animationDelay: "220ms" }}
