@@ -62,6 +62,11 @@ export const Route = createFileRoute("/api/public/n8n")({
           });
 
         try {
+          if (action === "run_hourly" || action === "run_reminders") {
+            const { runHourlyAutomation } = await import("@/lib/automation-runner.server");
+            return json(await runHourlyAutomation());
+          }
+
           if (action === "send_whatsapp") {
             const to = String(body["to"] ?? "");
             const text = String(body["body"] ?? "");
