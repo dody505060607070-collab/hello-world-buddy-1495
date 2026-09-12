@@ -80,7 +80,7 @@ export function CommandPalette() {
   const goto = (to: string) => {
     setOpen(false);
     setTerm("");
-    navigate({ to });
+    navigate({ to } as never);
   };
 
   const pages = navGroups.flatMap((g) => g.items);
