@@ -8,7 +8,7 @@ import ctaImage from "@/assets/cta-deal.jpg";
 import featureCommercial from "@/assets/feature-commercial.jpg";
 import featureInterior from "@/assets/feature-interior.jpg";
 import featureLand from "@/assets/feature-land.jpg";
-import socialCard from "@/assets/mithra-social-card.jpg.asset.json";
+import socialCard from "@/assets/rushdy-social-card.jpg.asset.json";
 import videoInterior from "@/assets/video-interior.mp4.asset.json";
 import videoCity from "@/assets/video-city.mp4.asset.json";
 import { HeroVideo } from "@/components/site/HeroVideo";
