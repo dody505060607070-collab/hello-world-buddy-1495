@@ -211,6 +211,39 @@ export type Database = {
         }
         Relationships: []
       }
+      backup_runs: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          error_message: string | null
+          id: string
+          requested_by: string | null
+          size_bytes: number | null
+          status: string
+          tables_count: number
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          requested_by?: string | null
+          size_bytes?: number | null
+          status?: string
+          tables_count?: number
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          requested_by?: string | null
+          size_bytes?: number | null
+          status?: string
+          tables_count?: number
+        }
+        Relationships: []
+      }
       buildings: {
         Row: {
           address: string | null
@@ -552,6 +585,47 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "contract_payments_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "contracts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contract_signatures: {
+        Row: {
+          contract_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          image_data: string
+          signed_at: string
+          signer_name: string
+          signer_role: string
+        }
+        Insert: {
+          contract_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          image_data: string
+          signed_at?: string
+          signer_name: string
+          signer_role?: string
+        }
+        Update: {
+          contract_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          image_data?: string
+          signed_at?: string
+          signer_name?: string
+          signer_role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contract_signatures_contract_id_fkey"
             columns: ["contract_id"]
             isOneToOne: false
             referencedRelation: "contracts"
@@ -1500,6 +1574,7 @@ export type Database = {
       opportunities: {
         Row: {
           assigned_to: string | null
+          close_probability: number
           close_reason: string | null
           contact_id: string | null
           contract_id: string | null
@@ -1517,6 +1592,7 @@ export type Database = {
         }
         Insert: {
           assigned_to?: string | null
+          close_probability?: number
           close_reason?: string | null
           contact_id?: string | null
           contract_id?: string | null
@@ -1534,6 +1610,7 @@ export type Database = {
         }
         Update: {
           assigned_to?: string | null
+          close_probability?: number
           close_reason?: string | null
           contact_id?: string | null
           contract_id?: string | null
@@ -2593,6 +2670,7 @@ export type Database = {
           approved_by: string | null
           assigned_by: string | null
           contact_id: string | null
+          contract_id: string | null
           created_at: string
           details: string | null
           due_date: string | null
@@ -2616,6 +2694,7 @@ export type Database = {
           approved_by?: string | null
           assigned_by?: string | null
           contact_id?: string | null
+          contract_id?: string | null
           created_at?: string
           details?: string | null
           due_date?: string | null
@@ -2639,6 +2718,7 @@ export type Database = {
           approved_by?: string | null
           assigned_by?: string | null
           contact_id?: string | null
+          contract_id?: string | null
           created_at?: string
           details?: string | null
           due_date?: string | null
@@ -2670,6 +2750,13 @@ export type Database = {
             columns: ["contact_id"]
             isOneToOne: false
             referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "contracts"
             referencedColumns: ["id"]
           },
           {

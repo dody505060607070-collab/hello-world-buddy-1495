@@ -73,7 +73,7 @@
   --card-foreground: oklch(0.26 0.012 40);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.26 0.012 40);
-  --primary: oklch(0.38 0.13 22);
+  --primary: oklch(0.306 0.103 20.15);
   --primary-foreground: oklch(0.985 0.005 60);
   --secondary: oklch(0.965 0.008 40);
   --secondary-foreground: oklch(0.32 0.03 30);
@@ -81,7 +81,7 @@
   --muted-foreground: oklch(0.55 0.02 40);
   --accent: oklch(0.955 0.022 22);
   --accent-foreground: oklch(0.38 0.13 22);
-  --destructive: oklch(0.53 0.19 25);
+  --destructive: oklch(0.306 0.103 20.15);
   --destructive-foreground: oklch(0.985 0.005 60);
   --success: oklch(0.6 0.12 150);
   --success-foreground: oklch(0.985 0.005 60);
@@ -91,20 +91,20 @@
   --gold-foreground: oklch(0.26 0.012 40);
   --border: oklch(0.915 0.01 40);
   --input: oklch(0.915 0.01 40);
-  --ring: oklch(0.38 0.13 22);
-  --chart-1: oklch(0.38 0.13 22);
+  --ring: oklch(0.306 0.103 20.15);
+  --chart-1: oklch(0.306 0.103 20.15);
   --chart-2: oklch(0.88 0.012 50);
   --chart-3: oklch(0.66 0.11 75);
   --chart-4: oklch(0.6 0.12 150);
-  --chart-5: oklch(0.53 0.19 25);
+  --chart-5: oklch(0.306 0.103 20.15);
   --sidebar: oklch(1 0 0);
   --sidebar-foreground: oklch(0.32 0.02 40);
-  --sidebar-primary: oklch(0.38 0.13 22);
+  --sidebar-primary: oklch(0.306 0.103 20.15);
   --sidebar-primary-foreground: oklch(0.985 0.005 60);
   --sidebar-accent: oklch(0.965 0.02 22);
-  --sidebar-accent-foreground: oklch(0.38 0.13 22);
+  --sidebar-accent-foreground: oklch(0.306 0.103 20.15);
   --sidebar-border: oklch(0.93 0.008 40);
-  --sidebar-ring: oklch(0.38 0.13 22);
+  --sidebar-ring: oklch(0.306 0.103 20.15);
 }
 
 .dark {
@@ -114,7 +114,7 @@
   --card-foreground: oklch(0.96 0.005 60);
   --popover: oklch(0.225 0.028 265);
   --popover-foreground: oklch(0.96 0.005 60);
-  --primary: oklch(0.56 0.14 22);
+  --primary: oklch(0.62 0.14 20.15);
   --primary-foreground: oklch(0.98 0.005 60);
   --secondary: oklch(0.265 0.03 265);
   --secondary-foreground: oklch(0.96 0.005 60);
@@ -122,7 +122,7 @@
   --muted-foreground: oklch(0.72 0.015 50);
   --accent: oklch(0.33 0.055 22);
   --accent-foreground: oklch(0.9 0.035 22);
-  --destructive: oklch(0.62 0.19 25);
+  --destructive: oklch(0.62 0.14 20.15);
   --destructive-foreground: oklch(0.98 0.005 60);
   --success: oklch(0.66 0.12 150);
   --success-foreground: oklch(0.16 0.02 150);
@@ -132,15 +132,15 @@
   --gold-foreground: oklch(0.2 0.02 60);
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 16%);
-  --ring: oklch(0.56 0.14 22);
+  --ring: oklch(0.62 0.14 20.15);
   --sidebar: oklch(0.21 0.03 265);
   --sidebar-foreground: oklch(0.93 0.008 50);
-  --sidebar-primary: oklch(0.56 0.14 22);
+  --sidebar-primary: oklch(0.62 0.14 20.15);
   --sidebar-primary-foreground: oklch(0.98 0.005 60);
   --sidebar-accent: oklch(0.33 0.055 22);
   --sidebar-accent-foreground: oklch(0.95 0.01 40);
   --sidebar-border: oklch(1 0 0 / 12%);
-  --sidebar-ring: oklch(0.56 0.14 22);
+  --sidebar-ring: oklch(0.62 0.14 20.15);
 }
 
 @layer base {
@@ -316,9 +316,9 @@
 }
 
 .mithra-marker-pin > div:first-child {
-  background-color: var(--marker-color, #EF4444) !important;
+  background-color: var(--marker-color, var(--color-primary)) !important;
 }
 
 .mithra-marker-pin > div:last-child {
-  border-top-color: var(--marker-color, #EF4444) !important;
+  border-top-color: var(--marker-color, var(--color-primary)) !important;
 }

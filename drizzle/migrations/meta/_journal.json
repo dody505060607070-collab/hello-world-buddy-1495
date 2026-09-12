@@ -36,6 +36,13 @@
       "when": 1789242578391,
       "tag": "0004_bind_history_actor_to_auth_uid",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1789245674286,
+      "tag": "0005_complete_property_operations_features",
+      "breakpoints": true
     }
   ]
 }
