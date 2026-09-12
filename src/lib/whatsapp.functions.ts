@@ -234,7 +234,11 @@ export const getWhatsAppLinkStatus = createServerFn({ method: "GET" })
       return {
         configured: true,
         connection: "connecting" as const,
-        qr: qrData.base64 ?? qrData.code ?? null,
+        qr: qrData.base64
+          ? qrData.base64.startsWith("data:")
+            ? qrData.base64
+            : `data:image/png;base64,${qrData.base64}`
+          : null,
         me: null,
         error: qrRes.ok ? null : (qrData.message ?? `WhatsApp ${qrRes.status}`),
       };
