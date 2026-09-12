@@ -49,13 +49,7 @@ export function HeroVideo() {
         }`}
       />
 
-      <div
-        className={`pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-4 px-6 pb-12 text-center transition-opacity duration-1000 ${
-          ended ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        {ended ? (
-          <>
+      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-4 px-6 pb-12 text-center">
             <h1 className="animate-pop-in max-w-full font-display text-4xl font-extrabold leading-tight text-primary-foreground drop-shadow-lg sm:text-5xl md:text-6xl lg:text-7xl">
               الرشودي للعقارات
             </h1>
@@ -85,8 +79,6 @@ export function HeroVideo() {
                 عقارات البيع
               </Link>
             </div>
-          </>
-        ) : null}
       </div>
 
       {/* Scroll cue */}
