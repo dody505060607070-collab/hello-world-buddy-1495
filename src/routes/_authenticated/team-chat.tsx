@@ -300,7 +300,7 @@ function TeamChatPage() {
 
         <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-4">
           {rows.map((m) => {
-            const mine = m.sender_id === userId;
+            const mine = m.sender_id === chatUserId;
             const parent = m.reply_to ? byId.get(m.reply_to) : null;
             return (
               <div key={m.id} className={cn("flex gap-2", mine ? "justify-start" : "justify-end")}>
