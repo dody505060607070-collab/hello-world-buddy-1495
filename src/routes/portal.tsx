@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 import { FileText, Home, LogOut, Receipt, User } from "lucide-react";
 
-import logoAsset from "@/assets/mithra-logo-transparent.png.asset.json";
+import logoAsset from "@/assets/rushdy-logo.png.asset.json";
 import { supabase } from "@/integrations/supabase/client";
 
 

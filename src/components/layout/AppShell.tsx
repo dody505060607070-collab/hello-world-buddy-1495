@@ -3,7 +3,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { Bell, ChevronDown, LogOut, Menu, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
-import logoAsset from "@/assets/mithra-logo.png.asset.json";
+import logoAsset from "@/assets/rushdy-logo.png.asset.json";
 import { navGroups } from "@/data/nav";
 import { signOut, useCurrentUser } from "@/hooks/useAuth";
 import { navCountsQuery } from "@/lib/counts";
