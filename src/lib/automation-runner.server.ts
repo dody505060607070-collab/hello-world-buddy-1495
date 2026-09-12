@@ -54,13 +54,13 @@ function nextSendDate(from: Date, interval: string): string | null {
   }
 }
 
-function taskIntervalHours(priority: string): number {
+export function taskIntervalHours(priority: string): number {
   if (priority === "urgent") return 12;
   if (priority === "high") return 24;
   return 72;
 }
 
-function taskMessage(input: {
+export function taskMessage(input: {
   employeeName: string;
   title: string;
   details: string | null;
