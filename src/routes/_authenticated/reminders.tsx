@@ -11,7 +11,6 @@ import { Field, PrimaryButton, inputClass, textareaClass } from "@/components/ki
 import { PageHero } from "@/components/kit/PageHero";
 import { supabase } from "@/integrations/supabase/client";
 import { followupStatusLabels } from "@/lib/labels";
-import { whatsappLink } from "@/lib/site-data";
 import { sendWhatsAppMessage } from "@/lib/whatsapp.functions";
 
 type FollowupRow = {

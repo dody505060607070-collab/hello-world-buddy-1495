@@ -305,7 +305,7 @@ export async function runHourlyAutomation(): Promise<RunResult> {
   } finally {
     await supabaseAdmin.rpc("finish_automation_lease", {
       _job_name: JOB_NAME,
-      _error: runError,
+      _error: runError ?? undefined,
     });
   }
 }
