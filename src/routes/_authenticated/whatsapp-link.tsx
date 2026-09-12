@@ -69,9 +69,9 @@ function WhatsAppLinkPage() {
           <div className="space-y-3 text-sm">
             <p className="font-semibold text-destructive">خدمة الربط غير مُفعّلة بعد</p>
             <p className="text-muted-foreground">
-              شغّل خدمة الجسر على الخادم من المجلد <code>deploy/whatsapp-bridge</code>، ثم أضف
-              المتغيرين <code>WHATSAPP_BRIDGE_URL</code> و<code>WHATSAPP_BRIDGE_TOKEN</code>. بعدها
-              سيظهر رمز QR هنا مباشرة.
+              أضف إعدادات خدمة واتساب في النظام: <code>WHATSAPP_API_URL</code> و
+              <code>WHATSAPP_API_KEY</code> و<code>WHATSAPP_INSTANCE</code>. بعدها سيظهر رمز QR هنا
+              مباشرة.
             </p>
           </div>
         ) : connected ? (
