@@ -462,3 +462,38 @@ function TeamChatPage() {
     </>
   );
 }
+
+/** بطاقة ربط حساب الشات المشترك (قاعدة مثراء). */
+function MithraaSignIn() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const submit = async () => {
+    setBusy(true);
+    try {
+      await signInToMithraa(email.trim(), password);
+      toast.success("تم ربط حساب الشات المشترك");
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="surface-card mb-4 space-y-3 p-4">
+      <h2 className="text-sm font-bold">ربط حساب الشات المشترك</h2>
+      <p className="text-[12.5px] text-muted-foreground">
+        سجّل دخولك ببيانات حسابك لدى منصة مثراء لعرض قناتي «فريق الرشودي» و«الشات المشترك».
+      </p>
+      <div className="grid gap-2 sm:grid-cols-[1fr_1fr_auto]">
+        <input className={inputClass} type="email" placeholder="البريد الإلكتروني" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input className={inputClass} type="password" placeholder="كلمة المرور" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <PrimaryButton onClick={() => void submit()} disabled={busy || !email || !password}>
+          {busy ? <Loader2 className="size-4 animate-spin" /> : "ربط"}
+        </PrimaryButton>
+      </div>
+    </div>
+  );
+}
