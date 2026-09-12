@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { Inbox, Loader2, Search, TriangleAlert } from "lucide-react";
+import { Image, Inbox, Loader2, Search, TriangleAlert } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -27,6 +27,7 @@ type SupplyRow = {
   admin_notes: string | null;
   status: string;
   created_at: string;
+  attachments: { path?: string; name?: string }[];
 };
 
 type ListingRow = {
@@ -78,7 +79,7 @@ function RequestsPage() {
   const listing = useTableRows<ListingRow>({
     table: "listing_requests",
     select:
-      "id, full_name, phone, purpose, property_type, city, district, asking_price, admin_notes, status, created_at",
+      "id, full_name, phone, purpose, property_type, city, district, asking_price, admin_notes, status, attachments, created_at",
     orderBy: { column: "created_at" },
     queryKey: ["listing_requests"],
   });
@@ -290,6 +291,11 @@ function RequestsPage() {
               cell: (r) => [r.city, r.district].filter(Boolean).join(" - ") || "—",
             },
             { header: "السعر المطلوب", cell: (r) => r.asking_price ?? "—" },
+            { header: "الصور", cell: (r) => r.attachments?.length ? <button type="button" className="inline-flex items-center gap-1 font-semibold text-primary" onClick={async () => {
+              const paths = r.attachments.map((item) => item.path).filter((path): path is string => Boolean(path));
+              const signed = await Promise.all(paths.map((path) => supabase.storage.from("listing-request-media").createSignedUrl(path, 300)));
+              for (const result of signed) if (result.data?.signedUrl) window.open(result.data.signedUrl, "_blank", "noopener,noreferrer");
+            }}><Image className="size-4" />{r.attachments.length} صور</button> : "—" },
             { header: "الحالة", cell: statusCell },
             { header: "ملاحظات", cell: noteCell },
             { header: "التاريخ", sortable: true, value: (r) => r.created_at, cell: (r) => formatDate(r.created_at) },

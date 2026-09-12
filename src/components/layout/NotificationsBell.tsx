@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Bell, CheckCheck } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 import { useCurrentUser } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -39,6 +40,21 @@ export function NotificationsBell() {
   });
 
   const unread = (list.data ?? []).filter((n) => !n.is_read).length;
+
+  useEffect(() => {
+    if (!userId) return;
+    const channel = supabase
+      .channel(`notifications-${userId}`)
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "notifications", filter: `user_id=eq.${userId}` }, (payload) => {
+        const notification = payload.new as Notif;
+        void qc.invalidateQueries({ queryKey: ["my-notifications", userId] });
+        void qc.invalidateQueries({ queryKey: ["notifications-center"] });
+        toast(notification.title, { description: notification.body ?? undefined });
+        if ("Notification" in window && Notification.permission === "granted") new Notification(notification.title, { body: notification.body ?? "لديك إشعار جديد" });
+      })
+      .subscribe();
+    return () => { void supabase.removeChannel(channel); };
+  }, [qc, userId]);
 
   const markRead = useMutation({
     mutationFn: async (id?: string) => {

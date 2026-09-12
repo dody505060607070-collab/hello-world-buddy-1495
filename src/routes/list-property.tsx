@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { ImagePlus, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -39,6 +40,7 @@ function ListPropertyPage() {
   const [mode, setMode] = useState<Mode>("offer");
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
+  const [images, setImages] = useState<File[]>([]);
   const [form, setForm] = useState({
     full_name: "",
     phone: "",
@@ -65,6 +67,14 @@ function ListPropertyPage() {
     setBusy(true);
     try {
       if (mode === "offer") {
+        const attachments: { path: string; name: string; size: number; type: string }[] = [];
+        for (const file of images) {
+          const extension = file.name.split(".").pop()?.replace(/[^a-zA-Z0-9]/g, "") || "jpg";
+          const path = `public/${crypto.randomUUID()}.${extension}`;
+          const uploaded = await supabase.storage.from("listing-request-media").upload(path, file, { contentType: file.type, upsert: false });
+          if (uploaded.error) throw uploaded.error;
+          attachments.push({ path, name: file.name, size: file.size, type: file.type });
+        }
         const { error } = await supabase.from("listing_requests").insert({
           full_name: form.full_name,
           phone: form.phone,
@@ -75,6 +85,7 @@ function ListPropertyPage() {
           district: form.district || null,
           asking_price: form.asking_price || null,
           description: form.description || null,
+          attachments,
         });
         if (error) throw error;
       } else {
@@ -120,6 +131,7 @@ function ListPropertyPage() {
         budget_min: "",
         budget_max: "",
       });
+      setImages([]);
       void navigate({ to: "/thank-you" });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "تعذّر إرسال الطلب، حاول مرة أخرى");
@@ -285,6 +297,21 @@ function ListPropertyPage() {
               onChange={(e) => set("description", e.target.value)}
             />
           </div>
+
+          {mode === "offer" ? <div className="space-y-3">
+            <Label>صور العقار (حتى 3 صور — خاصة ولا تظهر للعامة)</Label>
+            <label className="flex min-h-28 cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-secondary/30 p-5 text-center transition hover:border-primary/50">
+              <ImagePlus className="size-6 text-primary" />
+              <span className="text-[13px] font-semibold">اختر صور العقار</span>
+              <span className="text-[11.5px] text-muted-foreground">JPG أو PNG، بحد أقصى 8 ميجابايت للصورة</span>
+              <input type="file" accept="image/jpeg,image/png,image/webp" multiple className="hidden" onChange={(event) => {
+                const selected = Array.from(event.target.files ?? []).filter((file) => file.size <= 8 * 1024 * 1024);
+                setImages((current) => [...current, ...selected].slice(0, 3));
+                event.target.value = "";
+              }} />
+            </label>
+            {images.length ? <ul className="grid gap-2 sm:grid-cols-3">{images.map((file, index) => <li key={`${file.name}-${index}`} className="flex items-center justify-between gap-2 rounded-lg border border-border px-3 py-2 text-[12px]"><span className="truncate">{file.name}</span><button type="button" aria-label="حذف الصورة" onClick={() => setImages((current) => current.filter((_, i) => i !== index))} className="text-destructive"><X className="size-4" /></button></li>)}</ul> : null}
+          </div> : null}
 
           <Button type="submit" className="w-full" disabled={busy}>
             {busy ? "جارٍ الإرسال..." : "إرسال الطلب"}

@@ -19,6 +19,7 @@ type Row = {
   deal_type: string | null;
   stage: string;
   expected_value: number | null;
+  close_probability: number;
   next_follow_up: string | null;
   close_reason: string | null;
   contact_id: string | null;
@@ -41,7 +42,7 @@ export const Route = createFileRoute("/_authenticated/opportunities")({
 });
 
 const SELECT =
-  "id, title, deal_type, stage, expected_value, next_follow_up, close_reason, contact_id, created_at, contact:contact_id(full_name)";
+  "id, title, deal_type, stage, expected_value, close_probability, next_follow_up, close_reason, contact_id, created_at, contact:contact_id(full_name)";
 
 const stageOrder = ["new", "qualified", "viewing", "negotiation", "contract", "won", "lost"];
 
@@ -51,6 +52,7 @@ type FormState = {
   deal_type: string;
   stage: string;
   expected_value: string;
+  close_probability: string;
   next_follow_up: string;
 };
 
@@ -60,6 +62,7 @@ const emptyForm: FormState = {
   deal_type: "rent",
   stage: "new",
   expected_value: "",
+  close_probability: "50",
   next_follow_up: "",
 };
 
@@ -101,6 +104,7 @@ function OpportunitiesPage() {
         deal_type: form.deal_type,
         stage: form.stage,
         expected_value: form.expected_value ? Number(form.expected_value) : null,
+        close_probability: Math.max(0, Math.min(100, Number(form.close_probability) || 0)),
         next_follow_up: form.next_follow_up || null,
       });
       if (error) throw error;
@@ -151,6 +155,9 @@ function OpportunitiesPage() {
       value: rows
         .filter((r) => !["won", "lost"].includes(r.stage))
         .reduce((sum, r) => sum + (r.expected_value ?? 0), 0),
+      weighted: rows
+        .filter((r) => !["won", "lost"].includes(r.stage))
+        .reduce((sum, r) => sum + (r.expected_value ?? 0) * r.close_probability / 100, 0),
     }),
     [rows],
   );
@@ -171,6 +178,7 @@ function OpportunitiesPage() {
         stats={[
           { value: String(counts.open), label: "فرصة مفتوحة" },
           { value: formatCurrency(counts.value), label: "القيمة المتوقعة" },
+          { value: formatCurrency(counts.weighted), label: "القيمة المرجّحة" },
           { value: String(counts.won), label: "فرصة ناجحة" },
         ]}
       />
@@ -254,6 +262,18 @@ function OpportunitiesPage() {
               sortable: true,
               value: (r) => r.expected_value ?? 0,
               cell: (r) => formatCurrency(r.expected_value),
+            },
+            {
+              header: "احتمال الإغلاق",
+              sortable: true,
+              value: (r) => r.close_probability,
+              cell: (r) => `${r.close_probability}%`,
+            },
+            {
+              header: "القيمة المرجّحة",
+              sortable: true,
+              value: (r) => (r.expected_value ?? 0) * r.close_probability / 100,
+              cell: (r) => formatCurrency((r.expected_value ?? 0) * r.close_probability / 100),
             },
             {
               header: "المتابعة القادمة",
@@ -362,6 +382,17 @@ function OpportunitiesPage() {
               inputMode="numeric"
               value={form.expected_value}
               onChange={(e) => set({ expected_value: e.target.value })}
+            />
+          </Field>
+          <Field label={`احتمال الإغلاق (${form.close_probability}%)`}>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              step="5"
+              className="w-full accent-primary"
+              value={form.close_probability}
+              onChange={(e) => set({ close_probability: e.target.value })}
             />
           </Field>
           <Field label="المتابعة القادمة">
