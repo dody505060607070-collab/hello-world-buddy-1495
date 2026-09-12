@@ -28,12 +28,12 @@ export const Route = createFileRoute("/_authenticated/task-form")({
   }),
   head: () => ({
     meta: [
-      { title: "إضافة / تعديل مهمة | الرشودي للعقارات العقارية" },
+      { title: "إضافة / تعديل مهمة | الرشودي للعقارات" },
       {
         name: "description",
         content: "نموذج كامل لإنشاء مهمة: النوع، التفاصيل، الأولوية، الموعد، الموظفون المكلّفون والمرفقات.",
       },
-      { property: "og:title", content: "إضافة / تعديل مهمة | الرشودي للعقارات العقارية" },
+      { property: "og:title", content: "إضافة / تعديل مهمة | الرشودي للعقارات" },
       { property: "og:description", content: "تكليف الفريق بمهام عادية أو مهام تصوير ومتابعة تنفيذها." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

@@ -7,14 +7,14 @@ const BASE = "https://friendly-fellow-kit.lovable.app";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      { title: "سياسة الخصوصية | الرشودي للعقارات العقارية" },
+      { title: "سياسة الخصوصية | الرشودي للعقارات" },
       {
         name: "description",
         content:
-          "سياسة الخصوصية في الرشودي للعقارات العقارية: كيف نجمع بيانات زوار الموقع والعملاء ونستخدمها ونحميها.",
+          "سياسة الخصوصية في الرشودي للعقارات: كيف نجمع بيانات زوار الموقع والعملاء ونستخدمها ونحميها.",
       },
-      { property: "og:title", content: "سياسة الخصوصية | الرشودي للعقارات العقارية" },
-      { property: "og:description", content: "كيف نتعامل مع بياناتك في الرشودي للعقارات العقارية." },
+      { property: "og:title", content: "سياسة الخصوصية | الرشودي للعقارات" },
+      { property: "og:description", content: "كيف نتعامل مع بياناتك في الرشودي للعقارات." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: `${BASE}/privacy` },
       { name: "twitter:card", content: "summary_large_image" },
@@ -57,7 +57,7 @@ function PrivacyPage() {
       <article className="mx-auto max-w-3xl px-4 py-14">
         <h1 className="text-2xl font-extrabold text-foreground md:text-3xl">سياسة الخصوصية</h1>
         <p className="mt-3 text-[13.5px] leading-7 text-muted-foreground">
-          توضّح هذه السياسة طريقة تعامل مؤسسة الرشودي للعقارات العقارية مع بيانات زوار الموقع وعملائها.
+          توضّح هذه السياسة طريقة تعامل مؤسسة الرشودي للعقارات مع بيانات زوار الموقع وعملائها.
         </p>
 
         <div className="mt-8 space-y-6">

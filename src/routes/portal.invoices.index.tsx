@@ -8,9 +8,9 @@ export const Route = createFileRoute("/portal/invoices/")({
   head: () => ({
     meta: [
       { title: "فواتيري | بوابة عميل الرشودي للعقارات" },
-      { name: "description", content: "كل الفواتير المعتمدة والمرسلة إليك من إدارة الرشودي للعقارات العقارية." },
+      { name: "description", content: "كل الفواتير المعتمدة والمرسلة إليك من إدارة الرشودي للعقارات." },
       { property: "og:title", content: "فواتيري | بوابة عميل الرشودي للعقارات" },
-      { property: "og:description", content: "كل الفواتير المعتمدة والمرسلة إليك من إدارة الرشودي للعقارات العقارية." },
+      { property: "og:description", content: "كل الفواتير المعتمدة والمرسلة إليك من إدارة الرشودي للعقارات." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

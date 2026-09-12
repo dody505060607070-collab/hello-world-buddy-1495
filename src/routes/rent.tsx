@@ -14,12 +14,12 @@ import { publicPropertiesQuery } from "@/lib/site-data";
 export const Route = createFileRoute("/rent")({
   head: () => ({
     meta: [
-      { title: "عقارات للإيجار في بريدة | الرشودي للعقارات العقارية" },
+      { title: "عقارات للإيجار في بريدة | الرشودي للعقارات" },
       {
         name: "description",
         content: "شقق وفلل ومكاتب ومعارض للإيجار في بريدة مع أسعار محدثة وتواصل مباشر عبر واتساب.",
       },
-      { property: "og:title", content: "عقارات للإيجار في بريدة | الرشودي للعقارات العقارية" },
+      { property: "og:title", content: "عقارات للإيجار في بريدة | الرشودي للعقارات" },
       {
         property: "og:description",
         content: "تصفّح وحدات الإيجار المتاحة في أحياء بريدة واختر ما يناسبك.",

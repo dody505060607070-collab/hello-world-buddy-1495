@@ -20,7 +20,7 @@ export function AiWidget() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "مرحبًا بك في الرشودي للعقارات العقارية 👋 أنا المساعد الذكي، كيف أخدمك اليوم؟",
+      content: "مرحبًا بك في الرشودي للعقارات 👋 أنا المساعد الذكي، كيف أخدمك اليوم؟",
     },
   ]);
   const scroller = useRef<HTMLDivElement>(null);

@@ -13,10 +13,10 @@ import { resolveClientLogin } from "@/lib/portal.functions";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "تسجيل الدخول | الرشودي للعقارات العقارية" },
-      { name: "description", content: "دخول فريق الرشودي للعقارات العقارية إلى لوحة التحكم الداخلية." },
-      { property: "og:title", content: "تسجيل الدخول | الرشودي للعقارات العقارية" },
-      { property: "og:description", content: "دخول فريق الرشودي للعقارات العقارية إلى لوحة التحكم الداخلية." },
+      { title: "تسجيل الدخول | الرشودي للعقارات" },
+      { name: "description", content: "دخول فريق الرشودي للعقارات إلى لوحة التحكم الداخلية." },
+      { property: "og:title", content: "تسجيل الدخول | الرشودي للعقارات" },
+      { property: "og:description", content: "دخول فريق الرشودي للعقارات إلى لوحة التحكم الداخلية." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
@@ -100,7 +100,7 @@ function AuthPage() {
   return (
     <main className="grid min-h-screen place-items-center bg-background px-4 py-10">
       <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-sm">
-        <img src={logoAsset.url} alt="الرشودي للعقارات العقارية" className="mx-auto h-28 w-auto sm:h-36" />
+        <img src={logoAsset.url} alt="الرشودي للعقارات" className="mx-auto h-28 w-auto sm:h-36" />
         <div className="mt-6 grid grid-cols-2 gap-1 rounded-xl bg-muted p-1 text-sm font-semibold">
           {(["staff", "client"] as const).map((a) => (
             <button

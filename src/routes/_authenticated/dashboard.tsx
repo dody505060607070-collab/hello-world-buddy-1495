@@ -26,12 +26,12 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
-      { title: "لوحة التحكم | الرشودي للعقارات العقارية" },
+      { title: "لوحة التحكم | الرشودي للعقارات" },
       {
         name: "description",
         content: "ملخص موحد لأداء المحفظة العقارية والأولويات التي تحتاج متابعة.",
       },
-      { property: "og:title", content: "لوحة التحكم | الرشودي للعقارات العقارية" },
+      { property: "og:title", content: "لوحة التحكم | الرشودي للعقارات" },
       {
         property: "og:description",
         content: "ملخص موحد لأداء المحفظة العقارية والأولويات التي تحتاج متابعة.",

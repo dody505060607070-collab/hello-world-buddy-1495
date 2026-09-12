@@ -73,10 +73,10 @@ function SiteHeader() {
           ))}
         </nav>
 
-        <Link to="/" aria-label="الرشودي للعقارات العقارية">
+        <Link to="/" aria-label="الرشودي للعقارات">
           <img
             src={logoAsset.url}
-            alt="الرشودي للعقارات العقارية"
+            alt="الرشودي للعقارات"
             width={680}
             height={510}
             className="h-12 w-auto brightness-0 invert transition-transform duration-300 hover:scale-105 md:h-14"
@@ -129,10 +129,10 @@ function SiteFooter() {
       <div aria-hidden className="absolute inset-0 -z-10 bg-primary/80" />
 
       <div className="mx-auto max-w-3xl px-4 py-16 text-center">
-        <Link to="/" aria-label="الرشودي للعقارات العقارية" className="inline-block">
+        <Link to="/" aria-label="الرشودي للعقارات" className="inline-block">
           <img
             src={logoAsset.url}
-            alt="الرشودي للعقارات العقارية"
+            alt="الرشودي للعقارات"
             width={680}
             height={510}
             loading="lazy"
@@ -141,7 +141,7 @@ function SiteFooter() {
         </Link>
 
         <p className="mt-5 text-[14px] leading-7 text-white/85">
-          الرشودي للعقارات العقارية — إيجار وبيع وإدارة أملاك في بريدة، القصيم.
+          الرشودي للعقارات — إيجار وبيع وإدارة أملاك في بريدة، القصيم.
         </p>
 
         <div className="mt-6 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-[13.5px] text-white/90">

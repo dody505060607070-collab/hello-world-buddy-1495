@@ -23,12 +23,12 @@ import {
 export const Route = createFileRoute("/properties/$code")({
   head: ({ params }) => ({
     meta: [
-      { title: `عقار ${params.code} | الرشودي للعقارات العقارية` },
+      { title: `عقار ${params.code} | الرشودي للعقارات` },
       {
         name: "description",
-        content: `تفاصيل العقار رقم ${params.code} في بريدة: الموقع، السعر، المواصفات وطريقة التواصل مع الرشودي للعقارات العقارية.`,
+        content: `تفاصيل العقار رقم ${params.code} في بريدة: الموقع، السعر، المواصفات وطريقة التواصل مع الرشودي للعقارات.`,
       },
-      { property: "og:title", content: `عقار ${params.code} | الرشودي للعقارات العقارية` },
+      { property: "og:title", content: `عقار ${params.code} | الرشودي للعقارات` },
       {
         property: "og:description",
         content: "تفاصيل كاملة للعقار مع صور وموقع وتواصل مباشر عبر واتساب.",

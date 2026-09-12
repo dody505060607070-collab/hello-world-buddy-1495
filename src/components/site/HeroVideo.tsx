@@ -57,7 +57,7 @@ export function HeroVideo() {
         {ended ? (
           <>
             <h1 className="animate-pop-in font-display text-[13vw] font-extrabold leading-[0.95] tracking-tight text-white drop-shadow-[0_8px_40px_rgba(0,0,0,0.55)] sm:text-[9vw] md:text-[7.5vw] lg:text-[104px]">
-              الرشودي للعقارات العقارية
+              الرشودي للعقارات
             </h1>
             <p
               className="animate-pop-in max-w-2xl text-[15px] font-semibold leading-8 text-white/85 md:text-[20px]"

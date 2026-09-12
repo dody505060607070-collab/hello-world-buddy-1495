@@ -44,9 +44,9 @@ type PropertyRow = {
 export const Route = createFileRoute("/_authenticated/properties")({
   head: () => ({
     meta: [
-      { title: "العقارات | الرشودي للعقارات العقارية" },
+      { title: "العقارات | الرشودي للعقارات" },
       { name: "description", content: "إدارة بيانات العقارات، الأسعار، الحالة والنشر على الموقع." },
-      { property: "og:title", content: "العقارات | الرشودي للعقارات العقارية" },
+      { property: "og:title", content: "العقارات | الرشودي للعقارات" },
       { property: "og:description", content: "إدارة بيانات العقارات، الأسعار، الحالة والنشر." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

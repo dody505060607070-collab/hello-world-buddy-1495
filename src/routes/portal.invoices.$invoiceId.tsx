@@ -61,7 +61,7 @@ function InvoiceView() {
           <div className="flex flex-wrap items-start justify-between gap-6">
             <div className="text-right">
               <h1 className="text-2xl font-bold text-primary">فاتورة</h1>
-              <p className="text-sm text-muted-foreground">الرشودي للعقارات العقارية</p>
+              <p className="text-sm text-muted-foreground">الرشودي للعقارات</p>
             </div>
             <dl className="text-sm">
               <div className="flex gap-6 border-b border-border py-1.5">
@@ -87,7 +87,7 @@ function InvoiceView() {
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             <div className="rounded-xl border border-border p-4">
               <span className="rounded-full bg-muted px-2 py-0.5 text-[11px]">من</span>
-              <p className="mt-2 font-bold">الرشودي للعقارات العقارية</p>
+              <p className="mt-2 font-bold">الرشودي للعقارات</p>
               <p className="text-sm text-muted-foreground">بريدة، المملكة العربية السعودية</p>
               <p className="text-sm text-muted-foreground" dir="ltr">0550818020</p>
 

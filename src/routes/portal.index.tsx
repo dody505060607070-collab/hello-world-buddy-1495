@@ -6,10 +6,10 @@ import { getPortalOverview } from "@/lib/portal.functions";
 export const Route = createFileRoute("/portal/")({
   head: () => ({
     meta: [
-      { title: "بوابة العميل | الرشودي للعقارات العقارية" },
-      { name: "description", content: "تابع عقودك وفواتيرك وأقساطك مع الرشودي للعقارات العقارية." },
-      { property: "og:title", content: "بوابة العميل | الرشودي للعقارات العقارية" },
-      { property: "og:description", content: "تابع عقودك وفواتيرك وأقساطك مع الرشودي للعقارات العقارية." },
+      { title: "بوابة العميل | الرشودي للعقارات" },
+      { name: "description", content: "تابع عقودك وفواتيرك وأقساطك مع الرشودي للعقارات." },
+      { property: "og:title", content: "بوابة العميل | الرشودي للعقارات" },
+      { property: "og:description", content: "تابع عقودك وفواتيرك وأقساطك مع الرشودي للعقارات." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

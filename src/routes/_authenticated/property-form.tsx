@@ -31,12 +31,12 @@ export const Route = createFileRoute("/_authenticated/property-form")({
   }),
   head: () => ({
     meta: [
-      { title: "إضافة / تعديل عقار | الرشودي للعقارات العقارية" },
+      { title: "إضافة / تعديل عقار | الرشودي للعقارات" },
       {
         name: "description",
         content: "نموذج كامل لإضافة عقار: البيانات، السعر، الموقع، الصور، الفيديوهات والملاحظات الداخلية.",
       },
-      { property: "og:title", content: "إضافة / تعديل عقار | الرشودي للعقارات العقارية" },
+      { property: "og:title", content: "إضافة / تعديل عقار | الرشودي للعقارات" },
       { property: "og:description", content: "نموذج كامل لبيانات العقار ووسائطه وموقعه على الخريطة." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

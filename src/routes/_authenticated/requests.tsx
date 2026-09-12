@@ -46,12 +46,12 @@ type ListingRow = {
 export const Route = createFileRoute("/_authenticated/requests")({
   head: () => ({
     meta: [
-      { title: "طلبات العقارات | الرشودي للعقارات العقارية" },
+      { title: "طلبات العقارات | الرشودي للعقارات" },
       {
         name: "description",
         content: "طلبات توفير العقار وطلبات عرض العقار في شاشة واحدة مع متابعة الحالة.",
       },
-      { property: "og:title", content: "طلبات العقارات | الرشودي للعقارات العقارية" },
+      { property: "og:title", content: "طلبات العقارات | الرشودي للعقارات" },
       { property: "og:description", content: "متابعة طلبات التوفير والعرض حتى الإغلاق." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

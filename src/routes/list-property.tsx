@@ -14,13 +14,13 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/list-property")({
   head: () => ({
     meta: [
-      { title: "اعرض أو اطلب عقارك | الرشودي للعقارات العقارية" },
+      { title: "اعرض أو اطلب عقارك | الرشودي للعقارات" },
       {
         name: "description",
         content:
           "أرسل بيانات عقارك لعرضه للإيجار أو البيع في بريدة، أو اطلب عقاراً بمواصفات محددة وسيتواصل معك فريقنا.",
       },
-      { property: "og:title", content: "اعرض أو اطلب عقارك | الرشودي للعقارات العقارية" },
+      { property: "og:title", content: "اعرض أو اطلب عقارك | الرشودي للعقارات" },
       {
         property: "og:description",
         content: "نموذج عرض العقار أو طلب عقار في بريدة مع متابعة مباشرة من فريق الرشودي للعقارات.",

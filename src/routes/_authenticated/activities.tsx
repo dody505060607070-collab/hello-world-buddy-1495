@@ -15,9 +15,9 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/activities")({
   head: () => ({
     meta: [
-      { title: "المتابعات والأنشطة | الرشودي للعقارات العقارية" },
+      { title: "المتابعات والأنشطة | الرشودي للعقارات" },
       { name: "description", content: "إسناد الأنشطة للموظفين ومحادثة خاصة لمتابعة النتيجة." },
-      { property: "og:title", content: "المتابعات والأنشطة | الرشودي للعقارات العقارية" },
+      { property: "og:title", content: "المتابعات والأنشطة | الرشودي للعقارات" },
       { property: "og:description", content: "إسناد الأنشطة للموظفين ومحادثة خاصة لمتابعة النتيجة." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

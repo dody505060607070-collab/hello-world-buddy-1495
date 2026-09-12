@@ -23,9 +23,9 @@ type Row = {
 export const Route = createFileRoute("/_authenticated/employees")({
   head: () => ({
     meta: [
-      { title: "الموظفون | الرشودي للعقارات العقارية" },
+      { title: "الموظفون | الرشودي للعقارات" },
       { name: "description", content: "حسابات فريق العمل وحالتها وصلاحياتها في النظام." },
-      { property: "og:title", content: "الموظفون | الرشودي للعقارات العقارية" },
+      { property: "og:title", content: "الموظفون | الرشودي للعقارات" },
       { property: "og:description", content: "حسابات فريق العمل وحالتها وصلاحياتها في النظام." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

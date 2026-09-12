@@ -26,12 +26,12 @@ import { sendWhatsAppMessage } from "@/lib/whatsapp.functions";
 export const Route = createFileRoute("/_authenticated/payment-reminder/$paymentId")({
   head: () => ({
     meta: [
-      { title: "تذكير دفعة إيجارية | الرشودي للعقارات العقارية" },
+      { title: "تذكير دفعة إيجارية | الرشودي للعقارات" },
       {
         name: "description",
         content: "إرسال تذكير واتساب بدفعة إيجارية مع معاينة الرسالة وتكرار الإرسال وسجل الرسائل.",
       },
-      { property: "og:title", content: "تذكير دفعة إيجارية | الرشودي للعقارات العقارية" },
+      { property: "og:title", content: "تذكير دفعة إيجارية | الرشودي للعقارات" },
       { property: "og:description", content: "معاينة التذكير وإرساله ومتابعة سجل الرسائل." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -88,7 +88,7 @@ function PaymentReminderPage() {
   const [showTemplate, setShowTemplate] = useState(false);
 
   const settings = useQuery(publicSettingsQuery);
-  const companyName = settings.data?.company_name || "الرشودي للعقارات العقارية";
+  const companyName = settings.data?.company_name || "الرشودي للعقارات";
 
   const payment = useQuery({
     queryKey: ["payment-reminder", paymentId],

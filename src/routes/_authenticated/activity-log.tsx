@@ -16,9 +16,9 @@ type Row = {
 export const Route = createFileRoute("/_authenticated/activity-log")({
   head: () => ({
     meta: [
-      { title: "سجل الأنشطة | الرشودي للعقارات العقارية" },
+      { title: "سجل الأنشطة | الرشودي للعقارات" },
       { name: "description", content: "سجل كل عملية تمت في النظام ومن نفّذها ومتى." },
-      { property: "og:title", content: "سجل الأنشطة | الرشودي للعقارات العقارية" },
+      { property: "og:title", content: "سجل الأنشطة | الرشودي للعقارات" },
       { property: "og:description", content: "سجل كل عملية تمت في النظام ومن نفّذها ومتى." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
