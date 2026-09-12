@@ -211,6 +211,39 @@ export type Database = {
         }
         Relationships: []
       }
+      automation_job_state: {
+        Row: {
+          consecutive_failures: number
+          job_name: string
+          last_error: string | null
+          last_finished_at: string | null
+          last_started_at: string | null
+          lease_until: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          consecutive_failures?: number
+          job_name: string
+          last_error?: string | null
+          last_finished_at?: string | null
+          last_started_at?: string | null
+          lease_until?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          consecutive_failures?: number
+          job_name?: string
+          last_error?: string | null
+          last_finished_at?: string | null
+          last_started_at?: string | null
+          lease_until?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       backup_runs: {
         Row: {
           completed_at: string | null
@@ -1436,6 +1469,7 @@ export type Database = {
           result: string
           sent_by: string | null
           sent_by_system: boolean
+          task_id: string | null
           unit_id: string | null
           updated_at: string
         }
@@ -1455,6 +1489,7 @@ export type Database = {
           result?: string
           sent_by?: string | null
           sent_by_system?: boolean
+          task_id?: string | null
           unit_id?: string | null
           updated_at?: string
         }
@@ -1474,6 +1509,7 @@ export type Database = {
           result?: string
           sent_by?: string | null
           sent_by_system?: boolean
+          task_id?: string | null
           unit_id?: string | null
           updated_at?: string
         }
@@ -1497,6 +1533,13 @@ export type Database = {
             columns: ["payment_id"]
             isOneToOne: false
             referencedRelation: "contract_payments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_log_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
             referencedColumns: ["id"]
           },
           {
@@ -2664,6 +2707,57 @@ export type Database = {
           },
         ]
       }
+      task_reminder_state: {
+        Row: {
+          created_at: string
+          id: string
+          last_error: string | null
+          last_sent_at: string | null
+          next_send_at: string
+          sent_count: number
+          task_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_error?: string | null
+          last_sent_at?: string | null
+          next_send_at?: string
+          sent_count?: number
+          task_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_error?: string | null
+          last_sent_at?: string | null
+          next_send_at?: string
+          sent_count?: number
+          task_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_reminder_state_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "task_reminder_state_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tasks: {
         Row: {
           approved_at: string | null
@@ -2881,10 +2975,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      acquire_automation_lease: {
+        Args: { _job_name: string; _lease_seconds?: number }
+        Returns: boolean
+      }
       bootstrap_current_user: { Args: never; Returns: undefined }
       can_view_activity: {
         Args: { _activity_id: string; _user_id: string }
         Returns: boolean
+      }
+      finish_automation_lease: {
+        Args: { _error?: string; _job_name: string }
+        Returns: undefined
       }
       has_perm: {
         Args: { _action: string; _module: string; _user_id: string }

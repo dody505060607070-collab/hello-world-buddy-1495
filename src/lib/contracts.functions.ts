@@ -336,7 +336,7 @@ export const finalizeContractImport = createServerFn({ method: "POST" })
         due_date: row?.due ?? addCycle(base, cycle, i),
         amount_due: row?.amount ?? amountEach,
         amount_paid: 0,
-        status: "pending",
+        status: "active",
         is_derived: !row,
       };
     });

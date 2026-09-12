@@ -186,7 +186,7 @@ function PaymentReminderPage() {
           payment_id: p.id,
           message_body: message,
           repeat_interval: option.key,
-          status: "pending",
+          status: "active",
           next_send_at: next,
         });
         if (error) throw error;
