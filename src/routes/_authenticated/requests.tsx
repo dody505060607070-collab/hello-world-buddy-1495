@@ -27,7 +27,6 @@ type SupplyRow = {
   admin_notes: string | null;
   status: string;
   created_at: string;
-  attachments: { path?: string; name?: string }[];
 };
 
 type ListingRow = {
@@ -42,6 +41,7 @@ type ListingRow = {
   admin_notes: string | null;
   status: string;
   created_at: string;
+  attachments: { path?: string; name?: string }[];
 };
 
 export const Route = createFileRoute("/_authenticated/requests")({
