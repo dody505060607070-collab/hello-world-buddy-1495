@@ -3,7 +3,7 @@ import { Clock, Heart, Mail, MapPin, Menu, Phone, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 
 import footerImage from "@/assets/bg-footer.jpg";
-import logoAsset from "@/assets/rushdy-logo.png.asset.json";
+import logoAsset from "@/assets/rushdy-logo-transparent.png.asset.json";
 import { FloatingActions, ScrollProgress } from "@/components/site/Chrome";
 import { AiWidget } from "@/components/site/AiWidget";
 import { useSession } from "@/hooks/useAuth";
