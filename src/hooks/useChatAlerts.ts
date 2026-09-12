@@ -233,16 +233,22 @@ export function useChatAlerts() {
       qc.invalidateQueries({ queryKey: ["nav-counts"] });
     };
 
-    const channel = supabase
-      .channel("chat-alerts")
+    const groupChannel = mithraa
+      .channel("chat-alerts-group")
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "group_messages" },
         (payload) => {
           const row = payload.new as { sender_id: string; body: string | null; channel: string };
+          if (row.channel === "mithraa") return;
           void notify(row.sender_id, row.body, row.channel === "shared" ? "الشات المشترك" : "شات الموظفين", row.channel);
         },
       )
+      .subscribe();
+
+    const channel = supabase
+      .channel("chat-alerts")
+
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "activity_messages" },
