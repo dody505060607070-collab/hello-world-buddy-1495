@@ -62,7 +62,7 @@ function ControlPage() {
         <h1 className="text-xl font-bold">لوحة تحكم الإيقاف الكلي</h1>
         <p className="mt-2 text-xs text-white/60">
           الحالة الحالية:{" "}
-          <span className={data?.locked ? "text-red-400" : "text-green-400"}>
+          <span className={data?.locked ? "text-destructive" : "text-success"}>
             {data?.locked ? "مقفول" : "مفتوح"}
           </span>
         </p>
@@ -119,7 +119,7 @@ function ControlPage() {
               type="button"
               disabled={busy || !code}
               onClick={() => apply(true)}
-              className="flex-1 rounded-md bg-red-600 px-4 py-2 text-sm font-semibold disabled:opacity-40"
+              className="flex-1 rounded-md bg-destructive px-4 py-2 text-sm font-semibold text-destructive-foreground disabled:opacity-40"
             >
               قفل الموقع
             </button>
