@@ -4,6 +4,7 @@ import { useEffect, useState, type ReactNode } from "react";
 
 import footerImage from "@/assets/bg-footer.jpg";
 import logoAsset from "@/assets/rashudi-logo.webp.asset.json";
+import logoWhiteAsset from "@/assets/rashudi-logo-white.png.asset.json";
 import { FloatingActions, ScrollProgress } from "@/components/site/Chrome";
 import { AiWidget } from "@/components/site/AiWidget";
 import { useSession } from "@/hooks/useAuth";
