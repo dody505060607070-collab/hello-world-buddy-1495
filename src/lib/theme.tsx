@@ -68,7 +68,7 @@ export function ThemeToggle({ className, showLabel = false }: { className?: stri
       className={cn(
         showLabel
           ? "inline-flex h-9 items-center gap-2 rounded-lg border border-border px-3 text-xs font-bold text-foreground transition-colors hover:bg-muted"
-          : "grid size-9 place-items-center rounded-full border border-border text-foreground transition-colors hover:bg-muted",
+          : "inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-border p-0 leading-none text-foreground transition-colors hover:bg-muted",
         className,
       )}
     >
