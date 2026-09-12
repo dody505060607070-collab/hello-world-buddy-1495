@@ -49,18 +49,12 @@ export function HeroVideo() {
         }`}
       />
 
-      <div
-        className={`pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-5 px-6 text-center transition-opacity duration-1000 ${
-          ended ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        {ended ? (
-          <>
-            <h1 className="animate-pop-in font-display text-[13vw] font-extrabold leading-[0.95] tracking-tight text-white drop-shadow-[0_8px_40px_rgba(0,0,0,0.55)] sm:text-[9vw] md:text-[7.5vw] lg:text-[104px]">
+      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-4 px-6 pb-12 text-center">
+            <h1 className="animate-pop-in max-w-full font-display text-4xl font-extrabold leading-tight text-primary-foreground drop-shadow-lg sm:text-5xl md:text-6xl lg:text-7xl">
               الرشودي للعقارات
             </h1>
             <p
-              className="animate-pop-in max-w-2xl text-[15px] font-semibold leading-8 text-white/85 md:text-[20px]"
+              className="animate-pop-in max-w-2xl text-[15px] font-semibold leading-8 text-primary-foreground/85 md:text-[19px]"
               style={{ animationDelay: "220ms" }}
             >
               نبني قرارك العقاري على معرفة حقيقية بسوق القصيم — عقار مدروس، عقد واضح، ومتابعة لا
@@ -72,29 +66,27 @@ export function HeroVideo() {
             >
               <Link
                 to="/rent"
-                className="shine inline-flex items-center gap-2 rounded-xl bg-white/95 px-7 py-3.5 text-[14.5px] font-bold text-foreground"
+                className="shine inline-flex items-center gap-2 rounded-xl bg-card/95 px-7 py-3.5 text-[14.5px] font-bold text-card-foreground"
               >
                 <KeyRound className="size-4" />
                 عقارات الإيجار
               </Link>
               <Link
                 to="/sale"
-                className="shine glass-dark inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-[14.5px] font-bold text-white"
+                className="shine glass-dark inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-[14.5px] font-bold text-primary-foreground"
               >
                 <Home className="size-4" />
                 عقارات البيع
               </Link>
             </div>
-          </>
-        ) : null}
       </div>
 
       {/* Scroll cue */}
       <span
         aria-hidden
-        className="pointer-events-none absolute bottom-5 left-1/2 h-10 w-6 -translate-x-1/2 rounded-full border border-white/45"
+        className="pointer-events-none absolute bottom-5 left-1/2 h-10 w-6 -translate-x-1/2 rounded-full border border-primary-foreground/45"
       >
-        <span className="absolute left-1/2 top-2 size-1.5 -translate-x-1/2 animate-bounce rounded-full bg-white/80" />
+        <span className="absolute left-1/2 top-2 size-1.5 -translate-x-1/2 animate-bounce rounded-full bg-primary-foreground/80" />
       </span>
     </section>
   );
