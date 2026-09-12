@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
+import { mithraa } from "@/integrations/mithraa/client";
 import { useCurrentUser } from "@/hooks/useAuth";
 
 let sharedCtx: AudioContext | null = null;
@@ -271,6 +272,7 @@ export function useChatAlerts() {
 
     return () => {
       void supabase.removeChannel(channel);
+      void mithraa.removeChannel(groupChannel);
     };
   }, [qc, isSuperAdmin]);
 }
