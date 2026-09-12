@@ -65,18 +65,17 @@ export function PropertyMap({
     if (!leaflet || !containerRef.current) return;
     const L = leaflet;
     if (!mapRef.current) {
-      const map = L.map(containerRef.current, { scrollWheelZoom: false, zoomControl: false }).setView(
+      const map = L.map(containerRef.current, { scrollWheelZoom: true, zoomControl: false }).setView(
         [26.3536, 43.9667],
         11,
       );
+      setTimeout(() => map.invalidateSize(), 200);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "&copy; OpenStreetMap",
         maxZoom: 19,
       }).addTo(map);
       L.control.zoom({ position: "bottomleft" }).addTo(map);
       L.control.scale({ position: "bottomright", imperial: false }).addTo(map);
-      map.on("click", () => map.scrollWheelZoom.enable());
-      map.on("mouseout", () => map.scrollWheelZoom.disable());
       mapRef.current = map;
       layerRef.current = L.layerGroup().addTo(map);
 
@@ -178,10 +177,14 @@ export function PropertyMap({
         <span>{points.length} عقار على الخريطة</span>
       </div>
 
-      <div
-        ref={containerRef}
-        className="h-[380px] w-full overflow-hidden rounded-2xl border border-border shadow-float sm:h-[480px]"
-      />
+      <div className="flex justify-center">
+        <div className="relative aspect-square w-full max-w-[340px] rounded-full p-[6px] ring-2 ring-primary/40 shadow-float sm:max-w-[520px] lg:max-w-[620px]">
+          <div
+            ref={containerRef}
+            className="size-full overflow-hidden rounded-full border border-border"
+          />
+        </div>
+      </div>
     </section>
   );
 }
