@@ -38,6 +38,7 @@ type Msg = {
   is_pinned: boolean;
   deleted_at: string | null;
   created_at: string;
+  channel: string;
   sender: { full_name: string; job_title: string | null; avatar_url: string | null } | null;
 };
 
@@ -46,6 +47,7 @@ const EMOJIS = ["👍", "🙏", "🔥", "✅", "❤️", "😀", "😅", "🎉",
 function TeamChatPage() {
   const qc = useQueryClient();
   const { userId, isSuperAdmin } = useCurrentUser();
+  const [activeChannel, setActiveChannel] = useState<"rashoudi" | "mithraa" | "shared">("rashoudi");
   const [body, setBody] = useState("");
   const [search, setSearch] = useState("");
   const [replyTo, setReplyTo] = useState<Msg | null>(null);
@@ -56,12 +58,13 @@ function TeamChatPage() {
   const bottom = useRef<HTMLDivElement>(null);
 
   const messages = useQuery({
-    queryKey: ["group-messages"],
+    queryKey: ["group-messages", activeChannel],
     refetchInterval: 4000,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("group_messages")
-        .select("id, sender_id, body, reply_to, is_pinned, deleted_at, created_at, attachment_path, attachment_name, edited_at, sender:sender_id(full_name, job_title, avatar_url)")
+        .select("id, sender_id, body, reply_to, is_pinned, deleted_at, created_at, channel, attachment_path, attachment_name, edited_at, sender:sender_id(full_name, job_title, avatar_url)")
+        .eq("channel", activeChannel)
         .order("created_at")
         .limit(500);
       if (error) throw error;
@@ -70,12 +73,13 @@ function TeamChatPage() {
   });
 
   const staff = useQuery({
-    queryKey: ["profiles", "team-chat"],
+    queryKey: ["profiles", "team-chat", activeChannel],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")
-        .select("id, full_name, job_title, avatar_url")
+        .select("id, full_name, job_title, avatar_url, org")
         .eq("is_active", true)
+        .in("org", activeChannel === "shared" ? ["rashoudi", "mithraa"] : [activeChannel])
         .order("full_name");
       if (error) throw error;
       return data ?? [];
@@ -87,13 +91,13 @@ function TeamChatPage() {
     const channel = supabase
       .channel("group-messages-live")
       .on("postgres_changes", { event: "*", schema: "public", table: "group_messages" }, () => {
-        qc.invalidateQueries({ queryKey: ["group-messages"] });
+        qc.invalidateQueries({ queryKey: ["group-messages", activeChannel] });
       })
       .subscribe();
     return () => {
       void supabase.removeChannel(channel);
     };
-  }, [qc]);
+  }, [qc, activeChannel]);
 
   const all = messages.data ?? [];
   const byId = useMemo(() => new Map(all.map((m) => [m.id, m])), [all]);
@@ -123,13 +127,15 @@ function TeamChatPage() {
         sender_id: userId!,
         body: text,
         reply_to: replyTo?.id ?? null,
+        channel: activeChannel,
       });
       if (error) throw error;
       const mentions = text.match(/@([\p{L}\d_]+)/gu) ?? [];
       const { data: staff } = await supabase
         .from("profiles")
         .select("id, full_name")
-        .eq("is_active", true);
+        .eq("is_active", true)
+        .in("org", activeChannel === "shared" ? ["rashoudi", "mithraa"] : [activeChannel]);
       if (mentions.length) {
         const targets = (staff ?? []).filter(
           (s) => s.id !== userId && mentions.some((m) => s.full_name.includes(m.slice(1))),
@@ -153,7 +159,7 @@ function TeamChatPage() {
             title: "رسالة جديدة في شات الموظفين",
             body: text.slice(0, 120),
             url: "/team-chat",
-            tag: "mithra-team-chat",
+            tag: `rashoudi-team-chat-${activeChannel}`,
           },
         }).catch(() => undefined);
       }
@@ -162,7 +168,7 @@ function TeamChatPage() {
       setBody("");
       setReplyTo(null);
       setEditing(null);
-      qc.invalidateQueries({ queryKey: ["group-messages"] });
+      qc.invalidateQueries({ queryKey: ["group-messages", activeChannel] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -172,7 +178,7 @@ function TeamChatPage() {
       const { error } = await supabase.from("group_messages").update(values).eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["group-messages"] }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["group-messages", activeChannel] }),
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -187,11 +193,12 @@ function TeamChatPage() {
         attachment_path: path,
         attachment_name: file.name,
         reply_to: replyTo?.id ?? null,
+        channel: activeChannel,
       });
       if (error) throw error;
       setBody("");
       setReplyTo(null);
-      qc.invalidateQueries({ queryKey: ["group-messages"] });
+      qc.invalidateQueries({ queryKey: ["group-messages", activeChannel] });
     } catch (e) {
       toast.error((e as Error).message);
     } finally {
@@ -218,6 +225,15 @@ function TeamChatPage() {
       />
 
       <div className="surface-card overflow-hidden">
+        <nav className="flex gap-2 overflow-x-auto border-b border-border p-3">
+          {([
+            ["rashoudi", "فريق الرشودي"],
+            ["shared", "الشات المشترك"],
+            ...(isSuperAdmin ? [["mithraa", "فريق مثراء"]] : []),
+          ] as ["rashoudi" | "mithraa" | "shared", string][]).map(([value, label]) => (
+            <button key={value} type="button" onClick={() => setActiveChannel(value)} className={cn("shrink-0 rounded-full px-4 py-2 text-xs font-bold", activeChannel === value ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground")}>{label}</button>
+          ))}
+        </nav>
         <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border bg-accent/40 px-4 py-3">
           <div className="relative min-w-0">
             <Search className="pointer-events-none absolute end-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />

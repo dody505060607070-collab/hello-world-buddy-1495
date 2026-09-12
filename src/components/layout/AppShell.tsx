@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { Bell, ChevronDown, LogOut, Menu, X } from "lucide-react";
+import { ChevronDown, LogOut, Menu, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
 import logoAsset from "@/assets/rushdy-logo-transparent.png.asset.json";
@@ -118,11 +118,11 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-card px-3 md:h-24 md:px-6">
+      <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-primary-foreground/15 bg-primary px-3 text-primary-foreground shadow-sm md:h-24 md:px-6">
         <div className="relative z-10 flex items-center gap-1 md:gap-2">
           <button
             type="button"
-            className="grid size-9 place-items-center rounded-full bg-primary text-[13px] font-bold text-primary-foreground"
+            className="grid size-9 place-items-center rounded-full bg-primary-foreground/15 text-[13px] font-bold text-primary-foreground"
             aria-label="الحساب"
             title={profile?.full_name ?? ""}
           >
@@ -131,13 +131,13 @@ export function AppShell({ children }: { children: ReactNode }) {
           <button
             type="button"
             onClick={handleSignOut}
-            className="grid size-9 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+            className="grid size-9 place-items-center rounded-full text-primary-foreground/80 transition-colors hover:bg-primary-foreground/15 hover:text-primary-foreground"
             aria-label="تسجيل الخروج"
             title="تسجيل الخروج"
           >
             <LogOut className="size-[18px]" />
           </button>
-          <LanguageToggle />
+          <LanguageToggle className="border-primary-foreground/25 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20" />
           <NotificationsBell />
           <PushToggle />
         </div>
@@ -151,23 +151,23 @@ export function AppShell({ children }: { children: ReactNode }) {
             alt="الرشودي للعقارات"
             width={1152}
             height={576}
-            className="h-9 w-auto md:h-[96px]"
+            className="h-12 w-auto brightness-0 invert md:h-[82px]"
           />
         </Link>
 
         <div className="relative z-10 flex items-center gap-3">
           <div className="hidden text-end md:block">
-            <p className="text-[14px] font-bold leading-tight text-foreground">
+            <p className="text-[14px] font-bold leading-tight text-primary-foreground">
               {profile?.full_name ?? "—"}
             </p>
-            <p className="text-[11.5px] text-muted-foreground">
+            <p className="text-[11.5px] text-primary-foreground/70">
               {isSuperAdmin ? "مدير عام" : (profile?.job_title ?? "موظف")}
             </p>
           </div>
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="grid size-9 place-items-center rounded-lg border border-border text-muted-foreground lg:hidden"
+            className="grid size-9 place-items-center rounded-lg border border-primary-foreground/25 text-primary-foreground lg:hidden"
             aria-label="القائمة"
           >
             {open ? <X className="size-5" /> : <Menu className="size-5" />}

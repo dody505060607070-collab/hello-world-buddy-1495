@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { Building2, LockKeyhole, Mail, ShieldCheck, UserRound } from "lucide-react";
 import { toast } from "sonner";
 
 import logoAsset from "@/assets/rushdy-logo-transparent.png.asset.json";
@@ -98,9 +99,32 @@ function AuthPage() {
   };
 
   return (
-    <main className="grid min-h-screen place-items-center bg-background px-4 py-10">
-      <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-sm">
-        <img src={logoAsset.url} alt="الرشودي للعقارات" className="mx-auto h-28 w-auto sm:h-36" />
+    <main className="min-h-screen bg-[#f6f3f1] p-3 sm:grid sm:place-items-center sm:p-6" dir="rtl">
+      <div className="grid min-h-[calc(100vh-1.5rem)] w-full max-w-6xl overflow-hidden rounded-[2rem] bg-card shadow-2xl sm:min-h-[720px] lg:grid-cols-[0.9fr_1.1fr]">
+        <aside className="relative flex min-h-64 flex-col justify-between overflow-hidden bg-primary p-8 text-primary-foreground sm:p-12 lg:min-h-full">
+          <div className="absolute -start-28 -top-28 size-80 rounded-full border border-primary-foreground/10" />
+          <div className="absolute -bottom-32 -end-24 size-96 rounded-full border border-primary-foreground/10" />
+          <img src={logoAsset.url} alt="الرشودي للعقارات" className="relative h-28 w-fit brightness-0 invert sm:h-36" />
+          <div className="relative mt-10 max-w-md">
+            <p className="text-sm font-bold text-secondary">بوابة الرشودي الرقمية</p>
+            <h2 className="mt-3 text-3xl font-black leading-tight sm:text-4xl">إدارة عقارية متكاملة، في مكان واحد.</h2>
+            <p className="mt-4 text-sm leading-7 text-primary-foreground/75">تابع العقارات والعقود والعملاء والمهام بأمان وسهولة من لوحة موحدة.</p>
+            <div className="mt-8 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-1">
+              <span className="flex items-center gap-3"><ShieldCheck className="size-5 text-secondary" /> دخول آمن ومخصص</span>
+              <span className="flex items-center gap-3"><Building2 className="size-5 text-secondary" /> بياناتك العقارية لحظيًا</span>
+            </div>
+          </div>
+          <p className="relative mt-8 text-xs text-primary-foreground/55">© الرشودي للعقارات</p>
+        </aside>
+
+        <section className="flex items-center justify-center p-6 sm:p-12">
+          <div className="w-full max-w-md">
+            <p className="text-sm font-bold text-primary">مرحبًا بعودتك</p>
+            <h1 className="mt-2 text-3xl font-black text-foreground">
+              {audience === "client" ? "دخول بوابة العميل" : mode === "signin" ? "تسجيل الدخول" : "إنشاء حساب موظف"}
+            </h1>
+            <p className="mt-2 text-[13px] leading-6 text-muted-foreground">أدخل بياناتك للوصول إلى حسابك في الرشودي للعقارات.</p>
+
         <div className="mt-6 grid grid-cols-2 gap-1 rounded-xl bg-muted p-1 text-sm font-semibold">
           {(["staff", "client"] as const).map((a) => (
             <button
@@ -114,33 +138,25 @@ function AuthPage() {
           ))}
         </div>
 
-        <h1 className="mt-5 text-center text-xl font-bold text-foreground">
-          {audience === "client" ? "دخول بوابة العميل" : mode === "signin" ? "تسجيل الدخول للوحة التحكم" : "إنشاء حساب موظف"}
-        </h1>
-        <p className="mt-2 text-center text-[13px] text-muted-foreground">
-          {audience === "client"
-            ? "اسم المستخدم هو رقم الهوية، ومعه كلمة المرور الخاصة بك."
-            : "الوصول للبيانات الداخلية متاح للموظفين المصرّح لهم فقط."}
-        </p>
-
         <form onSubmit={submit} className="mt-6 space-y-4">
           {audience === "staff" && mode === "signup" ? (
             <div className="space-y-2">
               <Label htmlFor="name">الاسم الكامل</Label>
-              <Input
+              <div className="relative"><UserRound className="absolute end-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" /><Input
                 id="name"
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="مثال: محمد الرشودي للعقارات"
-              />
+                placeholder="مثال: محمد الرشودي"
+                className="pe-10"
+              /></div>
             </div>
           ) : null}
 
           {audience === "client" ? (
             <div className="space-y-2">
               <Label htmlFor="username">اسم المستخدم</Label>
-              <Input
+              <div className="relative"><UserRound className="absolute end-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" /><Input
                 id="username"
                 dir="ltr"
                 inputMode="numeric"
@@ -148,25 +164,28 @@ function AuthPage() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="1xxxxxxxxx"
-              />
+                className="pe-10"
+              /></div>
             </div>
           ) : (
             <div className="space-y-2">
               <Label htmlFor="email">البريد الإلكتروني</Label>
-              <Input
+              <div className="relative"><Mail className="absolute end-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" /><Input
                 id="email"
                 type="email"
                 dir="ltr"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-              />
+                placeholder="name@example.com"
+                className="pe-10"
+              /></div>
             </div>
           )}
 
           <div className="space-y-2">
             <Label htmlFor="password">كلمة المرور</Label>
-            <Input
+            <div className="relative"><LockKeyhole className="absolute end-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" /><Input
               id="password"
               type="password"
               dir="ltr"
@@ -174,16 +193,19 @@ function AuthPage() {
               minLength={audience === "client" ? 6 : 8}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder={undefined}
-            />
+              placeholder="••••••••"
+              className="pe-10"
+            /></div>
           </div>
 
-          <Button type="submit" className="w-full" disabled={busy}>
+          {mode === "signin" ? <label className="flex cursor-pointer items-center gap-2 text-[13px] text-muted-foreground"><input type="checkbox" className="size-4 accent-primary" /> إبقاء الاتصال</label> : null}
+
+          <Button type="submit" className="h-11 w-full" disabled={busy}>
             {audience === "client" ? "دخول بوابتي" : mode === "signin" ? "دخول" : "إنشاء الحساب"}
           </Button>
         </form>
 
-        {audience === "staff" ? (
+        {audience === "staff" && mode === "signin" ? (
           <>
             <div className="my-5 flex items-center gap-3 text-[12px] text-muted-foreground">
               <span className="h-px flex-1 bg-border" />
@@ -207,6 +229,8 @@ function AuthPage() {
             {mode === "signin" ? "ليس لديك حساب؟ إنشاء حساب" : "لدي حساب بالفعل — تسجيل الدخول"}
           </button>
         ) : null}
+          </div>
+        </section>
       </div>
     </main>
   );

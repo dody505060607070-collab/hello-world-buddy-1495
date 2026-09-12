@@ -192,7 +192,7 @@ async function senderName(id: string | null | undefined) {
 
 /** إشعار وصوت لأي رسالة جديدة في شات الموظفين أو محادثات الأنشطة. */
 export function useChatAlerts() {
-  const { userId } = useCurrentUser();
+  const { userId, isSuperAdmin } = useCurrentUser();
   const qc = useQueryClient();
   const meRef = useRef<string | undefined>(undefined);
   meRef.current = userId;
@@ -217,8 +217,13 @@ export function useChatAlerts() {
   }, []);
 
   useEffect(() => {
-    const notify = async (senderId: string | null, body: string | null, source: string) => {
+    let myOrg = "rashoudi";
+    void supabase.from("profiles").select("org").eq("id", meRef.current ?? "").maybeSingle().then(({ data }) => {
+      if (data?.org) myOrg = data.org;
+    });
+    const notify = async (senderId: string | null, body: string | null, source: string, messageChannel?: string) => {
       if (!senderId || senderId === meRef.current) return;
+      if (messageChannel && !isSuperAdmin && messageChannel !== "shared" && messageChannel !== myOrg) return;
       const name = await senderName(senderId);
       const text = (body ?? "مرفق جديد").slice(0, 120);
       playChime();
@@ -234,8 +239,8 @@ export function useChatAlerts() {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "group_messages" },
         (payload) => {
-          const row = payload.new as { sender_id: string; body: string | null };
-          void notify(row.sender_id, row.body, "شات الموظفين");
+          const row = payload.new as { sender_id: string; body: string | null; channel: string };
+          void notify(row.sender_id, row.body, row.channel === "shared" ? "الشات المشترك" : "شات الموظفين", row.channel);
         },
       )
       .on(
@@ -259,5 +264,5 @@ export function useChatAlerts() {
     return () => {
       void supabase.removeChannel(channel);
     };
-  }, [qc]);
+  }, [qc, isSuperAdmin]);
 }

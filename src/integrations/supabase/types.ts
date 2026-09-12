@@ -1047,6 +1047,7 @@ export type Database = {
           attachment_name: string | null
           attachment_path: string | null
           body: string | null
+          channel: string
           created_at: string
           deleted_at: string | null
           edited_at: string | null
@@ -1059,6 +1060,7 @@ export type Database = {
           attachment_name?: string | null
           attachment_path?: string | null
           body?: string | null
+          channel?: string
           created_at?: string
           deleted_at?: string | null
           edited_at?: string | null
@@ -1071,6 +1073,7 @@ export type Database = {
           attachment_name?: string | null
           attachment_path?: string | null
           body?: string | null
+          channel?: string
           created_at?: string
           deleted_at?: string | null
           edited_at?: string | null
@@ -1766,6 +1769,7 @@ export type Database = {
           id: string
           is_active: boolean
           job_title: string | null
+          org: string
           phone: string | null
           updated_at: string
           whatsapp: string | null
@@ -1781,6 +1785,7 @@ export type Database = {
           id: string
           is_active?: boolean
           job_title?: string | null
+          org?: string
           phone?: string | null
           updated_at?: string
           whatsapp?: string | null
@@ -1796,6 +1801,7 @@ export type Database = {
           id?: string
           is_active?: boolean
           job_title?: string | null
+          org?: string
           phone?: string | null
           updated_at?: string
           whatsapp?: string | null
@@ -2809,6 +2815,7 @@ export type Database = {
         Args: { _task_id: string; _user_id: string }
         Returns: boolean
       }
+      user_org: { Args: { _user_id: string }; Returns: string }
     }
     Enums: {
       app_role: "super_admin" | "employee"

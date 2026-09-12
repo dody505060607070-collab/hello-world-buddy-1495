@@ -54,7 +54,7 @@ export function NotificationsBell() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="relative grid size-9 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+        className="relative grid size-9 place-items-center rounded-full text-primary-foreground/80 transition-colors hover:bg-primary-foreground/15 hover:text-primary-foreground"
         aria-label="الإشعارات"
       >
         <Bell className="size-[18px]" />
