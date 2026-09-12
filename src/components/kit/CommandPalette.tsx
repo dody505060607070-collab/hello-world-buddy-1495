@@ -13,7 +13,7 @@ import {
 import { navGroups } from "@/data/nav";
 import { supabase } from "@/integrations/supabase/client";
 
-type Hit = { id: string; label: string; sub?: string; to: string };
+type Hit = { id: string; label: string; sub?: string | undefined; to: string };
 
 export function CommandPalette() {
   const navigate = useNavigate();
@@ -86,7 +86,7 @@ export function CommandPalette() {
   const pages = navGroups.flatMap((g) => g.items);
 
   return (
-    <CommandDialog open={open} onOpenChange={setOpen} title="بحث سريع" description="Ctrl+K">
+    <CommandDialog open={open} onOpenChange={setOpen}>
       <CommandInput
         value={term}
         onValueChange={setTerm}
