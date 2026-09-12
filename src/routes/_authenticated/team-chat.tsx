@@ -238,16 +238,27 @@ function TeamChatPage() {
         stats={[{ value: String(all.length), label: "رسالة" }]}
       />
 
+      {ready && !chatUserId ? <MithraaSignIn /> : null}
+
       <div className="surface-card flex h-[calc(100dvh-15rem)] min-h-[560px] flex-col overflow-hidden">
-        <nav className="flex gap-2 overflow-x-auto border-b border-border p-3">
+        <nav className="flex items-center gap-2 overflow-x-auto border-b border-border p-3">
           {([
             ["rashoudi", "فريق الرشودي"],
             ["shared", "الشات المشترك"],
-            ...(isSuperAdmin ? [["mithraa", "فريق مثراء"]] : []),
-          ] as ["rashoudi" | "mithraa" | "shared", string][]).map(([value, label]) => (
+          ] as ["rashoudi" | "shared", string][]).map(([value, label]) => (
             <button key={value} type="button" onClick={() => setActiveChannel(value)} className={cn("shrink-0 rounded-full px-4 py-2 text-xs font-bold", activeChannel === value ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground")}>{label}</button>
           ))}
+          {chatUserId ? (
+            <button
+              type="button"
+              onClick={() => void signOutMithraa()}
+              className="ms-auto shrink-0 rounded-full border border-border px-3 py-1.5 text-[11px] text-muted-foreground"
+            >
+              فصل حساب الشات
+            </button>
+          ) : null}
         </nav>
+
         <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border bg-accent/40 px-4 py-3">
           <div className="relative min-w-0">
             <Search className="pointer-events-none absolute end-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
