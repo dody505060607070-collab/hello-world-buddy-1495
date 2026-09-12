@@ -44,6 +44,7 @@ function ListPropertyPage() {
   const [busy, setBusy] = useState(false);
   const [images, setImages] = useState<File[]>([]);
   const [isBroker, setIsBroker] = useState(false);
+  const [additionalNotes, setAdditionalNotes] = useState("");
   const navigate = useNavigate();
   const [form, setForm] = useState({ full_name: "", phone: "", purpose: "sale", property_type: "", city: "بريدة", district: "", asking_price: "", description: "", budget_min: "", budget_max: "", map_url: "", broker_name: "", broker_phone: "" });
   const set = (key: keyof typeof form, value: string) => setForm((prev) => ({ ...prev, [key]: value }));
@@ -64,7 +65,7 @@ function ListPropertyPage() {
           if (upload.error) throw upload.error;
           attachments.push({ path, name: file.name, size: file.size, type: file.type });
         }
-        const notes = isBroker ? `${form.description}\n\nبيانات الوسيط: ${form.broker_name} — ${form.broker_phone}` : form.description;
+        const notes = [form.description, additionalNotes, isBroker ? `بيانات الوسيط: ${form.broker_name} — ${form.broker_phone}` : ""].filter(Boolean).join("\n\n");
         const result = await supabase.from("listing_requests").insert({ full_name: form.full_name, phone: form.phone, purpose: form.purpose, property_type: form.property_type, city: form.city || null, district: form.district || null, asking_price: form.asking_price, description: notes, map_url: form.map_url, attachments });
         if (result.error) throw result.error;
       } else {
@@ -109,7 +110,7 @@ function ListPropertyPage() {
           </>}
 
           <section className="rounded-lg border border-border bg-secondary/25"><div className="flex items-center justify-between gap-3 border-b border-border p-3"><div className="flex items-center gap-2"><span className="grid size-9 place-items-center rounded-md bg-primary text-primary-foreground"><UserRound className="size-4" /></span><div><p className="text-xs font-bold">أنا وسيط عقاري</p><p className="text-[10px] text-muted-foreground">اختر إذا كنت وسيطاً عقارياً</p></div></div><Switch checked={isBroker} onCheckedChange={setIsBroker} aria-label="أنا وسيط عقاري" /></div>{isBroker ? <div className="grid gap-4 p-3 sm:grid-cols-2"><div className="space-y-2"><RequiredLabel htmlFor="broker_name">اسم الوسيط</RequiredLabel><Input id="broker_name" value={form.broker_name} onChange={(e) => set("broker_name", e.target.value)} placeholder="اسم الوسيط" /></div><div className="space-y-2"><RequiredLabel htmlFor="broker_phone">جوال الوسيط</RequiredLabel><Input id="broker_phone" dir="ltr" value={form.broker_phone} onChange={(e) => set("broker_phone", e.target.value)} placeholder="05xxxxxxxx" /></div></div> : null}</section>
-          <div className="space-y-2"><Label htmlFor="notes" className="text-xs font-bold">{mode === "offer" ? "ملاحظات إضافية" : "مواصفات العقار المطلوبة"}</Label><Textarea id="notes" rows={4} value={mode === "offer" ? "" : form.description} onChange={(e) => mode === "request" && set("description", e.target.value)} placeholder={mode === "offer" ? "أي تفاصيل إضافية تساعدنا في إيجاد المشتري المناسب لك..." : "اكتب وصفاً تفصيلياً للعقار المطلوب..."} disabled={mode === "offer"} /></div>
+          <div className="space-y-2"><Label htmlFor="notes" className="text-xs font-bold">{mode === "offer" ? "ملاحظات إضافية" : "مواصفات العقار المطلوبة"}</Label><Textarea id="notes" rows={4} value={mode === "offer" ? additionalNotes : form.description} onChange={(e) => mode === "offer" ? setAdditionalNotes(e.target.value) : set("description", e.target.value)} placeholder={mode === "offer" ? "أي تفاصيل إضافية تساعدنا في إيجاد المشتري المناسب لك..." : "اكتب وصفاً تفصيلياً للعقار المطلوب..."} /></div>
           <Button type="submit" className="h-11 w-full" disabled={busy}>{busy ? "جارٍ الإرسال..." : "إرسال الطلب"}</Button>
         </div>
       </form>
