@@ -138,7 +138,7 @@ export function AiDock() {
         >
           <header className="flex items-center justify-between bg-primary px-4 py-3 text-primary-foreground">
             <h2 className="flex items-center gap-2 text-[13.5px] font-bold">
-              <span className="grid size-6 place-items-center rounded-md bg-primary-foreground/15 text-[10px] font-black">AI</span>
+              <img src={logoAsset.url} alt="" className="size-7 rounded-full object-cover" />
               مساعد الرشودي للعقارات
             </h2>
             <button type="button" onClick={() => setOpen(false)} aria-label="إغلاق">
