@@ -8,6 +8,7 @@ import { FloatingActions, ScrollProgress } from "@/components/site/Chrome";
 import { AiWidget } from "@/components/site/AiWidget";
 import { useSession } from "@/hooks/useAuth";
 import { COMPANY_EMAIL, COMPANY_PHONE } from "@/lib/site-data";
+import { ThemeToggle } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -24,7 +25,7 @@ function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-primary/85 text-primary-foreground shadow-md backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-primary-foreground/10 bg-primary text-primary-foreground shadow-md">
       <div className="mx-auto flex h-[74px] max-w-6xl items-center justify-between gap-4 px-4">
         <div className="flex items-center gap-2">
           <Link
@@ -33,6 +34,7 @@ function SiteHeader() {
           >
             اعرض | اطلب عقارك
           </Link>
+          <ThemeToggle showLabel className="hidden border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 sm:inline-flex" />
           <Link
             to="/favorites"
             aria-label="المفضلة"
@@ -106,6 +108,9 @@ function SiteHeader() {
               >
                 اعرض | اطلب عقارك
               </Link>
+            </li>
+            <li className="mt-2 border-t border-primary-foreground/15 pt-3">
+              <ThemeToggle showLabel className="w-full justify-center border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20" />
             </li>
           </ul>
         </nav>

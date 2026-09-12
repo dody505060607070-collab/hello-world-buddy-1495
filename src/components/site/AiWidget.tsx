@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { Loader2, Send, Sparkles, X } from "lucide-react";
+import { Loader2, Send, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import markAsset from "@/assets/rashudi-logo.webp.asset.json";
@@ -98,25 +98,16 @@ export function AiWidget() {
         <button
           type="button"
           aria-label="الرشودي للعقارات AI — المساعد الذكي"
-          className="glass shine group flex flex-col items-center gap-0.5 rounded-2xl px-2 pb-1.5 pt-2 shadow-float sm:gap-1 sm:rounded-3xl sm:px-3 sm:pb-2 sm:pt-3"
+          className="group block transition-transform hover:scale-105"
         >
-          <span className="grid size-9 place-items-center rounded-xl bg-white/70 ring-1 ring-primary/15 sm:size-14 sm:rounded-2xl">
-            {open ? (
-              <X className="size-4 text-primary sm:size-6" />
-            ) : (
-              <img
-                src={markAsset.url}
-                alt=""
-                width={680}
-                height={360}
-                loading="lazy"
-                className="h-6 w-auto animate-float-slow sm:h-9"
-              />
-            )}
-          </span>
-          <span className="text-[9px] font-extrabold tracking-wide text-primary sm:text-[11px]">
-            الرشودي للعقارات AI
-          </span>
+          <img
+            src={markAsset.url}
+            alt=""
+            width={680}
+            height={360}
+            loading="lazy"
+            className="h-16 w-auto animate-float-slow drop-shadow-lg sm:h-20"
+          />
         </button>
       </div>
 

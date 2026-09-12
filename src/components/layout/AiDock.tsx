@@ -116,15 +116,11 @@ export function AiDock() {
         aria-label="المساعد الذكي"
         title="اسحب لتحريك المساعد • اضغط للفتح"
         className={cn(
-          "grid size-16 touch-none select-none place-items-center overflow-hidden rounded-full bg-card shadow-float ring-2 ring-primary/30 transition-transform hover:scale-105",
-          dropping && "scale-110 ring-4 ring-primary/25",
+          "grid h-16 w-24 touch-none select-none place-items-center transition-transform hover:scale-105 md:h-20 md:w-28",
+          dropping && "scale-110",
         )}
       >
-        {open ? (
-          <X className="size-5 text-primary" />
-        ) : (
-          <img src={logoAsset.url} alt="الرشودي للعقارات" className="size-full object-cover" draggable={false} />
-        )}
+        <img src={logoAsset.url} alt="الرشودي للعقارات" className="size-full object-contain drop-shadow-lg" draggable={false} />
       </button>
 
       {open ? (
