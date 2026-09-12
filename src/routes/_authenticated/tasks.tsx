@@ -43,7 +43,7 @@ const STATUS_STYLE: Record<string, string> = {
   submitted: "border-violet-300 bg-violet-50 text-violet-700",
   approved: "border-emerald-300 bg-emerald-50 text-emerald-700",
   done: "border-emerald-300 bg-emerald-50 text-emerald-700",
-  rejected: "border-rose-300 bg-rose-50 text-rose-700",
+  rejected: "border-destructive/30 bg-destructive/10 text-destructive",
   cancelled: "border-slate-300 bg-slate-100 text-slate-600",
 };
 

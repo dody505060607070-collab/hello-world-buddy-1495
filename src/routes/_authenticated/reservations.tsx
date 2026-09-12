@@ -1,85 +1,43 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { CalendarClock } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { CalendarClock, CheckCircle2, Clock3, Loader2, Plus, XCircle } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 import { Chip } from "@/components/kit/Chip";
-import { LiveTable, formatDate } from "@/components/kit/LiveTable";
+import { DataTable } from "@/components/kit/DataTable";
+import { EmptyState, formatDate } from "@/components/kit/LiveTable";
+import { Field, GhostButton, Modal, PrimaryButton, inputClass, textareaClass } from "@/components/kit/Modal";
 import { PageHero } from "@/components/kit/PageHero";
+import { Button } from "@/components/ui/button";
+import { useCurrentUser } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import { reservationStatusLabels } from "@/lib/labels";
 
-type Row = {
-  id: string;
-  status: string;
-  starts_at: string;
-  ends_at: string;
-  extended_count: number | null;
-  notes: string | null;
-  properties: { name: string; code: string | null } | null;
-  employee: { full_name: string } | null;
-  contact: { full_name: string } | null;
-};
+type Row = { id: string; status: string; starts_at: string; ends_at: string; extended_count: number; notes: string | null; property_id: string | null; employee_id: string | null; contact_id: string | null; properties: { name: string; code: string | null } | null; employee: { full_name: string } | null; contact: { full_name: string } | null };
 
-export const Route = createFileRoute("/_authenticated/reservations")({
-  head: () => ({
-    meta: [
-      { title: "إدارة الحجوزات | الرشودي للعقارات" },
-      { name: "description", content: "حجوزات الموظفين للعقارات مع مدة الحجز والتمديد والانتهاء." },
-      { property: "og:title", content: "إدارة الحجوزات | الرشودي للعقارات" },
-      { property: "og:description", content: "حجوزات الموظفين للعقارات ومدة الحجز والتمديد." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
-  component: ReservationsPage,
-});
+export const Route = createFileRoute("/_authenticated/reservations")({ head: () => ({ meta: [
+  { title: "إدارة الحجوزات | الرشودي للعقارات" }, { name: "description", content: "إنشاء وتمديد وإلغاء حجوزات الموظفين وتحويلها إلى عقود." },
+  { property: "og:title", content: "إدارة الحجوزات | الرشودي للعقارات" }, { property: "og:description", content: "حجوزات العقارات ومدتها وحالتها وتحويلها للعقود." },
+  { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
+] }), component: ReservationsPage });
 
 function ReservationsPage() {
-  return (
-    <>
-      <PageHero
-        title="إدارة الحجوزات"
-        subtitle="الحجوزات النشطة والمؤقتة، ولا يُسمح بحجزين متعارضين على نفس العقار."
-        icon={CalendarClock}
-      />
-
-      <LiveTable<Row>
-        table="reservations"
-        select="id, status, starts_at, ends_at, extended_count, notes, properties:property_id(name, code), employee:employee_id(full_name), contact:contact_id(full_name)"
-        orderBy={{ column: "created_at" }}
-        searchPlaceholder="بحث بالعقار أو الموظف"
-        emptyText="لا توجد حجوزات"
-        emptyHint="عند حجز موظف لعقار سيظهر الحجز هنا مع مدة الصلاحية."
-        columns={[
-          {
-            header: "العقار",
-            cell: (r) => r.properties?.name ?? "—",
-            className: "font-semibold",
-          },
-          { header: "الكود", cell: (r) => r.properties?.code ?? "—" },
-          { header: "الموظف", cell: (r) => r.employee?.full_name ?? "—" },
-          { header: "العميل", cell: (r) => r.contact?.full_name ?? "—" },
-          { header: "من", cell: (r) => formatDate(r.starts_at) },
-          { header: "إلى", cell: (r) => formatDate(r.ends_at) },
-          { header: "مرات التمديد", cell: (r) => r.extended_count ?? 0 },
-          {
-            header: "الحالة",
-            cell: (r) => (
-              <Chip
-                tone={
-                  r.status === "active"
-                    ? "success"
-                    : r.status === "hold"
-                      ? "warning"
-                      : r.status === "cancelled"
-                        ? "danger"
-                        : "neutral"
-                }
-              >
-                {reservationStatusLabels[r.status] ?? r.status}
-              </Chip>
-            ),
-          },
-        ]}
-      />
-    </>
-  );
+  const { userId } = useCurrentUser(); const qc = useQueryClient(); const navigate = useNavigate(); const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({ property_id: "", employee_id: "", contact_id: "", notes: "" });
+  const query = useQuery({ queryKey: ["reservations"], queryFn: async () => { const { data, error } = await supabase.from("reservations").select("id,status,starts_at,ends_at,extended_count,notes,property_id,employee_id,contact_id,properties:property_id(name,code),employee:employee_id(full_name),contact:contact_id(full_name)").order("created_at", { ascending: false }).limit(300); if (error) throw error; return (data ?? []) as Row[]; } });
+  const options = useQuery({ queryKey: ["reservation-options"], queryFn: async () => { const [properties, staff, contacts] = await Promise.all([supabase.from("properties").select("id,name,code").eq("status", "available").order("name"), supabase.from("profiles").select("id,full_name").eq("is_active", true).order("full_name"), supabase.from("contacts").select("id,full_name").order("full_name").limit(500)]); for (const result of [properties, staff, contacts]) if (result.error) throw result.error; return { properties: properties.data ?? [], staff: staff.data ?? [], contacts: contacts.data ?? [] }; } });
+  const refresh = () => { void qc.invalidateQueries({ queryKey: ["reservations"] }); void qc.invalidateQueries({ queryKey: ["properties"] }); };
+  const create = useMutation({ mutationFn: async () => { if (!form.property_id || !form.employee_id) throw new Error("اختر العقار والموظف"); const ends = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(); const { error } = await supabase.from("reservations").insert({ property_id: form.property_id, employee_id: form.employee_id, contact_id: form.contact_id || null, notes: form.notes || null, ends_at: ends, status: "hold", created_by: userId ?? null }); if (error) throw error; await supabase.from("properties").update({ status: "reserved" }).eq("id", form.property_id); }, onSuccess: () => { refresh(); setOpen(false); setForm({ property_id: "", employee_id: "", contact_id: "", notes: "" }); toast.success("تم حجز العقار لمدة 24 ساعة"); }, onError: (e) => toast.error(e instanceof Error && e.message.includes("RESERVATION_CONFLICT") ? "العقار محجوز بالفعل في هذه المدة" : e instanceof Error ? e.message : "تعذّر الحجز") });
+  const update = useMutation({ mutationFn: async ({ row, action }: { row: Row; action: "extend" | "cancel" | "approve" }) => { if (action === "extend") { const ends = new Date(new Date(row.ends_at).getTime() + 24 * 60 * 60 * 1000).toISOString(); const result = await supabase.from("reservations").update({ ends_at: ends, extended_count: row.extended_count + 1 }).eq("id", row.id); if (result.error) throw result.error; return { row, action, contractId: null as string | null }; } if (action === "cancel") { const result = await supabase.from("reservations").update({ status: "cancelled", cancelled_by: userId ?? null, cancelled_at: new Date().toISOString() }).eq("id", row.id); if (result.error) throw result.error; if (row.property_id) await supabase.from("properties").update({ status: "available" }).eq("id", row.property_id); return { row, action, contractId: null as string | null }; } const property = row.property_id ? await supabase.from("properties").select("owner_id,purpose").eq("id", row.property_id).maybeSingle() : null; if (property?.error) throw property.error; const inserted = await supabase.from("contracts").insert({ contract_number: `RSV-${Date.now().toString(36).toUpperCase()}`, contract_type: property?.data?.purpose === "sale" ? "sale" : "rent", owner_id: property?.data?.owner_id ?? null, tenant_id: row.contact_id, property_id: row.property_id, start_date: new Date().toISOString().slice(0, 10), status: "draft", source: "reservation", created_by: userId ?? null }).select("id").single(); if (inserted.error) throw inserted.error; const result = await supabase.from("reservations").update({ status: "converted" }).eq("id", row.id); if (result.error) throw result.error; return { row, action, contractId: inserted.data.id }; }, onSuccess: ({ action, contractId }) => { refresh(); toast.success(action === "extend" ? "تم تمديد الحجز 24 ساعة" : action === "cancel" ? "تم إلغاء الحجز" : "تم إنشاء مسودة العقد من الحجز"); if (contractId) void navigate({ to: "/contracts/$contractId", params: { contractId } }); }, onError: (e) => toast.error(e instanceof Error ? e.message : "تعذّر التحديث") });
+  const rows = query.data ?? []; const active = rows.filter((r) => ["hold", "active"].includes(r.status));
+  return <><PageHero title="إدارة الحجوزات" subtitle="حجز العقار 24 ساعة، التمديد، الإلغاء أو التحويل إلى عقد." icon={CalendarClock} stats={[{ value: String(active.length), label: "حجز نشط" }, { value: String(rows.filter((r) => r.status === "converted").length), label: "تحولت لعقود" }]} />
+    <div className="flex justify-end"><Button onClick={() => setOpen(true)}><Plus />حجز جديد</Button></div>
+    <DataTable rows={rows} rowClassName={(r) => r.status === "cancelled" ? "bg-destructive/6" : ["hold", "active"].includes(r.status) ? "bg-warning/7" : "bg-success/5"} emptyState={<EmptyState text="لا توجد حجوزات" />} columns={[
+      { header: "العقار", cell: (r) => r.properties?.name ?? "—", className: "font-semibold" }, { header: "الكود", cell: (r) => r.properties?.code ?? "—" }, { header: "الموظف", cell: (r) => r.employee?.full_name ?? "—" }, { header: "العميل", cell: (r) => r.contact?.full_name ?? "—" }, { header: "ينتهي", cell: (r) => formatDate(r.ends_at) }, { header: "التمديد", cell: (r) => r.extended_count },
+      { header: "الحالة", cell: (r) => <Chip tone={["hold","active"].includes(r.status) ? "warning" : r.status === "cancelled" ? "danger" : "success"}>{reservationStatusLabels[r.status] ?? r.status}</Chip> },
+      { header: "إجراءات", cell: (r) => ["hold", "active"].includes(r.status) ? <span className="flex flex-wrap gap-2"><Button size="sm" variant="outline" onClick={() => update.mutate({ row: r, action: "extend" })}><Clock3 />تمديد 24س</Button><Button size="sm" onClick={() => update.mutate({ row: r, action: "approve" })}><CheckCircle2 />تحويل لعقد</Button><Button size="sm" variant="destructive" onClick={() => update.mutate({ row: r, action: "cancel" })}><XCircle />إلغاء</Button></span> : "—" },
+    ]} />
+    <Modal open={open} onClose={() => setOpen(false)} title="حجز عقار لمدة 24 ساعة" subtitle="لن يقبل النظام حجزًا متعارضًا على نفس العقار." footer={<><PrimaryButton onClick={() => create.mutate()} disabled={create.isPending}>{create.isPending ? <Loader2 className="animate-spin" /> : null}تأكيد الحجز</PrimaryButton><GhostButton onClick={() => setOpen(false)}>إلغاء</GhostButton></>}><div className="grid gap-4"><Field label="العقار"><select className={inputClass} value={form.property_id} onChange={(e) => setForm((v) => ({ ...v, property_id: e.target.value }))}><option value="">اختر</option>{options.data?.properties.map((p) => <option key={p.id} value={p.id}>{p.code} — {p.name}</option>)}</select></Field><Field label="الموظف"><select className={inputClass} value={form.employee_id} onChange={(e) => setForm((v) => ({ ...v, employee_id: e.target.value }))}><option value="">اختر</option>{options.data?.staff.map((p) => <option key={p.id} value={p.id}>{p.full_name}</option>)}</select></Field><Field label="العميل"><select className={inputClass} value={form.contact_id} onChange={(e) => setForm((v) => ({ ...v, contact_id: e.target.value }))}><option value="">بدون</option>{options.data?.contacts.map((p) => <option key={p.id} value={p.id}>{p.full_name}</option>)}</select></Field><Field label="ملاحظات"><textarea className={textareaClass} value={form.notes} onChange={(e) => setForm((v) => ({ ...v, notes: e.target.value }))} /></Field></div></Modal>
+  </>;
 }

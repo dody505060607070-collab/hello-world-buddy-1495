@@ -37,6 +37,8 @@ export const navGroups: NavGroup[] = [
     icon: Factory,
     items: [
       { label: "العقارات", to: "/properties", countKey: "properties", module: "properties" },
+      { label: "استيراد العقارات", to: "/properties/import", module: "properties" },
+      { label: "مقارنة العقارات", to: "/compare", module: "properties" },
       { label: "طلبات التقديم", to: "/requests", countKey: "listingRequests", module: "requests" },
       { label: "إدارة الحجوزات", to: "/reservations", countKey: "reservations", module: "reservations" },
     ],
@@ -87,6 +89,7 @@ export const navGroups: NavGroup[] = [
       { label: "الأدوار والصلاحيات", to: "/roles", module: "employees" },
       { label: "سجل الأنشطة", to: "/activity-log", module: "logs" },
       { label: "سجل الأخطاء", to: "/error-log", module: "logs" },
+      { label: "النسخ الاحتياطي", to: "/backup", module: "logs" },
     ],
   },
 ];

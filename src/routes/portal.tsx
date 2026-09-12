@@ -25,20 +25,20 @@ function PortalLayout() {
     navigate({ to: "/auth", replace: true });
   };
 
-  const link = "flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-white/80 transition hover:bg-white/10 hover:text-white";
-  const active = "bg-white/15 text-white";
+  const link = "flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-primary-foreground/80 transition hover:bg-primary-foreground/10 hover:text-primary-foreground";
+  const active = "bg-primary-foreground/15 text-primary-foreground";
 
   return (
     <div dir="rtl" className="portal-theme min-h-screen bg-muted/30">
-      <header className="bg-gradient-to-l from-[hsl(var(--primary))] to-[hsl(var(--primary)/0.75)] text-white shadow">
+      <header className="bg-primary text-primary-foreground shadow-card">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-4 py-3">
           <div className="flex items-center gap-2">
-            <span className="grid h-10 w-10 place-items-center rounded-lg bg-white/15 p-1">
+            <span className="grid h-10 w-10 place-items-center rounded-lg bg-primary-foreground/15 p-1">
               <img src={logoAsset.url} alt="الرشودي للعقارات" className="h-full w-full object-contain" />
             </span>
             <div className="leading-tight">
               <p className="text-sm font-bold">الرشودي للعقارات</p>
-              <p className="text-[11px] text-white/70">بوابة العميل</p>
+              <p className="text-[11px] text-primary-foreground/70">بوابة العميل</p>
             </div>
           </div>
 
@@ -56,10 +56,10 @@ function PortalLayout() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <span className="flex items-center gap-2 rounded-full border border-white/25 px-3 py-1.5 text-xs font-semibold">
+            <span className="flex items-center gap-2 rounded-full border border-primary-foreground/25 px-3 py-1.5 text-xs font-semibold">
               <User className="h-3.5 w-3.5" /> {name}
             </span>
-            <button onClick={signOut} className="flex items-center gap-1.5 rounded-lg border border-white/25 px-3 py-1.5 text-xs font-semibold hover:bg-white/10">
+            <button onClick={signOut} className="flex items-center gap-1.5 rounded-lg border border-primary-foreground/25 px-3 py-1.5 text-xs font-semibold hover:bg-primary-foreground/10">
               <LogOut className="h-3.5 w-3.5" /> خروج
             </button>
           </div>

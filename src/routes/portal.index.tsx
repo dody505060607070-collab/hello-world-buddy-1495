@@ -65,10 +65,10 @@ function PortalHome() {
   return (
     <div className="space-y-5">
       {/* بطاقة العميل */}
-      <section className="overflow-hidden rounded-2xl bg-gradient-to-l from-[hsl(var(--primary))] to-[hsl(var(--primary)/0.7)] p-5 text-white shadow">
+      <section className="overflow-hidden rounded-2xl bg-primary p-5 text-primary-foreground shadow-card">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <span className="grid h-12 w-12 place-items-center rounded-full bg-white/20 text-lg font-bold">
+            <span className="grid h-12 w-12 place-items-center rounded-full bg-primary-foreground/20 text-lg font-bold">
               {(data.contact?.full_name ?? "ع").slice(0, 1)}
             </span>
             <div>
@@ -78,10 +78,10 @@ function PortalHome() {
               </span>
             </div>
           </div>
-          <div className="rounded-xl bg-black/15 px-4 py-3 text-xs leading-6">
-            <p className="text-white/70">رقم الهوية</p>
+          <div className="rounded-xl bg-foreground/15 px-4 py-3 text-xs leading-6">
+            <p className="text-primary-foreground/70">رقم الهوية</p>
             <p className="font-bold" dir="ltr">{data.contact?.national_id ?? "—"}</p>
-            <p className="mt-1 text-white/70">الجوال</p>
+            <p className="mt-1 text-primary-foreground/70">الجوال</p>
             <p className="font-bold" dir="ltr">{data.contact?.phone ?? "—"}</p>
           </div>
         </div>
@@ -94,7 +94,7 @@ function PortalHome() {
         </div>
       ) : null}
       {upcoming.length ? (
-        <div className="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-700">
+        <div className="rounded-xl border border-primary/25 bg-primary/5 px-4 py-3 text-sm font-semibold text-primary">
           ⏰ {upcoming.length} دفعات مستحقة قريبًا بقيمة{" "}
           {num(upcoming.reduce((s, p) => s + (Number(p.amount_due) - Number(p.amount_paid)), 0))} ر.س.
         </div>
@@ -116,7 +116,7 @@ function PortalHome() {
               return (
                 <li
                   key={p.id}
-                  className={`flex flex-wrap items-center justify-between gap-3 px-5 py-3 text-sm ${late ? "bg-red-50/50" : "bg-blue-50/40"}`}
+                  className={`flex flex-wrap items-center justify-between gap-3 px-5 py-3 text-sm ${late ? "bg-destructive/5" : "bg-primary/5"}`}
                 >
                   <span className="font-bold">{num(Number(p.amount_due) - Number(p.amount_paid))} ر.س</span>
                   <span className="text-muted-foreground">دفعة رقم {p.payment_number}</span>
@@ -124,7 +124,7 @@ function PortalHome() {
                     {p.due_date} • {late ? `متأخرة منذ ${Math.abs(d)} يوم` : `تستحق بعد ${d} يوم`}
                   </span>
                   <span
-                    className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${late ? "bg-red-100 text-red-700" : "bg-blue-100 text-blue-700"}`}
+                    className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${late ? "bg-destructive/10 text-destructive" : "bg-primary/10 text-primary"}`}
                   >
                     {late ? "متأخرة" : "مستحقة قريبًا"}
                   </span>
@@ -182,7 +182,7 @@ function PortalHome() {
                   <span className="text-muted-foreground">المستأجر: <b className="text-foreground">{c.tenant?.full_name ?? "—"}</b></span>
                   <span className="text-muted-foreground">ينتهي في: <b className="text-foreground">{c.end_date ?? "—"}</b></span>
                   <span
-                    className={`rounded-full px-2.5 py-1 font-semibold ${late ? "bg-red-100 text-red-700" : "bg-emerald-100 text-emerald-700"}`}
+                    className={`rounded-full px-2.5 py-1 font-semibold ${late ? "bg-destructive/10 text-destructive" : "bg-success/10 text-success"}`}
                   >
                     {late ? `يوجد ${late} دفعة متأخرة` : "لا توجد دفعات متأخرة"}
                   </span>

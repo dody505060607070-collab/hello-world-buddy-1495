@@ -99,7 +99,7 @@ function AuthPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#f6f3f1] p-3 sm:grid sm:place-items-center sm:p-6" dir="rtl">
+    <main className="min-h-screen bg-background p-3 sm:grid sm:place-items-center sm:p-6" dir="rtl">
       <div className="grid min-h-[calc(100vh-1.5rem)] w-full max-w-6xl overflow-hidden rounded-[2rem] bg-card shadow-2xl sm:min-h-[720px] lg:grid-cols-[0.9fr_1.1fr]">
         <aside className="relative flex min-h-64 flex-col justify-between overflow-hidden bg-primary p-8 text-primary-foreground sm:p-12 lg:min-h-full">
           <div className="absolute -start-28 -top-28 size-80 rounded-full border border-primary-foreground/10" />
