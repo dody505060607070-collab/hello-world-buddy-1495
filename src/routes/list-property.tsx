@@ -109,7 +109,7 @@ function ListPropertyPage() {
 
       <form onSubmit={submit} className="overflow-hidden rounded-xl border border-border bg-card shadow-float">
         <header className="border-b border-border bg-accent px-5 py-4 sm:px-7">
-          <h1 className="text-lg font-extrabold text-primary">{mode === "offer" ? "بيانات العقار" : "بيانات طلب العقار"}</h1>
+          <h2 className="text-lg font-extrabold text-primary">{mode === "offer" ? "بيانات العقار" : "بيانات طلب العقار"}</h2>
           <p className="mt-1 text-xs text-muted-foreground">{mode === "offer" ? "يرجى تعبئة جميع الحقول المطلوبة بدقة" : "أخبرنا بما تبحث عنه وسنتواصل معك بأسرع وقت"}</p>
         </header>
 
