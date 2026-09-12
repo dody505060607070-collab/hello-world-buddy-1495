@@ -24,22 +24,66 @@ type TwilioResult =
   | { ok: true; sid: string }
   | { ok: false; error: string; needsTemplate?: boolean };
 
-/** إرسال عبر جسر واتساب المجاني على الـVPS (رقمك الشخصي/رقم الشركة). */
-async function bridgeSend(to: string, body: string): Promise<TwilioResult | null> {
-  const url = process.env["WHATSAPP_BRIDGE_URL"];
-  const token = process.env["WHATSAPP_BRIDGE_TOKEN"];
-  if (!url || !token) return null;
+/** إعداد Evolution API (الجسر المجاني على الـVPS). */
+function evoConfig() {
+  const url = process.env["WHATSAPP_API_URL"];
+  const key = process.env["WHATSAPP_API_KEY"];
+  const instance = process.env["WHATSAPP_INSTANCE"] ?? "mithra2";
+  if (!url || !key) return null;
+  return { url: url.replace(/\/$/, ""), key, instance };
+}
+
+async function evoFetch(path: string, init?: RequestInit) {
+  const cfg = evoConfig();
+  if (!cfg) throw new Error("إعدادات واتساب غير مكتملة");
+  return fetch(`${cfg.url}${path}`, {
+    ...init,
+    headers: {
+      apikey: cfg.key,
+      "Content-Type": "application/json",
+      ...(init?.headers ?? {}),
+    },
+  });
+}
+
+/** ينشئ الـ instance الخاصة بهذا الموقع تلقائيًا لو مش موجودة. */
+export async function cloudEnsureInstance(): Promise<void> {
+  const cfg = evoConfig();
+  if (!cfg) return;
   try {
-    const res = await fetch(`${url.replace(/\/$/, "")}/send`, {
+    const res = await evoFetch(`/instance/connectionState/${cfg.instance}`);
+    if (res.ok) return;
+    await evoFetch(`/instance/create`, {
       method: "POST",
-      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ to: toE164(to), body }),
+      body: JSON.stringify({
+        instanceName: cfg.instance,
+        integration: "WHATSAPP-BAILEYS",
+        qrcode: true,
+      }),
     });
-    const data = (await res.json().catch(() => ({}))) as { ok?: boolean; id?: string; error?: string };
-    if (res.ok && data.ok) return { ok: true, sid: data.id ?? "" };
-    return { ok: false, error: data.error ?? `Bridge ${res.status}` };
+  } catch {
+    /* تجاهل — هيتم الإبلاغ عند المحاولة التالية */
+  }
+}
+
+/** إرسال عبر Evolution API من الرقم المرتبط بالـQR. */
+async function bridgeSend(to: string, body: string): Promise<TwilioResult | null> {
+  const cfg = evoConfig();
+  if (!cfg) return null;
+  try {
+    const res = await evoFetch(`/message/sendText/${cfg.instance}`, {
+      method: "POST",
+      body: JSON.stringify({ number: toE164(to).replace("+", ""), text: body }),
+    });
+    const data = (await res.json().catch(() => ({}))) as {
+      key?: { id?: string };
+      message?: string;
+      error?: string;
+    };
+    if (res.ok) return { ok: true, sid: data.key?.id ?? "" };
+    return { ok: false, error: data.message ?? data.error ?? `WhatsApp ${res.status}` };
   } catch (e) {
-    return { ok: false, error: `تعذر الاتصال بجسر واتساب: ${(e as Error).message}` };
+    return { ok: false, error: `تعذر الاتصال بخدمة واتساب: ${(e as Error).message}` };
   }
 }
 
