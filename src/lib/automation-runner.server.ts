@@ -323,9 +323,9 @@ export async function runHourlyAutomation(): Promise<RunResult> {
     runError = error instanceof Error ? error.message : "تعذر تشغيل الأتمتة";
     throw error;
   } finally {
-    await supabaseAdmin.rpc("finish_automation_lease", {
-      _job_name: JOB_NAME,
-      _error: runError ?? undefined,
-    });
+    await supabaseAdmin.rpc(
+      "finish_automation_lease",
+      runError ? { _job_name: JOB_NAME, _error: runError } : { _job_name: JOB_NAME },
+    );
   }
 }
