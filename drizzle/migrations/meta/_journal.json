@@ -29,6 +29,13 @@
       "when": 1789240407801,
       "tag": "0003_add_shared_company_chat_channels",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1789242578391,
+      "tag": "0004_bind_history_actor_to_auth_uid",
+      "breakpoints": true
     }
   ]
 }
