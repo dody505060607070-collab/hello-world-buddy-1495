@@ -18,7 +18,7 @@ export function SignaturePad({ onChange }: { onChange: (dataUrl: string) => void
       canvas.height = rect.height * ratio;
       const context = canvas.getContext("2d");
       context?.scale(ratio, ratio);
-      if (context) { context.lineWidth = 2.4; context.lineCap = "round"; context.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--primary").trim() || "currentColor"; }
+      if (context) { context.lineWidth = 2.4; context.lineCap = "round"; context.strokeStyle = getComputedStyle(canvas).color; }
     };
     resize();
   }, []);
@@ -55,6 +55,6 @@ export function SignaturePad({ onChange }: { onChange: (dataUrl: string) => void
 
   return <div className="space-y-2">
     <div className="flex items-center justify-between"><span className="inline-flex items-center gap-2 text-[12.5px] font-semibold"><PenLine className="size-4 text-primary" />وقّع داخل المساحة</span><Button type="button" variant="ghost" size="sm" onClick={clear}><Eraser />مسح</Button></div>
-    <canvas ref={canvasRef} className="h-44 w-full touch-none rounded-lg border border-dashed border-primary/40 bg-card" onPointerDown={start} onPointerMove={move} onPointerUp={finish} onPointerCancel={finish} aria-label="مساحة التوقيع الإلكتروني" />
+    <canvas ref={canvasRef} className="h-44 w-full touch-none rounded-lg border border-dashed border-primary/40 bg-card text-primary" onPointerDown={start} onPointerMove={move} onPointerUp={finish} onPointerCancel={finish} aria-label="مساحة التوقيع الإلكتروني" />
   </div>;
 }
