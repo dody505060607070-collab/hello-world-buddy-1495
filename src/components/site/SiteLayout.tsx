@@ -4,7 +4,7 @@ import { useEffect, useState, type ReactNode } from "react";
 
 import footerImage from "@/assets/bg-footer.jpg";
 import logoAsset from "@/assets/rashudi-logo.webp.asset.json";
-import logoWhiteAsset from "@/assets/rashudi-logo-white.png.asset.json";
+import logoWhiteAsset from "@/assets/rashudi-logo-navbar.png.asset.json";
 import { FloatingActions, ScrollProgress } from "@/components/site/Chrome";
 import { AiWidget } from "@/components/site/AiWidget";
 import { useSession } from "@/hooks/useAuth";
@@ -50,7 +50,7 @@ function SiteHeader() {
         <Link
           to="/"
           aria-label="الرشودي للعقارات"
-          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+          className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center gap-4 border-x border-primary-foreground/20 px-5"
         >
           <img
             src={logoWhiteAsset.url}
