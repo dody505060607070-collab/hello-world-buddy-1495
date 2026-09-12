@@ -43,6 +43,13 @@
       "when": 1789245674286,
       "tag": "0005_complete_property_operations_features",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1789245870839,
+      "tag": "0006_secure_listing_request_media",
+      "breakpoints": true
     }
   ]
 }
