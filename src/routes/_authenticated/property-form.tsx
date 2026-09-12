@@ -15,6 +15,8 @@ import {
 
   Trash2,
   UploadCloud,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -132,6 +134,7 @@ function PropertyFormPage() {
   const [uploading, setUploading] = useState(false);
   const [guaranteeName, setGuaranteeName] = useState("");
   const [guaranteeYears, setGuaranteeYears] = useState("");
+  const [step, setStep] = useState(0);
 
 
   const set = (patch: Partial<FormState>) => setForm((prev) => ({ ...prev, ...patch }));
@@ -508,6 +511,7 @@ function PropertyFormPage() {
     const city = cities.data?.find((c) => c.name === form.city);
     return city ? d.city_id === city.id : true;
   });
+  const steps = ["البيانات", "السعر والموقع", "الروابط والضمانات", "الصور والملاحظات"];
 
   return (
     <>
@@ -536,6 +540,11 @@ function PropertyFormPage() {
         </button>
       </div>
 
+      <nav aria-label="خطوات نموذج العقار" className="surface-card grid grid-cols-2 gap-2 p-3 sm:grid-cols-4">
+        {steps.map((label, index) => <button key={label} type="button" onClick={() => setStep(index)} className={`rounded-lg px-3 py-2 text-[12.5px] font-bold transition ${step === index ? "bg-primary text-primary-foreground" : index < step ? "bg-success/12 text-success" : "bg-secondary text-muted-foreground"}`}><span className="me-1">{index + 1}.</span>{label}</button>)}
+      </nav>
+
+      {step === 0 ? <>
       <SectionCard
         title="البيانات الأساسية"
         subtitle="اسم العقار وكوده والغرض منه ونوعه وموقعه الإداري."
@@ -650,7 +659,9 @@ function PropertyFormPage() {
           </Field>
         </div>
       </SectionCard>
+      </> : null}
 
+      {step === 1 ? <>
       <SectionCard
         title="السعر والوصف والنشر"
         subtitle="السعر المعروض على الموقع، الوصف، رقم الواتساب وحالة الظهور."
@@ -762,7 +773,9 @@ function PropertyFormPage() {
           </Field>
         </div>
       </SectionCard>
+      </> : null}
 
+      {step === 2 ? <>
       <SectionCard
         title="روابط التواصل والوسائط"
         subtitle="كل منصة لها خانة مستقلة، وتظهر بأيقونتها الحقيقية في صفحة العقار على الموقع."
@@ -924,9 +937,11 @@ function PropertyFormPage() {
           )}
         </SectionCard>
       ) : null}
+      </> : null}
 
 
 
+      {step === 3 ? <>
       <SectionCard
         title="صور العقار"
         subtitle="ارفع الصور من جهازك أو أضِف روابط جاهزة، وحدّد الصورة الرئيسية."
@@ -1084,8 +1099,11 @@ function PropertyFormPage() {
           placeholder="ملاحظات عن المالك، التفاوض، أو تفاصيل تشغيلية."
         />
       </SectionCard>
+      </> : null}
 
       <div className="flex flex-wrap items-center justify-center gap-3 pb-4">
+        {step > 0 ? <button type="button" onClick={() => setStep((current) => current - 1)} className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-3 text-[13px] font-semibold"><ChevronRight className="size-4" />السابق</button> : null}
+        {step < steps.length - 1 ? <button type="button" onClick={() => setStep((current) => current + 1)} className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-[13px] font-bold text-primary-foreground">التالي<ChevronLeft className="size-4" /></button> : null}
         <button
           type="button"
           onClick={() => save.mutate()}

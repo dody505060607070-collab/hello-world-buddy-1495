@@ -23,7 +23,7 @@ const money = (v: number) => Number(v ?? 0).toLocaleString("en-US");
 const statusChip: Record<string, { label: string; cls: string }> = {
   paid: { label: "مدفوعة", cls: "bg-emerald-50 text-emerald-700" },
   partial: { label: "مدفوع جزئياً", cls: "bg-blue-50 text-blue-700" },
-  overdue: { label: "متأخر", cls: "bg-red-50 text-red-700" },
+  overdue: { label: "متأخر", cls: "bg-destructive/10 text-destructive" },
   pending: { label: "قادمة", cls: "bg-amber-50 text-amber-700" },
   cancelled: { label: "ملغاة", cls: "bg-muted text-muted-foreground" },
 };
@@ -125,7 +125,7 @@ function ContractDetail() {
           <span className="flex flex-wrap items-center gap-3 text-[11px] font-medium text-muted-foreground">
             <span className="flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-emerald-500" /> مدفوع</span>
             <span className="flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-blue-500" /> مدفوع جزئياً</span>
-            <span className="flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-red-500" /> متأخر</span>
+            <span className="flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-destructive" /> متأخر</span>
             <span className="flex items-center gap-1"><i className="h-2 w-2 rounded-full bg-amber-500" /> قادم</span>
           </span>
         </header>
@@ -147,7 +147,7 @@ function ContractDetail() {
                 const chip = statusChip[p.status] ?? statusChip["pending"]!;
                 const rest = Number(p.amount_due) - Number(p.amount_paid);
                 return (
-                  <tr key={p.id} className={p.status === "paid" ? "bg-emerald-50/40" : rest > 0 && p.due_date < new Date().toISOString().slice(0, 10) ? "bg-red-50/40" : ""}>
+                  <tr key={p.id} className={p.status === "paid" ? "bg-success/5" : rest > 0 && p.due_date < new Date().toISOString().slice(0, 10) ? "bg-destructive/5" : ""}>
                     <td className="px-4 py-3">{p.payment_number}</td>
                     <td className="px-4 py-3">{p.due_date}</td>
                     <td className="px-4 py-3">{money(Number(p.amount_due))}</td>
