@@ -122,29 +122,32 @@ function TeamChatPage() {
     mutationFn: async () => {
       const text = body.trim();
       if (!text) return;
+      if (!chatUserId) throw new Error("سجّل الدخول إلى الشات المشترك أولًا");
       if (editing) {
-        const { error } = await supabase
+        const { error } = await mithraa
           .from("group_messages")
           .update({ body: text, edited_at: new Date().toISOString() })
           .eq("id", editing.id);
         if (error) throw error;
         return;
       }
-      const { error } = await supabase.from("group_messages").insert({
-        sender_id: userId!,
+      const { error } = await mithraa.from("group_messages").insert({
+        sender_id: chatUserId,
         body: text,
         reply_to: replyTo?.id ?? null,
         channel: activeChannel,
       });
       if (error) throw error;
+
+      // الإشعارات المحلية للموظفين في قاعدة الرشودي فقط
       const mentions = text.match(/@([\p{L}\d_]+)/gu) ?? [];
-      const { data: staff } = await supabase
+      const { data: local } = await supabase
         .from("profiles")
         .select("id, full_name")
         .eq("is_active", true)
-        .in("org", activeChannel === "shared" ? ["rashoudi", "mithraa"] : [activeChannel]);
+        .eq("org", "rashoudi");
       if (mentions.length) {
-        const targets = (staff ?? []).filter(
+        const targets = (local ?? []).filter(
           (s) => s.id !== userId && mentions.some((m) => s.full_name.includes(m.slice(1))),
         );
         if (targets.length) {
@@ -158,7 +161,7 @@ function TeamChatPage() {
           );
         }
       }
-      const others = (staff ?? []).map((s) => s.id).filter((id) => id !== userId);
+      const others = (local ?? []).map((s) => s.id).filter((id) => id !== userId);
       if (others.length) {
         void sendPushToUsers({
           data: {
@@ -175,27 +178,31 @@ function TeamChatPage() {
       setBody("");
       setReplyTo(null);
       setEditing(null);
-      qc.invalidateQueries({ queryKey: ["group-messages", activeChannel] });
+      qc.invalidateQueries({ queryKey: ["group-messages", activeChannel, chatUserId] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
 
   const patch = useMutation({
     mutationFn: async ({ id, values }: { id: string; values: { is_pinned?: boolean; deleted_at?: string | null } }) => {
-      const { error } = await supabase.from("group_messages").update(values).eq("id", id);
+      const { error } = await mithraa.from("group_messages").update(values).eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["group-messages", activeChannel] }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["group-messages", activeChannel, chatUserId] }),
     onError: (e: Error) => toast.error(e.message),
   });
 
   const sendFile = async (file: File) => {
+    if (!chatUserId) {
+      toast.error("سجّل الدخول إلى الشات المشترك أولًا");
+      return;
+    }
     setUploading(true);
     try {
       const path = `team-chat/${Date.now()}-${file.name.replace(/[^\w.\-]/g, "_")}`;
       await uploadMedia("internal-files", path, file);
-      const { error } = await supabase.from("group_messages").insert({
-        sender_id: userId!,
+      const { error } = await mithraa.from("group_messages").insert({
+        sender_id: chatUserId,
         body: body.trim() || null,
         attachment_path: path,
         attachment_name: file.name,
@@ -205,7 +212,7 @@ function TeamChatPage() {
       if (error) throw error;
       setBody("");
       setReplyTo(null);
-      qc.invalidateQueries({ queryKey: ["group-messages", activeChannel] });
+      qc.invalidateQueries({ queryKey: ["group-messages", activeChannel, chatUserId] });
     } catch (e) {
       toast.error((e as Error).message);
     } finally {
