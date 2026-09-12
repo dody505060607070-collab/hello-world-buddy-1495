@@ -14,9 +14,9 @@ import { resolveClientLogin } from "@/lib/portal.functions";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "تسجيل الدخول | الرشودي للعقارات" },
+      { title: "الرشودي للعقارات" },
       { name: "description", content: "دخول فريق الرشودي للعقارات إلى لوحة التحكم الداخلية." },
-      { property: "og:title", content: "تسجيل الدخول | الرشودي للعقارات" },
+      { property: "og:title", content: "الرشودي للعقارات" },
       { property: "og:description", content: "دخول فريق الرشودي للعقارات إلى لوحة التحكم الداخلية." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -156,7 +156,7 @@ function AuthPage() {
           {audience === "client" ? (
             <div className="space-y-2">
               <Label htmlFor="username">اسم المستخدم</Label>
-              <div className="relative"><UserRound className="absolute end-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" /><Input
+              <div className="relative"><UserRound className="absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" /><Input
                 id="username"
                 dir="ltr"
                 inputMode="numeric"
@@ -164,13 +164,13 @@ function AuthPage() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="1xxxxxxxxx"
-                className="pe-10"
+                className="pr-10"
               /></div>
             </div>
           ) : (
             <div className="space-y-2">
               <Label htmlFor="email">البريد الإلكتروني</Label>
-              <div className="relative"><Mail className="absolute end-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" /><Input
+              <div className="relative"><Mail className="absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" /><Input
                 id="email"
                 type="email"
                 dir="ltr"
@@ -178,14 +178,14 @@ function AuthPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@example.com"
-                className="pe-10"
+                className="pr-10"
               /></div>
             </div>
           )}
 
           <div className="space-y-2">
             <Label htmlFor="password">كلمة المرور</Label>
-            <div className="relative"><LockKeyhole className="absolute end-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" /><Input
+            <div className="relative"><LockKeyhole className="absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" /><Input
               id="password"
               type="password"
               dir="ltr"
@@ -194,7 +194,7 @@ function AuthPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="pe-10"
+              className="pr-10"
             /></div>
           </div>
 
