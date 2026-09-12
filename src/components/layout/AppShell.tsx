@@ -151,7 +151,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             alt="الرشودي للعقارات"
             width={1152}
             height={576}
-            className="h-12 w-auto brightness-0 invert md:h-[82px]"
+            className="h-12 w-auto md:h-[82px]"
           />
         </Link>
 

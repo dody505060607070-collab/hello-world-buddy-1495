@@ -79,7 +79,7 @@ function SiteHeader() {
             alt="الرشودي للعقارات"
             width={680}
             height={510}
-            className="h-12 w-auto brightness-0 invert transition-transform duration-300 hover:scale-105 md:h-14"
+            className="h-12 w-auto transition-transform duration-300 hover:scale-105 md:h-14"
           />
         </Link>
       </div>
@@ -136,7 +136,7 @@ function SiteFooter() {
             width={680}
             height={510}
             loading="lazy"
-            className="mx-auto h-24 w-auto brightness-0 invert md:h-32"
+            className="mx-auto h-24 w-auto md:h-32"
           />
         </Link>
 
