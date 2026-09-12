@@ -178,10 +178,14 @@ export function PropertyMap({
         <span>{points.length} عقار على الخريطة</span>
       </div>
 
-      <div
-        ref={containerRef}
-        className="h-[380px] w-full overflow-hidden rounded-2xl border border-border shadow-float sm:h-[480px]"
-      />
+      <div className="flex justify-center">
+        <div className="relative aspect-square w-full max-w-[340px] rounded-full p-[6px] ring-2 ring-primary/40 shadow-float sm:max-w-[520px] lg:max-w-[620px]">
+          <div
+            ref={containerRef}
+            className="size-full overflow-hidden rounded-full border border-border"
+          />
+        </div>
+      </div>
     </section>
   );
 }
