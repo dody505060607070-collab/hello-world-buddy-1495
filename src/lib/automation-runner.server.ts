@@ -19,12 +19,21 @@ const TASK_BATCH = 40;
 function nextSendDate(from: Date, interval: string): string | null {
   const d = new Date(from);
   switch (interval) {
+    case "6h":
+      d.setHours(d.getHours() + 6);
+      return d.toISOString();
+    case "8h":
+      d.setHours(d.getHours() + 8);
+      return d.toISOString();
+    case "12h":
     case "12_hours":
       d.setHours(d.getHours() + 12);
       return d.toISOString();
+    case "24h":
     case "daily":
       d.setDate(d.getDate() + 1);
       return d.toISOString();
+    case "3d":
     case "three_days":
       d.setDate(d.getDate() + 3);
       return d.toISOString();
@@ -169,6 +178,10 @@ export async function runHourlyAutomation(): Promise<RunResult> {
       );
     }
 
+    const assignmentKeys = new Set(
+      (assignments ?? []).map((row) => `${row.task_id}:${row.user_id}`),
+    );
+
     const { data: taskStates, error: taskStateError } = await supabaseAdmin
       .from("task_reminder_state")
       .select(
@@ -186,7 +199,14 @@ export async function runHourlyAutomation(): Promise<RunResult> {
     for (const state of taskStates ?? []) {
       const task = Array.isArray(state.task) ? state.task[0] : state.task;
       const profile = Array.isArray(state.profile) ? state.profile[0] : state.profile;
-      if (!task || ["approved", "done", "cancelled"].includes(task.status)) continue;
+      if (
+        !task ||
+        ["approved", "done", "cancelled"].includes(task.status) ||
+        !assignmentKeys.has(`${state.task_id}:${state.user_id}`)
+      ) {
+        await supabaseAdmin.from("task_reminder_state").delete().eq("id", state.id);
+        continue;
+      }
       taskDue += 1;
       const phone = profile?.whatsapp ?? profile?.phone ?? "";
       if (!profile?.is_active || !profile.whatsapp_notify || !phone) {
