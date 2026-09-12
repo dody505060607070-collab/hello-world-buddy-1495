@@ -190,31 +190,53 @@ export const checkTwilioConfig = createServerFn({ method: "GET" })
     };
   });
 
-/** حالة ربط واتساب المجاني + رمز QR للمسح. */
+/** حالة ربط واتساب + رمز QR للمسح (Evolution API). */
 export const getWhatsAppLinkStatus = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async () => {
-    const url = process.env["WHATSAPP_BRIDGE_URL"];
-    const token = process.env["WHATSAPP_BRIDGE_TOKEN"];
-    if (!url || !token) {
+    const cfg = evoConfig();
+    if (!cfg) {
       return { configured: false, connection: "closed" as const, qr: null, me: null, error: null };
     }
     try {
-      const res = await fetch(`${url.replace(/\/$/, "")}/status`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = (await res.json()) as {
-        connection?: string;
-        qr?: string | null;
-        me?: string | null;
-        error?: string | null;
+      await cloudEnsureInstance();
+      const stateRes = await evoFetch(`/instance/connectionState/${cfg.instance}`);
+      const stateData = (await stateRes.json().catch(() => ({}))) as {
+        instance?: { state?: string };
+        message?: string;
+      };
+      const state = stateData.instance?.state ?? "close";
+      if (state === "open") {
+        let me: string | null = null;
+        try {
+          const listRes = await evoFetch(`/instance/fetchInstances`);
+          const list = (await listRes.json().catch(() => [])) as Array<{
+            name?: string;
+            instance?: { instanceName?: string; owner?: string };
+            ownerJid?: string;
+          }>;
+          const found = list.find(
+            (i) => i.name === cfg.instance || i.instance?.instanceName === cfg.instance,
+          );
+          me = (found?.ownerJid ?? found?.instance?.owner ?? null)?.split("@")[0] ?? null;
+        } catch {
+          /* الاسم اختياري */
+        }
+        return { configured: true, connection: "open" as const, qr: null, me, error: null };
+      }
+
+      const qrRes = await evoFetch(`/instance/connect/${cfg.instance}`);
+      const qrData = (await qrRes.json().catch(() => ({}))) as {
+        base64?: string;
+        code?: string;
+        message?: string;
       };
       return {
         configured: true,
-        connection: (data.connection ?? "closed") as "open" | "connecting" | "closed",
-        qr: data.qr ?? null,
-        me: data.me ?? null,
-        error: data.error ?? null,
+        connection: "connecting" as const,
+        qr: qrData.base64 ?? qrData.code ?? null,
+        me: null,
+        error: qrRes.ok ? null : (qrData.message ?? `WhatsApp ${qrRes.status}`),
       };
     } catch (e) {
       return {
@@ -222,7 +244,7 @@ export const getWhatsAppLinkStatus = createServerFn({ method: "GET" })
         connection: "closed" as const,
         qr: null,
         me: null,
-        error: `تعذر الوصول للجسر: ${(e as Error).message}`,
+        error: `تعذر الوصول لخدمة واتساب: ${(e as Error).message}`,
       };
     }
   });
@@ -231,15 +253,11 @@ export const getWhatsAppLinkStatus = createServerFn({ method: "GET" })
 export const unlinkWhatsApp = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async () => {
-    const url = process.env["WHATSAPP_BRIDGE_URL"];
-    const token = process.env["WHATSAPP_BRIDGE_TOKEN"];
-    if (!url || !token) return { ok: false, error: "الجسر غير مُعد" };
+    const cfg = evoConfig();
+    if (!cfg) return { ok: false, error: "خدمة واتساب غير مُعدّة" };
     try {
-      const res = await fetch(`${url.replace(/\/$/, "")}/logout`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      return { ok: res.ok, error: res.ok ? null : `Bridge ${res.status}` };
+      const res = await evoFetch(`/instance/logout/${cfg.instance}`, { method: "DELETE" });
+      return { ok: res.ok, error: res.ok ? null : `WhatsApp ${res.status}` };
     } catch (e) {
       return { ok: false, error: (e as Error).message };
     }
