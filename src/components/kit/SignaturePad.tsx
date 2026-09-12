@@ -18,7 +18,7 @@ export function SignaturePad({ onChange }: { onChange: (dataUrl: string) => void
       canvas.height = rect.height * ratio;
       const context = canvas.getContext("2d");
       context?.scale(ratio, ratio);
-      if (context) { context.lineWidth = 2.4; context.lineCap = "round"; context.strokeStyle = "#581018"; }
+      if (context) { context.lineWidth = 2.4; context.lineCap = "round"; context.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--primary").trim() || "currentColor"; }
     };
     resize();
   }, []);
