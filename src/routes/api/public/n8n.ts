@@ -8,6 +8,31 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/api/public/n8n")({
   server: {
     handlers: {
+      // تشغيل دوري (cron كل ساعة): GET مع الترويسة X-Mithra-Token
+      GET: async ({ request }) => {
+        const { verifyAutomationToken } = await import("@/lib/automation.server");
+        const url = new URL(request.url);
+        const token = request.headers.get("x-mithra-token") ?? url.searchParams.get("token");
+        if (!(await verifyAutomationToken(token))) {
+          return new Response(JSON.stringify({ ok: false, error: "unauthorized" }), {
+            status: 401,
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+        const { runHourlyAutomation } = await import("@/lib/automation-runner.server");
+        try {
+          const result = await runHourlyAutomation();
+          return new Response(JSON.stringify(result), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          });
+        } catch (e) {
+          return new Response(JSON.stringify({ ok: false, error: (e as Error).message }), {
+            status: 500,
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+      },
       POST: async ({ request }) => {
         const { verifyAutomationToken } = await import("@/lib/automation.server");
         const token = request.headers.get("x-mithra-token");
