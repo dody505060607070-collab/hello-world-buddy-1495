@@ -1,20 +1,32 @@
 /**
- * محرّك الأتمتة الدورية — يُستدعى كل ساعة من cron خارجي عبر /api/public/n8n
- * server-only: لا يُستورد من كود المتصفح.
+ * محرّك الأتمتة الدورية — يُستدعى كل ساعة من /api/public/n8n.
+ * كل تشغيل محدود، محمي بقفل قاعدة بيانات، ويكتب تقدمه بمفاتيح عدم تكرار.
  */
 
 type RunResult = {
   ok: true;
+  skipped?: boolean;
   ranAt: string;
   reminders: { due: number; sent: number; failed: number };
+  tasks: { due: number; sent: number; failed: number; skippedNoPhone: number };
   overdue: { payments: number; notified: number };
 };
+
+const JOB_NAME = "hourly_automation";
+const REMINDER_BATCH = 40;
+const TASK_BATCH = 40;
 
 function nextSendDate(from: Date, interval: string): string | null {
   const d = new Date(from);
   switch (interval) {
+    case "12_hours":
+      d.setHours(d.getHours() + 12);
+      return d.toISOString();
     case "daily":
       d.setDate(d.getDate() + 1);
+      return d.toISOString();
+    case "three_days":
+      d.setDate(d.getDate() + 3);
       return d.toISOString();
     case "weekly":
       d.setDate(d.getDate() + 7);
@@ -29,8 +41,35 @@ function nextSendDate(from: Date, interval: string): string | null {
       d.setFullYear(d.getFullYear() + 1);
       return d.toISOString();
     default:
-      return null; // once
+      return null;
   }
+}
+
+function taskIntervalHours(priority: string): number {
+  if (priority === "urgent") return 12;
+  if (priority === "high") return 24;
+  return 72;
+}
+
+function taskMessage(input: {
+  employeeName: string;
+  title: string;
+  details: string | null;
+  priority: string;
+  dueDate: string | null;
+  dueTime: string | null;
+}): string {
+  const priority = input.priority === "urgent" ? "عاجلة" : input.priority === "high" ? "عالية" : "عادية";
+  const due = [input.dueDate, input.dueTime].filter(Boolean).join(" ");
+  return [
+    `مرحبًا ${input.employeeName}،`,
+    `تذكير بمهمة ${priority}: ${input.title}`,
+    input.details ? `التفاصيل: ${input.details}` : null,
+    due ? `موعد التسليم: ${due}` : null,
+    "يرجى تحديث حالة المهمة من لوحة الرشودي للعقارات عند الانتهاء.",
+  ]
+    .filter(Boolean)
+    .join("\n");
 }
 
 export async function runHourlyAutomation(): Promise<RunResult> {
@@ -39,91 +78,234 @@ export async function runHourlyAutomation(): Promise<RunResult> {
   const now = new Date();
   const nowIso = now.toISOString();
 
-  // 1) التذكيرات والمتابعات المستحقة
-  const { data: due } = await supabaseAdmin
-    .from("reminder_followups")
-    .select(
-      "id, contract_id, payment_id, unit_id, recipient_name, recipient_phone, message_body, repeat_interval, sent_count",
-    )
-    .eq("status", "active")
-    .lte("next_send_at", nowIso)
-    .limit(50);
+  const { data: acquired, error: leaseError } = await supabaseAdmin.rpc("acquire_automation_lease", {
+    _job_name: JOB_NAME,
+    _lease_seconds: 3300,
+  });
+  if (leaseError) throw leaseError;
+  if (!acquired) {
+    return {
+      ok: true,
+      skipped: true,
+      ranAt: nowIso,
+      reminders: { due: 0, sent: 0, failed: 0 },
+      tasks: { due: 0, sent: 0, failed: 0, skippedNoPhone: 0 },
+      overdue: { payments: 0, notified: 0 },
+    };
+  }
 
-  let sent = 0;
-  let failed = 0;
+  let runError: string | null = null;
+  try {
+    const { data: due, error: dueError } = await supabaseAdmin
+      .from("reminder_followups")
+      .select(
+        "id, contract_id, payment_id, unit_id, recipient_name, recipient_phone, message_body, repeat_interval, sent_count, next_send_at",
+      )
+      .in("status", ["pending", "active"])
+      .lte("next_send_at", nowIso)
+      .order("next_send_at", { ascending: true })
+      .limit(REMINDER_BATCH);
+    if (dueError) throw dueError;
 
-  for (const r of due ?? []) {
-    const result = await twilioSend({ to: r.recipient_phone, body: r.message_body });
-    if (result.ok) sent += 1;
-    else failed += 1;
+    let sent = 0;
+    let failed = 0;
+    for (const reminder of due ?? []) {
+      const scheduledAt = reminder.next_send_at ?? nowIso;
+      const idempotencyKey = `followup:${reminder.id}:${scheduledAt}`;
+      const { data: existing } = await supabaseAdmin
+        .from("message_log")
+        .select("id, result")
+        .eq("idempotency_key", idempotencyKey)
+        .maybeSingle();
+      if (existing?.result === "sent") continue;
 
-    await supabaseAdmin.from("message_log").insert({
-      followup_id: r.id,
-      contract_id: r.contract_id,
-      payment_id: r.payment_id,
-      unit_id: r.unit_id,
-      recipient_name: r.recipient_name,
-      recipient_phone: r.recipient_phone,
-      body: r.message_body,
-      channel: "whatsapp",
-      result: result.ok ? "sent" : "failed",
-      failure_reason: result.ok ? null : result.error,
-      provider_message_id: result.ok ? result.sid : null,
-      sent_by_system: true,
-      idempotency_key: `followup:${r.id}:${nowIso.slice(0, 13)}`,
+      const result = await twilioSend({ to: reminder.recipient_phone, body: reminder.message_body });
+      if (result.ok) sent += 1;
+      else failed += 1;
+
+      await supabaseAdmin.from("message_log").upsert(
+        {
+          followup_id: reminder.id,
+          contract_id: reminder.contract_id,
+          payment_id: reminder.payment_id,
+          unit_id: reminder.unit_id,
+          recipient_name: reminder.recipient_name,
+          recipient_phone: reminder.recipient_phone,
+          body: reminder.message_body,
+          channel: "whatsapp",
+          result: result.ok ? "sent" : "failed",
+          failure_reason: result.ok ? null : result.error,
+          provider_message_id: result.ok ? result.sid : null,
+          sent_by_system: true,
+          idempotency_key: idempotencyKey,
+        },
+        { onConflict: "idempotency_key" },
+      );
+
+      const next = result.ok
+        ? nextSendDate(new Date(scheduledAt), reminder.repeat_interval ?? "once")
+        : new Date(now.getTime() + 60 * 60 * 1000).toISOString();
+      await supabaseAdmin
+        .from("reminder_followups")
+        .update({
+          sent_count: (reminder.sent_count ?? 0) + (result.ok ? 1 : 0),
+          last_sent_at: result.ok ? nowIso : null,
+          next_send_at: next,
+          status: result.ok ? (next ? "active" : "done") : "active",
+        })
+        .eq("id", reminder.id);
+    }
+
+    // أنشئ حالة مستقلة لكل موظف مكلّف؛ المفتاح الفريد يمنع التكرار بين التشغيلات.
+    const { data: assignments, error: assignmentError } = await supabaseAdmin
+      .from("task_assignees")
+      .select("task_id, user_id")
+      .limit(500);
+    if (assignmentError) throw assignmentError;
+    if (assignments?.length) {
+      await supabaseAdmin.from("task_reminder_state").upsert(
+        assignments.map((row) => ({ task_id: row.task_id, user_id: row.user_id })),
+        { onConflict: "task_id,user_id", ignoreDuplicates: true },
+      );
+    }
+
+    const { data: taskStates, error: taskStateError } = await supabaseAdmin
+      .from("task_reminder_state")
+      .select(
+        "id, task_id, user_id, next_send_at, sent_count, task:task_id(id,title,details,priority,status,due_date,due_time), profile:user_id(full_name,phone,whatsapp,whatsapp_notify,is_active)",
+      )
+      .lte("next_send_at", nowIso)
+      .order("next_send_at", { ascending: true })
+      .limit(TASK_BATCH);
+    if (taskStateError) throw taskStateError;
+
+    let taskSent = 0;
+    let taskFailed = 0;
+    let skippedNoPhone = 0;
+    let taskDue = 0;
+    for (const state of taskStates ?? []) {
+      const task = Array.isArray(state.task) ? state.task[0] : state.task;
+      const profile = Array.isArray(state.profile) ? state.profile[0] : state.profile;
+      if (!task || ["approved", "done", "cancelled"].includes(task.status)) continue;
+      taskDue += 1;
+      const phone = profile?.whatsapp ?? profile?.phone ?? "";
+      if (!profile?.is_active || !profile.whatsapp_notify || !phone) {
+        skippedNoPhone += 1;
+        await supabaseAdmin
+          .from("task_reminder_state")
+          .update({ next_send_at: new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString(), last_error: "واتساب الموظف غير مفعّل أو الرقم غير موجود" })
+          .eq("id", state.id);
+        continue;
+      }
+
+      const scheduledAt = state.next_send_at;
+      const idempotencyKey = `task:${state.task_id}:${state.user_id}:${scheduledAt}`;
+      const body = taskMessage({
+        employeeName: profile.full_name || "زميلنا",
+        title: task.title,
+        details: task.details,
+        priority: task.priority,
+        dueDate: task.due_date,
+        dueTime: task.due_time,
+      });
+      const result = await twilioSend({ to: phone, body });
+      if (result.ok) taskSent += 1;
+      else taskFailed += 1;
+
+      await supabaseAdmin.from("message_log").upsert(
+        {
+          task_id: state.task_id,
+          recipient_name: profile.full_name,
+          recipient_phone: phone,
+          body,
+          channel: "whatsapp",
+          result: result.ok ? "sent" : "failed",
+          failure_reason: result.ok ? null : result.error,
+          provider_message_id: result.ok ? result.sid : null,
+          sent_by_system: true,
+          idempotency_key: idempotencyKey,
+        },
+        { onConflict: "idempotency_key" },
+      );
+
+      const hours = result.ok ? taskIntervalHours(task.priority) : 1;
+      await supabaseAdmin
+        .from("task_reminder_state")
+        .update({
+          next_send_at: new Date(now.getTime() + hours * 60 * 60 * 1000).toISOString(),
+          last_sent_at: result.ok ? nowIso : state.next_send_at,
+          sent_count: state.sent_count + (result.ok ? 1 : 0),
+          last_error: result.ok ? null : result.error,
+        })
+        .eq("id", state.id);
+    }
+
+    const today = nowIso.slice(0, 10);
+    const { data: overdue, error: overdueError } = await supabaseAdmin
+      .from("contract_payments")
+      .select("id")
+      .lt("due_date", today)
+      .neq("status", "paid")
+      .limit(200);
+    if (overdueError) throw overdueError;
+
+    let notified = 0;
+    const overdueCount = (overdue ?? []).length;
+    if (overdueCount > 0 && now.getUTCHours() === 5) {
+      const dailyKey = `overdue:${today}`;
+      const { data: alreadyNotified } = await supabaseAdmin
+        .from("automation_events")
+        .select("id")
+        .eq("event", dailyKey)
+        .maybeSingle();
+      if (!alreadyNotified) {
+        const { data: staff } = await supabaseAdmin.from("user_roles").select("user_id");
+        const ids = Array.from(new Set((staff ?? []).map((row) => row.user_id)));
+        if (ids.length > 0) {
+          await supabaseAdmin.from("notifications").insert(
+            ids.map((user_id) => ({
+              user_id,
+              title: "دفعات متأخرة",
+              body: `يوجد ${overdueCount} دفعة متأخرة تحتاج متابعة`,
+              link: "/payments",
+            })),
+          );
+          notified = ids.length;
+        }
+        await supabaseAdmin.from("automation_events").insert({
+          event: dailyKey,
+          direction: "in",
+          payload: { overdue: overdueCount, notified } as never,
+          status: "sent",
+        });
+      }
+    }
+
+    await supabaseAdmin.from("automation_events").insert({
+      event: "automation.hourly_run",
+      direction: "in",
+      payload: {
+        reminders: { due: (due ?? []).length, sent, failed },
+        tasks: { due: taskDue, sent: taskSent, failed: taskFailed, skippedNoPhone },
+        overdue: overdueCount,
+      } as never,
+      status: failed + taskFailed > 0 ? "partial" : "sent",
     });
 
-    const next = nextSendDate(now, r.repeat_interval ?? "once");
-    await supabaseAdmin
-      .from("reminder_followups")
-      .update({
-        sent_count: (r.sent_count ?? 0) + 1,
-        last_sent_at: nowIso,
-        next_send_at: next,
-        status: next ? "active" : "done",
-      })
-      .eq("id", r.id);
+    return {
+      ok: true,
+      ranAt: nowIso,
+      reminders: { due: (due ?? []).length, sent, failed },
+      tasks: { due: taskDue, sent: taskSent, failed: taskFailed, skippedNoPhone },
+      overdue: { payments: overdueCount, notified },
+    };
+  } catch (error) {
+    runError = error instanceof Error ? error.message : "تعذر تشغيل الأتمتة";
+    throw error;
+  } finally {
+    await supabaseAdmin.rpc("finish_automation_lease", {
+      _job_name: JOB_NAME,
+      _error: runError,
+    });
   }
-
-  // 2) الدفعات المتأخرة → تنبيه الفريق
-  const today = nowIso.slice(0, 10);
-  const { data: overdue } = await supabaseAdmin
-    .from("contract_payments")
-    .select("id")
-    .lt("due_date", today)
-    .neq("status", "paid")
-    .limit(200);
-
-  let notified = 0;
-  const overdueCount = (overdue ?? []).length;
-  // تنبيه واحد يوميًا فقط (الساعة 8 صباحًا بتوقيت الرياض ≈ 05 UTC)
-  if (overdueCount > 0 && now.getUTCHours() === 5) {
-    const { data: staff } = await supabaseAdmin.from("user_roles").select("user_id");
-    const ids = Array.from(new Set((staff ?? []).map((s) => s.user_id)));
-    if (ids.length > 0) {
-      await supabaseAdmin.from("notifications").insert(
-        ids.map((user_id) => ({
-          user_id,
-          title: "دفعات متأخرة",
-          body: `يوجد ${overdueCount} دفعة متأخرة تحتاج متابعة`,
-          link: "/payments",
-        })),
-      );
-      notified = ids.length;
-    }
-  }
-
-  await supabaseAdmin.from("automation_events").insert({
-    event: "automation.hourly_run",
-    direction: "in",
-    payload: { due: (due ?? []).length, sent, failed, overdue: overdueCount } as never,
-    status: failed > 0 ? "partial" : "sent",
-  });
-
-  return {
-    ok: true,
-    ranAt: nowIso,
-    reminders: { due: (due ?? []).length, sent, failed },
-    overdue: { payments: overdueCount, notified },
-  };
 }

@@ -12,6 +12,7 @@ import { PageHero } from "@/components/kit/PageHero";
 import { supabase } from "@/integrations/supabase/client";
 import { followupStatusLabels } from "@/lib/labels";
 import { whatsappLink } from "@/lib/site-data";
+import { sendWhatsAppMessage } from "@/lib/whatsapp.functions";
 
 type FollowupRow = {
   id: string;
@@ -57,7 +58,9 @@ export const Route = createFileRoute("/_authenticated/reminders")({
 
 const repeatOptions = [
   { key: "once", label: "مرة واحدة" },
+  { key: "12_hours", label: "كل 12 ساعة" },
   { key: "daily", label: "كل يوم" },
+  { key: "three_days", label: "كل 3 أيام" },
   { key: "weekly", label: "كل أسبوع" },
   { key: "biweekly", label: "كل أسبوعين" },
   { key: "monthly", label: "كل شهر" },
@@ -123,10 +126,6 @@ function RemindersPage() {
       if (!body.trim()) throw new Error("نص الرسالة مطلوب");
 
       const next = new Date();
-      if (repeat === "daily") next.setDate(next.getDate() + 1);
-      if (repeat === "weekly") next.setDate(next.getDate() + 7);
-      if (repeat === "biweekly") next.setDate(next.getDate() + 14);
-      if (repeat === "monthly") next.setMonth(next.getMonth() + 1);
 
       const { error } = await supabase.from("reminder_followups").insert({
         recipient_contact_id: selectedContact.id,
@@ -135,8 +134,8 @@ function RemindersPage() {
         contract_id: contractId || null,
         message_body: body.trim(),
         repeat_interval: repeat,
-        status: "pending",
-        next_send_at: repeat === "once" ? new Date().toISOString() : next.toISOString(),
+        status: "active",
+        next_send_at: next.toISOString(),
       });
       if (error) throw error;
 
@@ -155,8 +154,7 @@ function RemindersPage() {
       queryClient.invalidateQueries({ queryKey: ["reminder_followups"] });
       queryClient.invalidateQueries({ queryKey: ["message_log"] });
       queryClient.invalidateQueries({ queryKey: ["nav-counts"] });
-      toast.success("تم جدولة التذكير وتسجيله في سجل التواصل");
-      if (phone) window.open(whatsappLink(phone, body.trim()), "_blank", "noopener");
+      toast.success("تمت جدولة التذكير للإرسال التلقائي");
       setBody("");
     },
     onError: (err) => toast.error(err instanceof Error ? err.message : "تعذّر الحفظ"),
@@ -176,6 +174,30 @@ function RemindersPage() {
       toast.success("تم إيقاف التذكير");
     },
     onError: (err) => toast.error(err instanceof Error ? err.message : "تعذّر الإيقاف"),
+  });
+
+  const sendNow = useMutation({
+    mutationFn: async (row: FollowupRow) => {
+      const result = await sendWhatsAppMessage({
+        data: { to: row.recipient_phone, body: row.message_body },
+      });
+      if (!result.ok) throw new Error(result.error);
+      const { error } = await supabase.from("message_log").insert({
+        recipient_name: row.recipient_name,
+        recipient_phone: row.recipient_phone,
+        body: row.message_body,
+        channel: "whatsapp",
+        result: result.sid ? `sent:${result.sid}` : "sent",
+        sent_by_system: false,
+        followup_id: row.id,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["message_log"] });
+      toast.success("تم إرسال الرسالة مباشرة عبر واتساب");
+    },
+    onError: (err) => toast.error(err instanceof Error ? err.message : "تعذّر الإرسال"),
   });
 
   const rows = followups.data ?? [];
@@ -358,15 +380,15 @@ function RemindersPage() {
               header: "إجراءات",
               cell: (r) => (
                 <span className="inline-flex items-center gap-3">
-                  <a
-                    href={whatsappLink(r.recipient_phone, r.message_body)}
-                    target="_blank"
-                    rel="noopener"
+                  <button
+                    type="button"
+                    onClick={() => sendNow.mutate(r)}
+                    disabled={sendNow.isPending}
                     className="inline-flex items-center gap-1 text-[12.5px] font-semibold text-primary"
                   >
                     <Send className="size-4" />
                     إرسال الآن
-                  </a>
+                  </button>
                   {r.status !== "stopped" ? (
                     <button
                       type="button"
