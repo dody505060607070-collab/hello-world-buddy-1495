@@ -168,7 +168,7 @@ function TeamChatPage() {
       setBody("");
       setReplyTo(null);
       setEditing(null);
-      qc.invalidateQueries({ queryKey: ["group-messages"] });
+      qc.invalidateQueries({ queryKey: ["group-messages", activeChannel] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -178,7 +178,7 @@ function TeamChatPage() {
       const { error } = await supabase.from("group_messages").update(values).eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["group-messages"] }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["group-messages", activeChannel] }),
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -198,7 +198,7 @@ function TeamChatPage() {
       if (error) throw error;
       setBody("");
       setReplyTo(null);
-      qc.invalidateQueries({ queryKey: ["group-messages"] });
+      qc.invalidateQueries({ queryKey: ["group-messages", activeChannel] });
     } catch (e) {
       toast.error((e as Error).message);
     } finally {
