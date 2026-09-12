@@ -23,15 +23,10 @@ export function AiDock() {
   const [items, setItems] = useState<string[]>([]);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([WELCOME]);
-  const scroller = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const drag = useRef<{ x: number; y: number; ox: number; oy: number; moved: boolean } | null>(
     null,
   );
-
-  useEffect(() => {
-    scroller.current?.scrollTo({ top: scroller.current.scrollHeight, behavior: "smooth" });
-  }, [messages, items, open]);
 
   // فتح المساعد تلقائيًا بمجرد بدء السحب داخل اللوحة
   useEffect(() => {
@@ -175,7 +170,7 @@ export function AiDock() {
             </div>
           ) : null}
 
-          <Conversation ref={scroller} className="min-h-0">
+          <Conversation className="min-h-0">
             <ConversationContent className="gap-3 px-3 py-3">
               {messages.map((message, index) => (
                 <AiMessage key={index} from={message.role}>
