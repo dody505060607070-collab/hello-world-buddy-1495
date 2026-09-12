@@ -10,6 +10,8 @@ import { PageHero } from "@/components/kit/PageHero";
 import { PrimaryButton, inputClass } from "@/components/kit/Modal";
 import { useCurrentUser } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { mithraa } from "@/integrations/mithraa/client";
+import { signInToMithraa, signOutMithraa, useMithraaSession } from "@/integrations/mithraa/useMithraaSession";
 import { sendPushToUsers } from "@/lib/push.functions";
 import { cn } from "@/lib/utils";
 
