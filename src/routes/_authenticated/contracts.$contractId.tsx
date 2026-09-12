@@ -1,12 +1,13 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, FileText, Loader2, Pencil, Trash2 } from "lucide-react";
+import { ArrowRight, FileText, Loader2, Pencil, PenLine, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
 import { Chip } from "@/components/kit/Chip";
 import { GhostButton, Modal, PrimaryButton } from "@/components/kit/Modal";
 import { PageHero } from "@/components/kit/PageHero";
+import { SignaturePad } from "@/components/kit/SignaturePad";
 import { Toggle } from "@/components/kit/Toggle";
 import { supabase } from "@/integrations/supabase/client";
 import { deleteContractWithOwner } from "@/lib/delete-helpers";
@@ -56,6 +57,9 @@ function ContractViewPage() {
   const navigate = useNavigate();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [alsoOwner, setAlsoOwner] = useState(false);
+  const [signatureOpen, setSignatureOpen] = useState(false);
+  const [signature, setSignature] = useState("");
+  const [signerName, setSignerName] = useState("");
 
 
 
@@ -99,6 +103,16 @@ function ContractViewPage() {
       return data ?? [];
     },
   });
+
+  const signatures = useQuery({ queryKey: ["contract-signatures", contractId], queryFn: async () => {
+    const { data, error } = await supabase.from("contract_signatures").select("id,signer_name,signer_role,image_data,signed_at").eq("contract_id", contractId).order("signed_at", { ascending: false });
+    if (error) throw error; return data ?? [];
+  }});
+
+  const saveSignature = useMutation({ mutationFn: async () => {
+    if (!signerName.trim()) throw new Error("اكتب اسم الموقّع"); if (!signature) throw new Error("أضف التوقيع");
+    const { data: auth } = await supabase.auth.getUser(); const { error } = await supabase.from("contract_signatures").insert({ contract_id: contractId, signer_name: signerName.trim(), signer_role: "staff", image_data: signature, created_by: auth.user?.id ?? null }); if (error) throw error;
+  }, onSuccess: () => { void signatures.refetch(); setSignatureOpen(false); setSignature(""); setSignerName(""); toast.success("تم حفظ التوقيع الإلكتروني"); }, onError: (e) => toast.error(e instanceof Error ? e.message : "تعذّر حفظ التوقيع") });
 
   const extraction = useQuery({
     queryKey: ["contract-view-extraction", contractId],
@@ -188,6 +202,7 @@ function ContractViewPage() {
             <Pencil className="size-4" />
             تعديل العقد
           </Link>
+          <button type="button" onClick={() => setSignatureOpen(true)} className="inline-flex h-10 items-center gap-2 rounded-lg border border-border bg-card px-4 text-[13px] font-semibold hover:bg-muted"><PenLine className="size-4" />توقيع العقد</button>
           <button
             type="button"
             disabled={remove.isPending}
@@ -227,6 +242,7 @@ function ContractViewPage() {
               </p>
             </div>
           </Modal>
+          <Modal open={signatureOpen} onClose={() => setSignatureOpen(false)} title="التوقيع الإلكتروني" subtitle="يُحفظ اسم الموقّع والتاريخ مع العقد." footer={<><PrimaryButton onClick={() => saveSignature.mutate()} disabled={saveSignature.isPending}>حفظ التوقيع</PrimaryButton><GhostButton onClick={() => setSignatureOpen(false)}>إلغاء</GhostButton></>}><div className="space-y-4"><label className="grid gap-1 text-[12.5px] font-semibold">اسم الموقّع<input className="h-10 rounded-lg border border-input bg-background px-3" value={signerName} onChange={(e) => setSignerName(e.target.value)} /></label><SignaturePad onChange={setSignature} /></div></Modal>
         </div>
       </div>
 
@@ -398,6 +414,10 @@ function ContractViewPage() {
                 </p>
               ) : null}
             </div>
+          </Section>
+
+          <Section title={`التوقيعات الإلكترونية (${signatures.data?.length ?? 0})`}>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{(signatures.data ?? []).map((row) => <article key={row.id} className="rounded-xl border border-border p-3"><img src={row.image_data} alt={`توقيع ${row.signer_name}`} className="h-24 w-full rounded-lg bg-card object-contain" /><p className="mt-2 text-[13px] font-bold">{row.signer_name}</p><p className="text-[11.5px] text-muted-foreground">{new Date(row.signed_at).toLocaleString("ar-SA")}</p></article>)}{!signatures.data?.length ? <p className="text-[12.5px] text-muted-foreground">لم يُضف أي توقيع بعد.</p> : null}</div>
           </Section>
 
           {extraFields.length || importWarnings.length ? (
