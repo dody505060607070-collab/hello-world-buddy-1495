@@ -200,11 +200,9 @@ export function parseEjarContract(rawText: string): EjarParsed | null {
 
   const put = (key: string, value: string) => {
     if (section === "units") {
-      if (key === "Unit Type" || !currentUnit) {
-        if (key === "Unit Type") {
-          currentUnit = {};
-          unitBuckets.push(currentUnit);
-        } else return;
+      if (!currentUnit || (key === "Unit No." && currentUnit["Unit No."])) {
+        currentUnit = {};
+        unitBuckets.push(currentUnit);
       }
       if (currentUnit[key] === undefined) currentUnit[key] = value;
       return;
@@ -215,7 +213,10 @@ export function parseEjarContract(rawText: string): EjarParsed | null {
 
   for (let i = 0; i < parts.length; i++) {
     const p = parts[i]!;
-    const sec = SECTION_OF[p];
+    const sectionLabel = Object.keys(SECTION_OF)
+      .sort((a, b) => b.length - a.length)
+      .find((label) => p === label || p.endsWith(label));
+    const sec = sectionLabel ? SECTION_OF[sectionLabel] : undefined;
     if (sec) {
       section = sec;
       if (sec === "units") currentUnit = null;

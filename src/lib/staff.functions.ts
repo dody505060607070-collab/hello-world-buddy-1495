@@ -61,6 +61,7 @@ export const createStaffAccount = createServerFn({ method: "POST" })
         hire_date: data.hireDate?.trim() || null,
         admin_notes: data.adminNotes?.trim() || null,
         is_active: true,
+        org: "rashoudi",
       })
       .select("id")
       .single();
