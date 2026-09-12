@@ -3,7 +3,7 @@ import { Clock, Heart, Mail, MapPin, Menu, Phone, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 
 import footerImage from "@/assets/bg-footer.jpg";
-import logoAsset from "@/assets/rushdy-logo-transparent.png.asset.json";
+import logoAsset from "@/assets/rashudi-logo.webp.asset.json";
 import { FloatingActions, ScrollProgress } from "@/components/site/Chrome";
 import { AiWidget } from "@/components/site/AiWidget";
 import { useSession } from "@/hooks/useAuth";
@@ -79,7 +79,7 @@ function SiteHeader() {
             alt="الرشودي للعقارات"
             width={680}
             height={510}
-            className="h-12 w-auto brightness-0 invert transition-transform duration-300 hover:scale-105 md:h-14"
+            className="h-12 w-auto transition-transform duration-300 hover:scale-105 md:h-14"
           />
         </Link>
       </div>
@@ -136,7 +136,7 @@ function SiteFooter() {
             width={680}
             height={510}
             loading="lazy"
-            className="mx-auto h-24 w-auto brightness-0 invert md:h-32"
+            className="mx-auto h-24 w-auto md:h-32"
           />
         </Link>
 

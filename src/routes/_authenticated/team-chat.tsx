@@ -224,7 +224,7 @@ function TeamChatPage() {
         stats={[{ value: String(all.length), label: "رسالة" }]}
       />
 
-      <div className="surface-card overflow-hidden">
+      <div className="surface-card flex h-[calc(100dvh-15rem)] min-h-[560px] flex-col overflow-hidden">
         <nav className="flex gap-2 overflow-x-auto border-b border-border p-3">
           {([
             ["rashoudi", "فريق الرشودي"],
@@ -273,7 +273,7 @@ function TeamChatPage() {
           </div>
         ) : null}
 
-        <div className="space-y-3 overflow-y-auto p-4" style={{ maxHeight: 520 }}>
+        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-4">
           {rows.map((m) => {
             const mine = m.sender_id === userId;
             const parent = m.reply_to ? byId.get(m.reply_to) : null;

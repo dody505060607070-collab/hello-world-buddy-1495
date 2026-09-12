@@ -3,7 +3,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { ChevronDown, LogOut, Menu, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
-import logoAsset from "@/assets/rushdy-logo-transparent.png.asset.json";
+import logoAsset from "@/assets/rashudi-logo.webp.asset.json";
 import { navGroups } from "@/data/nav";
 import { signOut, useCurrentUser } from "@/hooks/useAuth";
 import { navCountsQuery } from "@/lib/counts";
@@ -151,7 +151,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             alt="الرشودي للعقارات"
             width={1152}
             height={576}
-            className="h-12 w-auto brightness-0 invert md:h-[82px]"
+            className="h-12 w-auto md:h-[82px]"
           />
         </Link>
 

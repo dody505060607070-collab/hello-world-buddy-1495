@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Building2, LockKeyhole, Mail, ShieldCheck, UserRound } from "lucide-react";
 import { toast } from "sonner";
 
-import logoAsset from "@/assets/rushdy-logo-transparent.png.asset.json";
+import logoAsset from "@/assets/rashudi-logo.webp.asset.json";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -104,7 +104,7 @@ function AuthPage() {
         <aside className="relative flex min-h-64 flex-col justify-between overflow-hidden bg-primary p-8 text-primary-foreground sm:p-12 lg:min-h-full">
           <div className="absolute -start-28 -top-28 size-80 rounded-full border border-primary-foreground/10" />
           <div className="absolute -bottom-32 -end-24 size-96 rounded-full border border-primary-foreground/10" />
-          <img src={logoAsset.url} alt="الرشودي للعقارات" className="relative h-28 w-fit brightness-0 invert sm:h-36" />
+          <img src={logoAsset.url} alt="الرشودي للعقارات" className="relative h-28 w-fit sm:h-36" />
           <div className="relative mt-10 max-w-md">
             <p className="text-sm font-bold text-secondary">بوابة الرشودي الرقمية</p>
             <h2 className="mt-3 text-3xl font-black leading-tight sm:text-4xl">إدارة عقارية متكاملة، في مكان واحد.</h2>
