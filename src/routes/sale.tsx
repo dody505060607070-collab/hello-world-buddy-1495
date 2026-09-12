@@ -15,12 +15,12 @@ import { publicPropertiesQuery } from "@/lib/site-data";
 export const Route = createFileRoute("/sale")({
   head: () => ({
     meta: [
-      { title: "عقارات للبيع في بريدة | مثراء العقارية" },
+      { title: "عقارات للبيع في بريدة | الرشودي للعقارات العقارية" },
       {
         name: "description",
         content: "فلل وأراضٍ وعمائر ومحلات للبيع في بريدة بأسعار السوق الحقيقية وبيانات موثقة.",
       },
-      { property: "og:title", content: "عقارات للبيع في بريدة | مثراء العقارية" },
+      { property: "og:title", content: "عقارات للبيع في بريدة | الرشودي للعقارات العقارية" },
       {
         property: "og:description",
         content: "فرص شراء عقارية في بريدة مع حاسبة تمويل وتواصل مباشر.",

@@ -7,14 +7,14 @@ const BASE = "https://friendly-fellow-kit.lovable.app";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      { title: "سياسة الخصوصية | مثراء العقارية" },
+      { title: "سياسة الخصوصية | الرشودي للعقارات العقارية" },
       {
         name: "description",
         content:
-          "سياسة الخصوصية في مثراء العقارية: كيف نجمع بيانات زوار الموقع والعملاء ونستخدمها ونحميها.",
+          "سياسة الخصوصية في الرشودي للعقارات العقارية: كيف نجمع بيانات زوار الموقع والعملاء ونستخدمها ونحميها.",
       },
-      { property: "og:title", content: "سياسة الخصوصية | مثراء العقارية" },
-      { property: "og:description", content: "كيف نتعامل مع بياناتك في مثراء العقارية." },
+      { property: "og:title", content: "سياسة الخصوصية | الرشودي للعقارات العقارية" },
+      { property: "og:description", content: "كيف نتعامل مع بياناتك في الرشودي للعقارات العقارية." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: `${BASE}/privacy` },
       { name: "twitter:card", content: "summary_large_image" },
@@ -43,7 +43,7 @@ const sections = [
   },
   {
     title: "حماية البيانات",
-    body: "بياناتك محفوظة على خوادم آمنة مع صلاحيات وصول محدودة لموظفي مثراء المعنيين بطلبك.",
+    body: "بياناتك محفوظة على خوادم آمنة مع صلاحيات وصول محدودة لموظفي الرشودي للعقارات المعنيين بطلبك.",
   },
   {
     title: "حقوقك",
@@ -57,7 +57,7 @@ function PrivacyPage() {
       <article className="mx-auto max-w-3xl px-4 py-14">
         <h1 className="text-2xl font-extrabold text-foreground md:text-3xl">سياسة الخصوصية</h1>
         <p className="mt-3 text-[13.5px] leading-7 text-muted-foreground">
-          توضّح هذه السياسة طريقة تعامل مؤسسة مثراء العقارية مع بيانات زوار الموقع وعملائها.
+          توضّح هذه السياسة طريقة تعامل مؤسسة الرشودي للعقارات العقارية مع بيانات زوار الموقع وعملائها.
         </p>
 
         <div className="mt-8 space-y-6">

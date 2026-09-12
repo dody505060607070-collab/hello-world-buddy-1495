@@ -10,12 +10,12 @@ import { getWhatsAppLinkStatus, unlinkWhatsApp } from "@/lib/whatsapp.functions"
 export const Route = createFileRoute("/_authenticated/whatsapp-link")({
   head: () => ({
     meta: [
-      { title: "ربط واتساب | مثراء" },
+      { title: "ربط واتساب | الرشودي للعقارات" },
       {
         name: "description",
         content: "ربط رقم واتساب بالنظام عبر رمز QR لإرسال التذكيرات مباشرة من الرقم.",
       },
-      { property: "og:title", content: "ربط واتساب | مثراء" },
+      { property: "og:title", content: "ربط واتساب | الرشودي للعقارات" },
       {
         property: "og:description",
         content: "ربط رقم واتساب بالنظام عبر رمز QR لإرسال التذكيرات مباشرة من الرقم.",

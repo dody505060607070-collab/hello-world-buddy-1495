@@ -148,7 +148,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         >
           <img
             src={logoAsset.url}
-            alt="مثراء العقارية"
+            alt="الرشودي للعقارات العقارية"
             width={1152}
             height={576}
             className="h-9 w-auto md:h-[96px]"

@@ -58,12 +58,12 @@ type ImportRow = {
 export const Route = createFileRoute("/_authenticated/contracts/")({
   head: () => ({
     meta: [
-      { title: "إدارة العقود | مثراء العقارية" },
+      { title: "إدارة العقود | الرشودي للعقارات العقارية" },
       {
         name: "description",
         content: "عقود الإيجار والبيع، إضافتها يدويًا أو استيرادها من ملف PDF وتحليلها بالذكاء الاصطناعي.",
       },
-      { property: "og:title", content: "إدارة العقود | مثراء العقارية" },
+      { property: "og:title", content: "إدارة العقود | الرشودي للعقارات العقارية" },
       { property: "og:description", content: "عقود الإيجار والبيع واستيراد PDF وتحليلها آليًا." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

@@ -50,12 +50,12 @@ const STATUS_STYLE: Record<string, string> = {
 export const Route = createFileRoute("/_authenticated/tasks")({
   head: () => ({
     meta: [
-      { title: "المهام | مثراء العقارية" },
+      { title: "المهام | الرشودي للعقارات العقارية" },
       {
         name: "description",
         content: "كل المهام العادية ومهام التصوير في شاشة واحدة مع الحالة والأولوية والاعتماد.",
       },
-      { property: "og:title", content: "المهام | مثراء العقارية" },
+      { property: "og:title", content: "المهام | الرشودي للعقارات العقارية" },
       { property: "og:description", content: "متابعة مهام الفريق ومهام التصوير واعتماد التنفيذ." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

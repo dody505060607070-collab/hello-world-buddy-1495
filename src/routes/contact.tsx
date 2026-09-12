@@ -16,15 +16,15 @@ import { COMPANY_EMAIL, COMPANY_PHONE, whatsappLink } from "@/lib/site-data";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "تواصل معنا | مثراء العقارية" },
+      { title: "تواصل معنا | الرشودي للعقارات العقارية" },
       {
         name: "description",
-        content: "تواصل مع مثراء العقارية في بريدة عبر الهاتف أو واتساب أو البريد، ومواقعنا وأوقات العمل.",
+        content: "تواصل مع الرشودي للعقارات العقارية في بريدة عبر الهاتف أو واتساب أو البريد، ومواقعنا وأوقات العمل.",
       },
-      { property: "og:title", content: "تواصل معنا | مثراء العقارية" },
+      { property: "og:title", content: "تواصل معنا | الرشودي للعقارات العقارية" },
       {
         property: "og:description",
-        content: "أرسل استفسارك العقاري وسيتواصل معك فريق مثراء العقارية.",
+        content: "أرسل استفسارك العقاري وسيتواصل معك فريق الرشودي للعقارات العقارية.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -124,7 +124,7 @@ function ContactPage() {
 
           <div className="overflow-hidden rounded-2xl border border-border shadow-card">
             <iframe
-              title="موقع مثراء العقارية في بريدة"
+              title="موقع الرشودي للعقارات العقارية في بريدة"
               src="https://www.openstreetmap.org/export/embed.html?bbox=43.90%2C26.28%2C44.10%2C26.40&layer=mapnik"
               className="h-full min-h-[420px] w-full"
               loading="lazy"

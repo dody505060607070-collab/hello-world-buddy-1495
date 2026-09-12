@@ -6,9 +6,9 @@ import { getPortalContract } from "@/lib/portal.functions";
 export const Route = createFileRoute("/portal/contracts/$contractId")({
   head: () => ({
     meta: [
-      { title: "جدول الأقساط | بوابة عميل مثراء" },
+      { title: "جدول الأقساط | بوابة عميل الرشودي للعقارات" },
       { name: "description", content: "تفاصيل العقد وجدول الأقساط والمدفوع والمتبقي." },
-      { property: "og:title", content: "جدول الأقساط | بوابة عميل مثراء" },
+      { property: "og:title", content: "جدول الأقساط | بوابة عميل الرشودي للعقارات" },
       { property: "og:description", content: "تفاصيل العقد وجدول الأقساط والمدفوع والمتبقي." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

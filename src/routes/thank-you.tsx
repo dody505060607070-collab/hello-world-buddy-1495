@@ -9,12 +9,12 @@ const BASE = "https://friendly-fellow-kit.lovable.app";
 export const Route = createFileRoute("/thank-you")({
   head: () => ({
     meta: [
-      { title: "تم استلام طلبك | مثراء العقارية" },
+      { title: "تم استلام طلبك | الرشودي للعقارات العقارية" },
       {
         name: "description",
-        content: "شكرًا لتواصلك مع مثراء العقارية، سنعاود الاتصال بك خلال ساعات العمل.",
+        content: "شكرًا لتواصلك مع الرشودي للعقارات العقارية، سنعاود الاتصال بك خلال ساعات العمل.",
       },
-      { property: "og:title", content: "تم استلام طلبك | مثراء العقارية" },
+      { property: "og:title", content: "تم استلام طلبك | الرشودي للعقارات العقارية" },
       { property: "og:description", content: "سنتواصل معك قريبًا بخصوص طلبك العقاري." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: `${BASE}/thank-you` },
@@ -34,7 +34,7 @@ function ThankYouPage() {
           تم استلام طلبك بنجاح
         </h1>
         <p className="mt-3 text-[14px] leading-7 text-muted-foreground">
-          شكرًا لثقتك بمثراء العقارية. وصل طلبك لفريقنا، وسنتواصل معك خلال ساعات العمل
+          شكرًا لثقتك بالرشودي للعقارات العقارية. وصل طلبك لفريقنا، وسنتواصل معك خلال ساعات العمل
           (السبت — الخميس 9ص — 10م).
         </p>
 

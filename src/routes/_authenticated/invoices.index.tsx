@@ -25,9 +25,9 @@ type Row = {
 
 export const Route = createFileRoute("/_authenticated/invoices/")({
   head: () => ({ meta: [
-    { title: "الفواتير | مثراء العقارية" },
+    { title: "الفواتير | الرشودي للعقارات العقارية" },
     { name: "description", content: "إدارة الفواتير وحالات السداد والمدفوعات." },
-    { property: "og:title", content: "الفواتير | مثراء العقارية" },
+    { property: "og:title", content: "الفواتير | الرشودي للعقارات العقارية" },
     { property: "og:description", content: "الفواتير الصادرة وحالات سدادها." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary" },

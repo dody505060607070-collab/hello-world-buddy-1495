@@ -24,9 +24,9 @@ type Row = {
 export const Route = createFileRoute("/_authenticated/services")({
   head: () => ({
     meta: [
-      { title: "الخدمات | مثراء العقارية" },
+      { title: "الخدمات | الرشودي للعقارات العقارية" },
       { name: "description", content: "إضافة وتعديل الخدمات المعروضة للزوار في الموقع العام." },
-      { property: "og:title", content: "الخدمات | مثراء العقارية" },
+      { property: "og:title", content: "الخدمات | الرشودي للعقارات العقارية" },
       { property: "og:description", content: "إضافة وتعديل الخدمات المعروضة للزوار في الموقع العام." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

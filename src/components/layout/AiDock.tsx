@@ -136,7 +136,7 @@ export function AiDock() {
           <header className="flex items-center justify-between bg-primary px-4 py-3 text-primary-foreground">
             <h2 className="flex items-center gap-2 text-[13.5px] font-bold">
               <Bot className="size-4" />
-              مساعد مثراء
+              مساعد الرشودي للعقارات
             </h2>
             <button type="button" onClick={() => setOpen(false)} aria-label="إغلاق">
               <X className="size-4" />

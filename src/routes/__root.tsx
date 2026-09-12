@@ -89,7 +89,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "مثراء العقارية — لوحة الإدارة" },
+      { title: "الرشودي للعقارات العقارية — لوحة الإدارة" },
       {
         name: "description",
         content: "نظام إدارة عقاري متكامل: العقارات، العقود، الفواتير، الملاك والمهام.",

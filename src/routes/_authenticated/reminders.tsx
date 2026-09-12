@@ -41,12 +41,12 @@ type LogRow = {
 export const Route = createFileRoute("/_authenticated/reminders")({
   head: () => ({
     meta: [
-      { title: "إدارة التذكيرات | مثراء العقارية" },
+      { title: "إدارة التذكيرات | الرشودي للعقارات العقارية" },
       {
         name: "description",
         content: "إرسال ومتابعة تذكيرات الدفعات الإيجارية من شاشة واحدة مع سجل التواصل الكامل.",
       },
-      { property: "og:title", content: "إدارة التذكيرات | مثراء العقارية" },
+      { property: "og:title", content: "إدارة التذكيرات | الرشودي للعقارات العقارية" },
       { property: "og:description", content: "تذكيرات السداد والمتابعات المجدولة وحالة الإرسال." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

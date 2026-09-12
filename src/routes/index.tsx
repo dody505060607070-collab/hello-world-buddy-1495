@@ -25,13 +25,13 @@ const SOCIAL_IMAGE = `${SITE_URL}${socialCard.url}`;
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "مثراء العقارية | عقارات بريدة للإيجار والبيع" },
+      { title: "الرشودي للعقارات العقارية | عقارات بريدة للإيجار والبيع" },
       {
         name: "description",
         content:
-          "مثراء العقارية في بريدة: شقق وفلل ومعارض للإيجار والبيع، خبرة محلية تفوق 8 سنوات وخدمة سريعة عبر واتساب.",
+          "الرشودي للعقارات العقارية في بريدة: شقق وفلل ومعارض للإيجار والبيع، خبرة محلية تفوق 8 سنوات وخدمة سريعة عبر واتساب.",
       },
-      { property: "og:title", content: "مثراء العقارية | عقارات بريدة للإيجار والبيع" },
+      { property: "og:title", content: "الرشودي للعقارات العقارية | عقارات بريدة للإيجار والبيع" },
       {
         property: "og:description",
         content: "خبرة محلية في سوق عقارات بريدة: إيجار، بيع، إدارة أملاك ومتابعة عقود.",
@@ -40,10 +40,10 @@ export const Route = createFileRoute("/")({
       { property: "og:image", content: SOCIAL_IMAGE },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "شعار مثراء العقارية" },
+      { property: "og:image:alt", content: "شعار الرشودي للعقارات العقارية" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:image", content: SOCIAL_IMAGE },
-      { name: "twitter:image:alt", content: "شعار مثراء العقارية" },
+      { name: "twitter:image:alt", content: "شعار الرشودي للعقارات العقارية" },
       { property: "og:url", content: `${SITE_URL}/` },
     ],
     links: [{ rel: "canonical", href: `${SITE_URL}/` }],

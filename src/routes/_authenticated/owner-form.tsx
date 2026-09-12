@@ -15,12 +15,12 @@ export const Route = createFileRoute("/_authenticated/owner-form")({
   }),
   head: () => ({
     meta: [
-      { title: "إضافة مالك | مثراء العقارية" },
+      { title: "إضافة مالك | الرشودي للعقارات العقارية" },
       {
         name: "description",
         content: "نموذج إضافة وتعديل بيانات المالك: البيانات الأساسية، بيانات التواصل والإعدادات.",
       },
-      { property: "og:title", content: "إضافة مالك | مثراء العقارية" },
+      { property: "og:title", content: "إضافة مالك | الرشودي للعقارات العقارية" },
       { property: "og:description", content: "نموذج كامل لبيانات المالك وتواصله وإعداداته." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
