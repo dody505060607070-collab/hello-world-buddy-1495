@@ -15,6 +15,13 @@
       "when": 1789148491605,
       "tag": "0001_automation_shared_token",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789240382144,
+      "tag": "0002_add_shared_company_chat_channels",
+      "breakpoints": true
     }
   ]
 }
