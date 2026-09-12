@@ -55,7 +55,7 @@ export function HeroVideo() {
             <img
               src={logo.url}
               alt="الرشودي للعقارات - ALRASHUDI REAL ESTATE"
-              className="animate-pop-in w-56 max-w-[78vw] rounded-2xl shadow-2xl ring-1 ring-white/15 sm:w-64 md:w-80"
+              className="animate-pop-in w-64 max-w-[80vw] rounded-2xl drop-shadow-2xl sm:w-72 md:w-96"
             />
             <p
               className="animate-pop-in max-w-2xl text-[15px] font-semibold leading-8 text-primary-foreground/85 md:text-[19px]"
