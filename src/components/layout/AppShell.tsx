@@ -8,6 +8,8 @@ import { navGroups } from "@/data/nav";
 import { signOut, useCurrentUser } from "@/hooks/useAuth";
 import { navCountsQuery } from "@/lib/counts";
 import { LanguageToggle, useI18n } from "@/lib/i18n";
+import { ThemeToggle } from "@/lib/theme";
+import { CommandPalette } from "@/components/kit/CommandPalette";
 import { cn } from "@/lib/utils";
 
 function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
@@ -138,6 +140,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <LogOut className="size-[18px]" />
           </button>
           <LanguageToggle className="border-primary-foreground/25 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20" />
+          <ThemeToggle className="border-primary-foreground/25 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20" />
           <NotificationsBell />
           <PushToggle />
         </div>
@@ -199,6 +202,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </main>
 
         <AiDock />
+        <CommandPalette />
       </div>
     </div>
   );
