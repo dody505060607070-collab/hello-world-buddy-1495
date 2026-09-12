@@ -140,7 +140,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <LogOut className="size-[18px]" />
           </button>
           <LanguageToggle className="border-primary-foreground/25 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20" />
-          <ThemeToggle className="border-primary-foreground/25 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20" />
+          <ThemeToggle showLabel className="hidden border-primary-foreground/25 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 sm:inline-flex" />
           <NotificationsBell />
           <PushToggle />
         </div>

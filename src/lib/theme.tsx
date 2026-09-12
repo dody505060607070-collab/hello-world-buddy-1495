@@ -57,7 +57,7 @@ export function useTheme() {
   return useContext(ThemeContext);
 }
 
-export function ThemeToggle({ className }: { className?: string }) {
+export function ThemeToggle({ className, showLabel = false }: { className?: string; showLabel?: boolean }) {
   const { theme, toggle } = useTheme();
   return (
     <button
@@ -66,11 +66,14 @@ export function ThemeToggle({ className }: { className?: string }) {
       aria-label={theme === "dark" ? "الوضع الفاتح" : "الوضع الليلي"}
       title={theme === "dark" ? "الوضع الفاتح" : "الوضع الليلي"}
       className={cn(
-        "grid size-9 place-items-center rounded-full border border-border text-foreground transition-colors hover:bg-muted",
+        showLabel
+          ? "inline-flex h-9 items-center gap-2 rounded-lg border border-border px-3 text-xs font-bold text-foreground transition-colors hover:bg-muted"
+          : "grid size-9 place-items-center rounded-full border border-border text-foreground transition-colors hover:bg-muted",
         className,
       )}
     >
       {theme === "dark" ? <Sun className="size-[18px]" /> : <Moon className="size-[18px]" />}
+      {showLabel ? <span>{theme === "dark" ? "الوضع الفاتح" : "الوضع الليلي"}</span> : null}
     </button>
   );
 }
