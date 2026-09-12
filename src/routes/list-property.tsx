@@ -1,8 +1,9 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Home, ImagePlus, KeyRound, MapPin, Search, UserRound, X } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
+import heroImage from "@/assets/hero-list-property.jpg";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -79,7 +80,27 @@ function ListPropertyPage() {
     finally { setBusy(false); }
   };
 
-  return <SiteLayout><main className="bg-secondary/40 px-4 py-8 sm:py-12" dir="rtl">
+  return <SiteLayout>
+    <section className="relative isolate flex min-h-[380px] items-center justify-center overflow-hidden md:min-h-[440px]" dir="rtl">
+      <img src={heroImage} alt="اعرض أو اطلب عقارك" width={1920} height={1080} className="absolute inset-0 -z-20 size-full object-cover" />
+      <div aria-hidden className="absolute inset-0 -z-10 bg-primary/70 mix-blend-multiply" />
+      <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-foreground/45 via-transparent to-foreground/35" />
+      <div className="px-4 py-20 text-center text-white">
+        <p className="animate-pop-in text-sm font-extrabold drop-shadow md:text-base">خدمة اعرض عقارك</p>
+        <h1 className="animate-pop-in mt-1 font-display text-[42px] font-black leading-[1.15] drop-shadow-lg sm:text-6xl md:text-7xl">
+          اعرض أو اطلب عقارك
+        </h1>
+        <p className="animate-pop-in mx-auto mt-4 max-w-2xl text-sm font-semibold leading-8 text-white/90 drop-shadow md:text-base" style={{ animationDelay: "180ms" }}>
+          أوصل عقارك للمهتمين، أو شاركنا مواصفات طلبك وسنساعدك في الوصول للخيار المناسب.
+        </p>
+        <nav aria-label="مسار الصفحة" className="animate-pop-in mt-5 text-xs font-semibold text-white/75 md:text-sm" style={{ animationDelay: "300ms" }}>
+          <Link to="/" className="hover:text-white">الرئيسية</Link>
+          <span className="mx-2">/</span>
+          <span>اعرض أو اطلب</span>
+        </nav>
+      </div>
+    </section>
+    <main className="bg-secondary/40 px-4 py-8 sm:py-12" dir="rtl">
     <div className="mx-auto max-w-3xl">
       <div className="mb-5 grid grid-cols-2 gap-1 rounded-lg border border-border bg-card p-1 shadow-card">
         <Button type="button" variant={mode === "offer" ? "default" : "ghost"} onClick={() => switchMode("offer")} className="h-11"><Home />اعرض عقارك</Button>
@@ -88,7 +109,7 @@ function ListPropertyPage() {
 
       <form onSubmit={submit} className="overflow-hidden rounded-xl border border-border bg-card shadow-float">
         <header className="border-b border-border bg-accent px-5 py-4 sm:px-7">
-          <h1 className="text-lg font-extrabold text-primary">{mode === "offer" ? "بيانات العقار" : "بيانات طلب العقار"}</h1>
+          <h2 className="text-lg font-extrabold text-primary">{mode === "offer" ? "بيانات العقار" : "بيانات طلب العقار"}</h2>
           <p className="mt-1 text-xs text-muted-foreground">{mode === "offer" ? "يرجى تعبئة جميع الحقول المطلوبة بدقة" : "أخبرنا بما تبحث عنه وسنتواصل معك بأسرع وقت"}</p>
         </header>
 
