@@ -1,6 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { PenLine } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
+import { SignaturePad } from "@/components/kit/SignaturePad";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 import { getPortalContract } from "@/lib/portal.functions";
 
 export const Route = createFileRoute("/portal/contracts/$contractId")({
@@ -30,6 +36,9 @@ const statusChip: Record<string, { label: string; cls: string }> = {
 
 function ContractDetail() {
   const { contractId } = Route.useParams();
+  const queryClient = useQueryClient();
+  const [signature, setSignature] = useState("");
+  const [signerName, setSignerName] = useState("");
   const { data, isLoading, error } = useQuery({
     queryKey: ["portal-contract", contractId],
     queryFn: () => getPortalContract({ data: { contractId } }),
@@ -53,6 +62,8 @@ function ContractDetail() {
   };
   const totalDue = data.payments.reduce((s, p) => s + Number(p.amount_due), 0);
   const totalPaid = data.payments.reduce((s, p) => s + Number(p.amount_paid), 0);
+  const signatures = useQuery({ queryKey: ["portal-contract-signatures", contractId], queryFn: async () => { const { data: rows, error: signatureError } = await supabase.from("contract_signatures").select("id,signer_name,image_data,signed_at").eq("contract_id", contractId).order("signed_at", { ascending: false }); if (signatureError) throw signatureError; return rows ?? []; } });
+  const sign = useMutation({ mutationFn: async () => { if (!signerName.trim() || !signature) throw new Error("اكتب اسمك وأضف توقيعك"); const { data: auth } = await supabase.auth.getUser(); if (!auth.user) throw new Error("يجب تسجيل الدخول"); const { error: signError } = await supabase.from("contract_signatures").insert({ contract_id: contractId, signer_name: signerName.trim(), signer_role: "tenant", image_data: signature, created_by: auth.user.id }); if (signError) throw signError; }, onSuccess: () => { setSignature(""); setSignerName(""); void queryClient.invalidateQueries({ queryKey: ["portal-contract-signatures", contractId] }); toast.success("تم توقيع العقد بنجاح"); }, onError: (signError) => toast.error(signError instanceof Error ? signError.message : "تعذّر التوقيع") });
 
   return (
     <div className="space-y-5">
@@ -166,6 +177,14 @@ function ContractDetail() {
               ) : null}
             </tbody>
           </table>
+        </div>
+      </section>
+
+      <section className="rounded-2xl border border-border bg-card p-5">
+        <h2 className="flex items-center gap-2 text-sm font-bold"><PenLine className="size-4 text-primary" />التوقيع الإلكتروني</h2>
+        <div className="mt-4 grid gap-5 lg:grid-cols-2">
+          <div className="space-y-3"><label className="grid gap-1 text-xs font-semibold">اسم الموقّع<input className="h-10 rounded-lg border border-input bg-background px-3" value={signerName} onChange={(event) => setSignerName(event.target.value)} /></label><SignaturePad onChange={setSignature} /><Button onClick={() => sign.mutate()} disabled={sign.isPending || !signature}>توقيع العقد</Button></div>
+          <div className="space-y-2">{(signatures.data ?? []).map((row) => <article key={row.id} className="rounded-lg border border-border p-3"><img src={row.image_data} alt={`توقيع ${row.signer_name}`} className="h-20 w-full object-contain" /><p className="mt-1 text-xs font-bold">{row.signer_name}</p><p className="text-[11px] text-muted-foreground">{new Date(row.signed_at).toLocaleString("ar-SA")}</p></article>)}{!signatures.data?.length ? <p className="text-xs text-muted-foreground">لم يُوقّع هذا العقد بعد.</p> : null}</div>
         </div>
       </section>
     </div>
