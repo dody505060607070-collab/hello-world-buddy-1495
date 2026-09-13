@@ -68,7 +68,7 @@ export function HeroVideo({
       </picture>
       <span
         aria-hidden
-        className="absolute inset-0 -z-10 bg-gradient-to-b from-foreground/80 via-foreground/45 to-foreground/80"
+        className="absolute inset-0 -z-10 bg-gradient-to-b from-foreground/55 via-foreground/20 to-foreground/65"
       />
 
       <div className="mx-auto flex min-h-[760px] w-full max-w-7xl flex-col justify-between px-4 pb-7 pt-14 text-center md:min-h-[760px] md:px-8 md:pb-10 md:pt-20 lg:min-h-[calc(100svh-74px)]">
