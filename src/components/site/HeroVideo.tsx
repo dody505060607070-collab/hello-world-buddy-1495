@@ -75,7 +75,7 @@ export function HeroVideo({
         <div className="mx-auto flex max-w-5xl flex-1 flex-col items-center justify-center py-8 md:py-12">
           <h1 className="animate-pop-in flex w-full justify-center">
             <span className="sr-only">
-              خبرةٌ محلية.. وقرارٌ عقاري أوضح — الرشودي للعقارات — نعرف بريدة.. ونفهم العقار
+              خبرةٌ محلية.. وقرارٌ عقاري أوضح — الرشودي للعقارات — تعرف بريدة.. ونفهم العقار
             </span>
             <img
               src={heroHeadline}
