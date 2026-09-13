@@ -15,7 +15,7 @@ const filters = [
 ] as const;
 
 const colors: Record<string, string> = {
-  sale: "#F59E0B",
+  sale: "var(--map-sale)",
   rent: "var(--primary)",
 };
 
@@ -28,7 +28,7 @@ function normalizePurpose(p?: string | null): "sale" | "rent" {
 export function PropertyMap({
   properties,
   title = "العقارات على الخريطة",
-  description = "اضغط على أي نقطة لعرض تفاصيل العقار — الأصفر للبيع والأزرق للإيجار.",
+  description = "اضغط على أي نقطة لعرض تفاصيل العقار — الرمادي للبيع والأحمر للإيجار.",
 }: {
   properties: MapProperty[] | undefined;
   title?: string;

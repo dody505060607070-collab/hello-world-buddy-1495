@@ -124,6 +124,15 @@ function SiteHeader() {
                 اعرض | اطلب عقارك
               </Link>
             </li>
+            <li>
+              <Link
+                to={session ? "/dashboard" : "/auth"}
+                onClick={() => setOpen(false)}
+                className="mt-1 block rounded-lg bg-gold px-4 py-3 text-center text-[15px] font-bold text-gold-foreground transition-opacity hover:opacity-90"
+              >
+                {session ? "لوحة التحكم" : "تسجيل الدخول"}
+              </Link>
+            </li>
             <li className="mt-2 border-t border-primary-foreground/15 pt-3">
               <ThemeToggle showLabel className="w-full justify-center border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20" />
             </li>

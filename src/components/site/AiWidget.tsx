@@ -1,8 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
-import { Loader2, Send, Sparkles } from "lucide-react";
+import { Bot, Loader2, Send, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import markAsset from "@/assets/rashudi-logo.webp.asset.json";
 import { askPublicAi } from "@/lib/ai.functions";
 import { cn } from "@/lib/utils";
 
@@ -97,17 +96,14 @@ export function AiWidget() {
       >
         <button
           type="button"
-          aria-label="الرشودي للعقارات AI — المساعد الذكي"
-          className="group block transition-transform hover:scale-105"
+          aria-label="المساعد الذكي"
+          className="group relative grid size-16 place-items-center rounded-full border-2 border-primary-foreground/25 bg-primary text-primary-foreground shadow-float transition-transform hover:scale-105 sm:size-20"
         >
-          <img
-            src={markAsset.url}
-            alt=""
-            width={680}
-            height={360}
-            loading="lazy"
-            className="h-16 w-auto animate-float-slow drop-shadow-lg sm:h-20"
-          />
+          <Bot className="size-8 animate-float-slow sm:size-10" strokeWidth={2.2} />
+          <Sparkles className="absolute end-1.5 top-1.5 size-4 text-gold sm:end-2 sm:top-2 sm:size-5" />
+          <span className="absolute -bottom-1 rounded-full border border-primary-foreground/20 bg-card px-2 py-0.5 text-[9px] font-black leading-none text-primary sm:text-[10px]">
+            AI
+          </span>
         </button>
       </div>
 
