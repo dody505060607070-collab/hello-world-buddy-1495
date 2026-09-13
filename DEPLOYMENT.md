@@ -61,3 +61,10 @@ node .output/server/index.mjs   # أو عبر PM2 خلف Nginx
 
 خطة النقل الكاملة (قاعدة البيانات + الحسابات + الملفات) في `deploy/MIGRATION.md`،
 وكل الملفات الجاهزة في مجلد `deploy/`.
+
+## 6. GitHub والنسخة المطابقة
+
+- GitHub يحفظ الكود وملفات النشر فقط؛ لا ترفع إليه `.env` أو جلسة واتساب أو نسخ قاعدة البيانات مكشوفة.
+- لإنشاء نسخة واحدة مشفرة تشمل البيانات والأسرار والملفات وجلسة واتساب، استخدم
+  `deploy/scripts/08-export-portable.sh` واتبع `deploy/PORTABLE-BACKUP.md`.
+- خزّن كلمة تشفير النسخة خارج GitHub، واستخدم GitHub Repository Secrets عند النشر الآلي.
