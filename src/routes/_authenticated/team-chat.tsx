@@ -483,9 +483,9 @@ function MithraaSignIn() {
 
   return (
     <div className="surface-card mb-4 space-y-3 p-4">
-      <h2 className="text-sm font-bold">ربط حساب الشات المشترك</h2>
+      <h2 className="text-sm font-bold">ربط حساب الشات المشترك — مرة واحدة فقط</h2>
       <p className="text-[12.5px] text-muted-foreground">
-        سجّل دخولك ببيانات حسابك لدى منصة مثراء لعرض قناتي «فريق الرشودي» و«الشات المشترك».
+        سجّل دخولك ببريدك وكلمة مرورك لدى منصة مثراء مرة واحدة، وسيبقى حسابك مرتبطًا على هذا الجهاز وتصلك قناتا «فريق الرشودي» و«الشات المشترك» تلقائيًا.
       </p>
       <div className="grid gap-2 sm:grid-cols-[1fr_1fr_auto]">
         <input className={inputClass} type="email" placeholder="البريد الإلكتروني" value={email} onChange={(e) => setEmail(e.target.value)} />
