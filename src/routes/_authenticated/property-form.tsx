@@ -809,7 +809,13 @@ function PropertyFormPage() {
               onChange={(e) => set({ map_url: e.target.value })}
               placeholder="https://maps.google.com/..."
             />
+            <p className="mt-1 text-[12px] text-muted-foreground">
+              {geoBusy
+                ? "جارٍ تحديد الموقع من الرابط..."
+                : "الصق الرابط وسيتم ملء خط الطول والعرض تلقائياً."}
+            </p>
           </Field>
+
           <Field label="خط العرض (Latitude)">
             <input
               className={inputClass}
