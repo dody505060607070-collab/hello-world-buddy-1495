@@ -140,6 +140,44 @@ function PropertyFormPage() {
 
   const set = (patch: Partial<FormState>) => setForm((prev) => ({ ...prev, ...patch }));
 
+  // تحديد خط الطول والعرض تلقائياً من رابط خرائط جوجل
+  const [geoBusy, setGeoBusy] = useState(false);
+  const mapUrlValue = form.map_url.trim();
+  const lastResolvedUrl = useRef("");
+
+  useEffect(() => {
+    if (!mapUrlValue || !/^https?:\/\//i.test(mapUrlValue)) return;
+    if (lastResolvedUrl.current === mapUrlValue) return;
+    let cancelled = false;
+    const timer = window.setTimeout(async () => {
+      lastResolvedUrl.current = mapUrlValue;
+      setGeoBusy(true);
+      try {
+        const coords = await resolvePropertyCoordinates({ data: { mapUrl: mapUrlValue } });
+        if (cancelled) return;
+        if (coords) {
+          setForm((prev) => ({
+            ...prev,
+            latitude: String(coords.latitude),
+            longitude: String(coords.longitude),
+          }));
+          toast.success("تم تحديد موقع العقار من الرابط");
+        } else {
+          toast.error("تعذّر استخراج الموقع من هذا الرابط، أدخل الإحداثيات يدوياً");
+        }
+      } catch {
+        if (!cancelled) toast.error("تعذّر قراءة الرابط الآن");
+      } finally {
+        if (!cancelled) setGeoBusy(false);
+      }
+    }, 700);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [mapUrlValue]);
+
+
   const property = useQuery({
     queryKey: ["property", id],
     enabled: Boolean(id),
