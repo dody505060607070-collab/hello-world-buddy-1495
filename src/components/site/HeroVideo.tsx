@@ -63,7 +63,7 @@ export function HeroVideo({
             <span className="h-px flex-1 bg-primary-foreground/55" />
           </div>
 
-          <h1 className="animate-pop-in mt-7 font-display text-[45px] font-black leading-[1.15] text-primary-foreground drop-shadow-lg sm:text-[58px] md:mt-9 md:text-[76px] lg:text-[88px]">
+          <h1 className="animate-pop-in mt-7 whitespace-nowrap font-display text-[40px] font-black leading-[1.15] text-primary-foreground drop-shadow-lg sm:text-[58px] md:mt-9 md:text-[76px] lg:text-[88px]">
             الرشودي للعقارات
           </h1>
           <p className="animate-pop-in mt-4 text-[22px] font-black text-hero-accent md:mt-5 md:text-[30px]">

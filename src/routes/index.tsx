@@ -80,10 +80,7 @@ function HomePage() {
     () => [...new Set((all.data ?? []).map((p) => p.district).filter(Boolean))] as string[],
     [all.data],
   );
-  const rentPeriods = useMemo(
-    () => [...new Set((all.data ?? []).map((p) => p.rent_period).filter(Boolean))] as string[],
-    [all.data],
-  );
+  const rentPeriods = ["سنوي", "شهري", "يومي"];
 
   const results = useMemo(() => {
     if (!searchSubmitted) return null;
@@ -92,7 +89,7 @@ function HomePage() {
         (!purpose || p.purpose === purpose) &&
         (!type || p.property_type === type) &&
         (!district || p.district === district) &&
-        (!rentPeriod || p.rent_period === rentPeriod),
+        (!rentPeriod || `${p.name} ${p.description ?? ""} ${p.price_text ?? ""}`.includes(rentPeriod)),
     );
   }, [all.data, purpose, type, district, rentPeriod, searchSubmitted]);
 
