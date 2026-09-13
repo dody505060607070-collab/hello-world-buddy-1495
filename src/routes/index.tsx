@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Building2, Handshake, Home, KeyRound, Search, ShieldCheck } from "lucide-react";
+import { Building2, Handshake, Home, KeyRound, ShieldCheck } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import bgCity from "@/assets/bg-city.jpg";
@@ -69,6 +69,8 @@ function HomePage() {
   const [purpose, setPurpose] = useState("");
   const [type, setType] = useState("");
   const [district, setDistrict] = useState("");
+  const [rentPeriod, setRentPeriod] = useState("");
+  const [searchSubmitted, setSearchSubmitted] = useState(false);
 
   const types = useMemo(
     () => [...new Set((all.data ?? []).map((p) => p.property_type).filter(Boolean))] as string[],
@@ -78,16 +80,21 @@ function HomePage() {
     () => [...new Set((all.data ?? []).map((p) => p.district).filter(Boolean))] as string[],
     [all.data],
   );
+  const rentPeriods = useMemo(
+    () => [...new Set((all.data ?? []).map((p) => p.rent_period).filter(Boolean))] as string[],
+    [all.data],
+  );
 
   const results = useMemo(() => {
-    if (!purpose && !type && !district) return null;
+    if (!searchSubmitted) return null;
     return (all.data ?? []).filter(
       (p) =>
         (!purpose || p.purpose === purpose) &&
         (!type || p.property_type === type) &&
-        (!district || p.district === district),
+        (!district || p.district === district) &&
+        (!rentPeriod || p.rent_period === rentPeriod),
     );
-  }, [all.data, purpose, type, district]);
+  }, [all.data, purpose, type, district, rentPeriod, searchSubmitted]);
 
   const recentCodes = useRecentlyViewed();
   const recent = (all.data ?? []).filter((p) => recentCodes.includes(p.code)).slice(0, 3);
@@ -96,58 +103,25 @@ function HomePage() {
 
   return (
     <SiteLayout>
-      <HeroVideo />
-
-
-      <section className="relative z-20 mx-auto -mt-14 max-w-5xl px-4">
-        <div className="glass-panel animate-pop-in p-4 sm:p-5">
-          <div className="grid gap-3 md:grid-cols-4">
-            <select
-              value={purpose}
-              onChange={(e) => setPurpose(e.target.value)}
-              aria-label="نوع العرض"
-              className="h-11 rounded-xl border border-input bg-card/80 px-3 text-[13.5px] outline-none transition-colors focus:border-primary/50"
-            >
-              <option value="">كل العروض</option>
-              <option value="rent">للإيجار</option>
-              <option value="sale">للبيع</option>
-            </select>
-            <select
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              aria-label="نوع العقار"
-              className="h-11 rounded-xl border border-input bg-card/80 px-3 text-[13.5px] outline-none transition-colors focus:border-primary/50"
-            >
-              <option value="">كل أنواع العقارات</option>
-              {types.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
-            <select
-              value={district}
-              onChange={(e) => setDistrict(e.target.value)}
-              aria-label="الحي"
-              className="h-11 rounded-xl border border-input bg-card/80 px-3 text-[13.5px] outline-none transition-colors focus:border-primary/50"
-            >
-              <option value="">كل الأحياء</option>
-              {districts.map((d) => (
-                <option key={d} value={d}>
-                  {d}
-                </option>
-              ))}
-            </select>
-            <div className="shine flex h-11 items-center justify-center gap-2 rounded-xl bg-primary text-[13.5px] font-bold text-primary-foreground">
-              <Search className="size-4" />
-              {results ? `${results.length} نتيجة` : "ابحث عن عقارك"}
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroVideo
+        types={types}
+        districts={districts}
+        rentPeriods={rentPeriods}
+        type={type}
+        district={district}
+        rentPeriod={rentPeriod}
+        onTypeChange={setType}
+        onDistrictChange={setDistrict}
+        onRentPeriodChange={setRentPeriod}
+        onSearch={() => {
+          setPurpose(rentPeriod ? "rent" : "");
+          setSearchSubmitted(true);
+          window.setTimeout(() => document.querySelector("#search-results")?.scrollIntoView({ behavior: "smooth" }), 0);
+        }}
+      />
 
       {results ? (
-        <section className="mx-auto max-w-6xl px-4 py-14">
+        <section id="search-results" className="mx-auto max-w-6xl scroll-mt-24 px-4 py-14">
           <h2 className="mb-6 text-[22px] font-bold text-foreground">نتائج البحث</h2>
           <PropertyGrid
             properties={results}
@@ -287,7 +261,9 @@ function HomePage() {
         </div>
       </Reveal>
 
-      <PropertyMapSection properties={all.data} />
+      <div id="property-map" className="scroll-mt-24">
+        <PropertyMapSection properties={all.data} />
+      </div>
 
       <section className="relative isolate overflow-hidden py-20 text-white">
         <img

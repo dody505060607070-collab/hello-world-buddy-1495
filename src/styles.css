@@ -63,6 +63,7 @@
   --color-whatsapp-preview: var(--whatsapp-preview);
   --color-whatsapp-bubble: var(--whatsapp-bubble);
   --color-whatsapp-foreground: var(--whatsapp-foreground);
+  --color-hero-accent: var(--hero-accent);
 
   --shadow-card: 0 1px 2px oklch(0.28 0.05 22 / 6%), 0 8px 24px oklch(0.28 0.05 22 / 4%);
   --shadow-float: 0 10px 30px oklch(0.28 0.05 22 / 10%);
@@ -111,6 +112,7 @@
   --whatsapp-preview: oklch(0.925 0.018 100);
   --whatsapp-bubble: oklch(0.93 0.08 135);
   --whatsapp-foreground: oklch(0.2 0.02 155);
+  --hero-accent: oklch(0.78 0.11 18);
 }
 
 .dark {
@@ -150,6 +152,7 @@
   --whatsapp-preview: oklch(0.24 0.025 150);
   --whatsapp-bubble: oklch(0.34 0.07 145);
   --whatsapp-foreground: oklch(0.96 0.01 145);
+  --hero-accent: oklch(0.8 0.1 18);
 }
 
 @layer base {
