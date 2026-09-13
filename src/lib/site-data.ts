@@ -56,20 +56,12 @@ export function galleryImages(property: Pick<PublicProperty, "property_images">)
 }
 
 async function fetchProperties(purpose?: "rent" | "sale", limit = 60) {
-  let query = supabase
-    .from("properties")
-    .select(PROPERTY_FIELDS)
-    .eq("is_visible", true)
-    .order("is_featured", { ascending: false })
-    .order("sort_order", { ascending: true })
-    .order("created_at", { ascending: false })
-    .limit(limit);
-
-  if (purpose) query = query.eq("purpose", purpose);
-
-  const { data, error } = await query;
+  const { data, error } = await supabase.rpc("get_public_properties", {
+    _purpose: purpose,
+    _limit: limit,
+  });
   if (error) throw error;
-  return (data ?? []) as unknown as PublicProperty[];
+  return (Array.isArray(data) ? data : []) as unknown as PublicProperty[];
 }
 
 export const publicPropertiesQuery = (purpose?: "rent" | "sale", limit?: number) =>
@@ -83,14 +75,12 @@ export const publicPropertyQuery = (code: string) =>
   queryOptions({
     queryKey: ["public-property", code],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("properties")
-        .select(PROPERTY_FIELDS)
-        .eq("is_visible", true)
-        .eq("code", code)
-        .maybeSingle();
+      const { data, error } = await supabase.rpc("get_public_properties", {
+        _code: code,
+        _limit: 1,
+      });
       if (error) throw error;
-      return (data as unknown as PublicProperty | null) ?? null;
+      return (Array.isArray(data) ? data[0] : null) as unknown as PublicProperty | null;
     },
   });
 
