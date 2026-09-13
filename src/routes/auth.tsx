@@ -1,9 +1,9 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Building2, LockKeyhole, Mail, ShieldCheck, UserRound } from "lucide-react";
+import { Eye, EyeOff, LockKeyhole, Mail, UserRound } from "lucide-react";
 import { toast } from "sonner";
 
-import logoAsset from "@/assets/rashudi-logo.webp.asset.json";
+import navbarLogo from "@/assets/rashudi-logo-navbar.png.asset.json";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,6 +35,7 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [busy, setBusy] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     void (async () => {
@@ -318,11 +319,11 @@ function Field({
         {label} <span className="text-primary">*</span>
       </Label>
       <div className="flex overflow-hidden rounded-xl border border-border bg-accent/40 focus-within:border-primary/50 focus-within:ring-2 focus-within:ring-primary/15">
-        {trailing}
-        <div className="flex-1">{children}</div>
-        <span className="grid h-12 w-12 shrink-0 place-items-center border-s border-border bg-card text-primary">
+        <span className="grid h-12 w-12 shrink-0 place-items-center border-e border-border bg-card text-primary">
           {icon}
         </span>
+        <div className="flex-1">{children}</div>
+        {trailing}
       </div>
     </div>
   );
