@@ -26,6 +26,7 @@ import { SOCIAL_PLATFORMS, SocialGlyph } from "@/components/site/SocialIcons";
 import { PageHero } from "@/components/kit/PageHero";
 import { Toggle } from "@/components/kit/Toggle";
 import { supabase } from "@/integrations/supabase/client";
+import { resolvePropertyCoordinates } from "@/lib/geo.functions";
 
 export const Route = createFileRoute("/_authenticated/property-form")({
   validateSearch: (search: Record<string, unknown>) => ({
