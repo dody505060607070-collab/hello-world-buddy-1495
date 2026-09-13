@@ -82,12 +82,11 @@ export async function resolveMapUrlToCoords(
 ): Promise<Coords | null> {
   if (mapUrl) {
     // بعض الروابط تُلصق مكررة؛ نأخذ أول رابط صالح فقط
-    const firstUrl = mapUrl.match(/https?:\/\/[^\s]+?(?=https?:\/\/|$)/)?.[0] ?? mapUrl;
-    mapUrl = firstUrl;
-    const direct = extractCoordsFromUrl(mapUrl);
+    const cleanUrl = mapUrl.match(/https?:\/\/[^\s]+?(?=https?:\/\/|$)/)?.[0] ?? mapUrl;
+    const direct = extractCoordsFromUrl(cleanUrl);
     if (direct) return direct;
     try {
-      const finalUrl = await followRedirects(mapUrl);
+      const finalUrl = await followRedirects(cleanUrl);
       const coords = extractCoordsFromUrl(finalUrl);
       if (coords) return coords;
       const placeQuery = extractPlaceQuery(finalUrl);
