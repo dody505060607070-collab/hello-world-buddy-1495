@@ -48,7 +48,7 @@ const EMOJIS = ["👍", "🙏", "🔥", "✅", "❤️", "😀", "😅", "🎉",
 
 function TeamChatPage() {
   const qc = useQueryClient();
-  const { userId, isSuperAdmin } = useCurrentUser();
+  const { userId, isSuperAdmin, profile } = useCurrentUser();
   const { mithraaUser, ready } = useMithraaSession();
   const chatUserId = mithraaUser?.id;
   const [activeChannel, setActiveChannel] = useState<"rashoudi" | "shared">("rashoudi");
@@ -238,7 +238,7 @@ function TeamChatPage() {
         stats={[{ value: String(all.length), label: "رسالة" }]}
       />
 
-      {ready && !chatUserId ? <MithraaSignIn /> : null}
+      {ready && !chatUserId ? <MithraaSignIn fullName={profile?.full_name} /> : null}
 
       <div className="surface-card flex h-[calc(100dvh-15rem)] min-h-[560px] flex-col overflow-hidden">
         <nav className="flex items-center gap-2 overflow-x-auto border-b border-border p-3">
@@ -464,7 +464,7 @@ function TeamChatPage() {
 }
 
 /** بطاقة ربط حساب الشات المشترك (قاعدة مثراء). */
-function MithraaSignIn() {
+function MithraaSignIn({ fullName }: { fullName?: string | undefined }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -472,7 +472,7 @@ function MithraaSignIn() {
   const submit = async () => {
     setBusy(true);
     try {
-      await signInToMithraa(email.trim(), password);
+      await signInToMithraa(email.trim(), password, fullName);
       toast.success("تم ربط حساب الشات المشترك");
     } catch (e) {
       toast.error((e as Error).message);
@@ -483,9 +483,9 @@ function MithraaSignIn() {
 
   return (
     <div className="surface-card mb-4 space-y-3 p-4">
-      <h2 className="text-sm font-bold">ربط حساب الشات المشترك</h2>
+      <h2 className="text-sm font-bold">ربط حساب الشات المشترك — مرة واحدة فقط</h2>
       <p className="text-[12.5px] text-muted-foreground">
-        سجّل دخولك ببيانات حسابك لدى منصة مثراء لعرض قناتي «فريق الرشودي» و«الشات المشترك».
+        سجّل دخولك ببريدك وكلمة مرورك لدى منصة مثراء مرة واحدة، وسيبقى حسابك مرتبطًا على هذا الجهاز وتصلك قناتا «فريق الرشودي» و«الشات المشترك» تلقائيًا.
       </p>
       <div className="grid gap-2 sm:grid-cols-[1fr_1fr_auto]">
         <input className={inputClass} type="email" placeholder="البريد الإلكتروني" value={email} onChange={(e) => setEmail(e.target.value)} />
