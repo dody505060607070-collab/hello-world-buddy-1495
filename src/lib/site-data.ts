@@ -56,10 +56,8 @@ export function galleryImages(property: Pick<PublicProperty, "property_images">)
 }
 
 async function fetchProperties(purpose?: "rent" | "sale", limit = 60) {
-  const { data, error } = await supabase.rpc("get_public_properties", {
-    _purpose: purpose,
-    _limit: limit,
-  });
+  const args = purpose ? { _purpose: purpose, _limit: limit } : { _limit: limit };
+  const { data, error } = await supabase.rpc("get_public_properties", args);
   if (error) throw error;
   return (Array.isArray(data) ? data : []) as unknown as PublicProperty[];
 }
