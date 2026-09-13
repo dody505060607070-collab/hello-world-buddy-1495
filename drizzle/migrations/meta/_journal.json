@@ -71,6 +71,13 @@
       "when": 1789261041676,
       "tag": "0009_enforce_staff_reservation_actions",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1789308301659,
+      "tag": "0010_harden_profiles_properties_and_media",
+      "breakpoints": true
     }
   ]
 }
