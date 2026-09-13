@@ -464,7 +464,7 @@ function TeamChatPage() {
 }
 
 /** بطاقة ربط حساب الشات المشترك (قاعدة مثراء). */
-function MithraaSignIn() {
+function MithraaSignIn({ fullName }: { fullName?: string }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -472,7 +472,7 @@ function MithraaSignIn() {
   const submit = async () => {
     setBusy(true);
     try {
-      await signInToMithraa(email.trim(), password);
+      await signInToMithraa(email.trim(), password, fullName);
       toast.success("تم ربط حساب الشات المشترك");
     } catch (e) {
       toast.error((e as Error).message);
