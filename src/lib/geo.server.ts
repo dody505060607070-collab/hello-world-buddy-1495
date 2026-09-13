@@ -81,6 +81,9 @@ export async function resolveMapUrlToCoords(
   fallbackQuery?: string | null,
 ): Promise<Coords | null> {
   if (mapUrl) {
+    // بعض الروابط تُلصق مكررة؛ نأخذ أول رابط صالح فقط
+    const firstUrl = mapUrl.match(/https?:\/\/[^\s]+?(?=https?:\/\/|$)/)?.[0] ?? mapUrl;
+    mapUrl = firstUrl;
     const direct = extractCoordsFromUrl(mapUrl);
     if (direct) return direct;
     try {
