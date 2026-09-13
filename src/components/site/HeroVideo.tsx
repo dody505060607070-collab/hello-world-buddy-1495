@@ -57,16 +57,16 @@ export function HeroVideo({
         <div className="mx-auto flex max-w-5xl flex-1 flex-col items-center justify-center py-8 md:py-12">
           <div className="animate-pop-in flex w-full max-w-lg items-center justify-center gap-4 text-primary-foreground/90 md:max-w-2xl md:gap-6">
             <span className="h-px flex-1 bg-primary-foreground/55" />
-            <p className="shrink-0 text-[13px] font-bold md:text-[18px]">
+            <p className="shrink-0 font-hero text-[12px] font-bold md:text-[17px]">
               خبرة محلية.. وقرار عقاري أوضح
             </p>
             <span className="h-px flex-1 bg-primary-foreground/55" />
           </div>
 
-          <h1 className="animate-pop-in mt-7 whitespace-nowrap font-display text-[40px] font-black leading-[1.15] text-primary-foreground drop-shadow-lg sm:text-[58px] md:mt-9 md:text-[76px] lg:text-[88px]">
+          <h1 className="animate-pop-in mt-7 whitespace-nowrap font-hero text-[37px] font-black leading-[1.45] text-primary-foreground drop-shadow-lg sm:text-[54px] md:mt-9 md:text-[70px] lg:text-[82px]">
             الرشودي للعقارات
           </h1>
-          <p className="animate-pop-in mt-4 text-[22px] font-black text-hero-accent md:mt-5 md:text-[30px]">
+          <p className="animate-pop-in mt-1 font-hero text-[19px] font-extrabold leading-9 text-hero-accent md:mt-2 md:text-[27px] md:leading-10">
             نعرف بريدة.. ونفهم العقار
           </p>
           <p className="animate-pop-in mt-5 max-w-4xl text-[15px] font-medium leading-8 text-primary-foreground/85 sm:text-[17px] md:mt-7 md:text-[22px] md:leading-10">
