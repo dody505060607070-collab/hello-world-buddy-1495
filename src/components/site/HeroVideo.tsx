@@ -81,7 +81,7 @@ export function HeroVideo({
               src={heroEyebrowType}
               alt=""
               aria-hidden
-              className="h-auto w-[270px] object-contain sm:w-[330px] md:w-[420px]"
+              className="hero-type-image h-auto w-[290px] object-contain sm:w-[350px] md:w-[440px]"
             />
           </div>
 
@@ -91,7 +91,7 @@ export function HeroVideo({
               src={heroTitleType}
               alt=""
               aria-hidden
-              className="h-auto w-full max-w-[350px] object-contain drop-shadow-lg sm:max-w-[500px] md:max-w-[680px] lg:max-w-[760px]"
+              className="hero-type-image h-auto w-full max-w-[370px] object-contain sm:max-w-[520px] md:max-w-[700px] lg:max-w-[780px]"
             />
           </h1>
           <div className="animate-pop-in mt-3 flex w-full justify-center md:mt-4">
@@ -100,7 +100,7 @@ export function HeroVideo({
               src={heroAccentType}
               alt=""
               aria-hidden
-              className="h-auto w-[245px] object-contain sm:w-[310px] md:w-[400px]"
+              className="hero-type-image h-auto w-[265px] object-contain sm:w-[330px] md:w-[420px]"
             />
           </div>
           <p className="animate-pop-in mt-5 max-w-4xl text-[15px] font-medium leading-8 text-primary-foreground/85 sm:text-[17px] md:mt-7 md:text-[22px] md:leading-10">
