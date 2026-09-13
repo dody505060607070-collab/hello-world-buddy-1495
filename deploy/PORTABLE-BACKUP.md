@@ -26,7 +26,7 @@ export PORTABLE_BACKUP_PASSWORD='كلمة تشفير طويلة لا تحفظه�
 bash deploy/scripts/08-export-portable.sh
 ```
 
-ينتج ملف داخل `private-backups/` باسم قريب من:
+ينتج ملف خارج مجلد المشروع داخل `/var/backups/rashoudi-portable/` باسم قريب من:
 
 ```text
 rashoudi-full-20260913T190000Z.tar.gz.enc

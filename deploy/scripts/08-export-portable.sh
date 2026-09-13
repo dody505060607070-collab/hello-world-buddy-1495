@@ -23,7 +23,7 @@ set +a
 
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 WORK_DIR="$(mktemp -d)"
-OUT_DIR="${PORTABLE_BACKUP_DIR:-$ROOT_DIR/private-backups}"
+OUT_DIR="${PORTABLE_BACKUP_DIR:-/var/backups/rashoudi-portable}"
 ARCHIVE="$OUT_DIR/rashoudi-full-$STAMP.tar.gz.enc"
 
 cleanup() {
