@@ -3,9 +3,9 @@ import { MapPinned, Search } from "lucide-react";
 
 import desktopHero from "@/assets/home-hero-desktop.jpg";
 import desktopHeroVideo from "@/assets/hero-desktop.mp4.asset.json";
-import heroAccentType from "@/assets/hero-type/accent.png";
-import heroEyebrowType from "@/assets/hero-type/eyebrow.png";
-import heroTitleType from "@/assets/hero-type/title.png";
+import heroAccentType from "@/assets/hero-type/accent-hd.png";
+import heroEyebrowType from "@/assets/hero-type/eyebrow-hd.png";
+import heroTitleType from "@/assets/hero-type/title-hd.png";
 import mobileHero from "@/assets/home-hero-mobile.jpg";
 import mobileHeroVideo from "@/assets/hero-mobile.mp4.asset.json";
 import { Button, buttonVariants } from "@/components/ui/button";

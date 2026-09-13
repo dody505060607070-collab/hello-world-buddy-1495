@@ -1,17 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Building2, Handshake, Home, KeyRound, ShieldCheck } from "lucide-react";
 import { useMemo, useState } from "react";
 
-import ctaImage from "@/assets/cta-deal.jpg";
 import socialCard from "@/assets/rushdy-social-card.jpg.asset.json";
 import { HeroVideo } from "@/components/site/HeroVideo";
 import { PropertyGrid } from "@/components/site/PropertyCard";
 import { SiteLayout } from "@/components/site/SiteLayout";
-import { PropertyMapSection } from "@/components/site/PropertyMapSection";
-import { Reveal } from "@/components/site/Reveal";
-import { useRecentlyViewed } from "@/lib/favorites";
-import { publicPropertiesQuery, publicServicesQuery } from "@/lib/site-data";
+import { publicPropertiesQuery } from "@/lib/site-data";
 
 const SITE_URL = "https://mitharfinale.lovable.app";
 const SOCIAL_IMAGE = `${SITE_URL}${socialCard.url}`;
@@ -45,19 +40,7 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-const fallbackServices = [
-  { id: "s1", title: "تأجير الوحدات", description: "شقق وفلل ومكاتب جاهزة للسكن والعمل.", icon: "KeyRound" },
-  { id: "s2", title: "بيع العقارات", description: "أراضٍ وفلل وعمائر بأسعار السوق الحقيقية.", icon: "Home" },
-  { id: "s3", title: "إدارة الأملاك", description: "متابعة العقود والتحصيل والصيانة عن المالك.", icon: "ShieldCheck" },
-  { id: "s4", title: "الوساطة العقارية", description: "تفاوض ووساطة موثوقة بين المالك والمستأجر.", icon: "Handshake" },
-];
-
-const serviceIcons = { KeyRound, Home, ShieldCheck, Handshake, Building2 } as const;
-
 function HomePage() {
-  const rent = useQuery(publicPropertiesQuery("rent", 6));
-  const sale = useQuery(publicPropertiesQuery("sale", 6));
-  const services = useQuery(publicServicesQuery);
   const all = useQuery(publicPropertiesQuery(undefined, 200));
 
   const [purpose, setPurpose] = useState("");
@@ -87,10 +70,6 @@ function HomePage() {
     );
   }, [all.data, purpose, type, district, rentPeriod, searchSubmitted]);
 
-  const recentCodes = useRecentlyViewed();
-  const recent = (all.data ?? []).filter((p) => recentCodes.includes(p.code)).slice(0, 3);
-
-  const shownServices = services.data?.length ? services.data : fallbackServices;
 
   return (
     <SiteLayout>
@@ -123,98 +102,6 @@ function HomePage() {
         </section>
       ) : null}
 
-      <Reveal as="section" className="mx-auto max-w-6xl px-4 py-16">
-        <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
-          <h2 className="text-[22px] font-bold text-foreground sm:text-[26px]">أحدث عقارات الإيجار</h2>
-          <Link to="/rent" className="text-[13.5px] font-semibold text-primary hover:underline">
-            عرض الكل
-          </Link>
-        </div>
-        <PropertyGrid
-          properties={rent.data}
-          loading={rent.isLoading}
-          error={rent.error}
-          emptyText="لا توجد عقارات إيجار معروضة حالياً."
-        />
-      </Reveal>
-
-      <Reveal as="section" className="mesh-bg py-16">
-        <div className="mx-auto max-w-6xl px-4">
-          <div className="mb-6 flex items-end justify-between">
-            <h2 className="text-[22px] font-bold text-foreground sm:text-[26px]">أحدث عقارات البيع</h2>
-            <Link to="/sale" className="text-[13.5px] font-semibold text-primary hover:underline">
-              عرض الكل
-            </Link>
-          </div>
-          <PropertyGrid
-            properties={sale.data}
-            loading={sale.isLoading}
-            error={sale.error}
-            emptyText="لا توجد عقارات بيع معروضة حالياً."
-          />
-        </div>
-      </Reveal>
-
-      <Reveal as="section" className="mx-auto max-w-6xl px-4 py-20">
-        <h2 className="text-center text-[24px] font-bold text-foreground sm:text-[30px]">خدماتنا</h2>
-        <p className="mx-auto mt-3 max-w-xl text-center text-[13.5px] leading-7 text-muted-foreground">
-          نغطي رحلة العقار كاملة: العرض، التفاوض، العقد، ثم المتابعة والتحصيل.
-        </p>
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {shownServices.map((service) => {
-            const Icon =
-              serviceIcons[(service.icon ?? "Building2") as keyof typeof serviceIcons] ?? Building2;
-            return (
-              <div
-                key={service.id}
-                className="glass lift rounded-2xl p-6 text-center"
-              >
-                <span className="mx-auto grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-primary to-primary/70 text-primary-foreground shadow-card">
-                  <Icon className="size-6" />
-                </span>
-                <h3 className="mt-4 text-[15.5px] font-bold text-foreground">{service.title}</h3>
-                <p className="mt-2 text-[13px] leading-6 text-muted-foreground">
-                  {service.description}
-                </p>
-              </div>
-            );
-          })}
-        </div>
-      </Reveal>
-
-      {recent.length > 0 ? (
-        <Reveal as="section" className="mx-auto max-w-6xl px-4 pb-6">
-          <h2 className="mb-6 text-[22px] font-bold text-foreground sm:text-[26px]">شاهدتها مؤخراً</h2>
-          <PropertyGrid properties={recent} />
-        </Reveal>
-      ) : null}
-
-      <div id="property-map" className="scroll-mt-24">
-        <PropertyMapSection properties={all.data} />
-      </div>
-
-      <section className="relative isolate overflow-hidden py-20 text-white">
-        <img
-          src={ctaImage}
-          alt=""
-          aria-hidden
-          loading="lazy"
-          className="absolute inset-0 -z-10 size-full object-cover"
-        />
-        <div aria-hidden className="absolute inset-0 -z-10 bg-primary/75" />
-        <div className="mx-auto flex max-w-4xl flex-col items-center gap-5 px-4 text-center">
-          <h2 className="text-[24px] font-bold sm:text-[30px]">عندك عقار للإيجار أو البيع؟</h2>
-          <p className="max-w-xl text-[14px] leading-7 text-white/90">
-            أرسل تفاصيل عقارك وسيتواصل معك فريقنا لتقييمه وعرضه على العملاء المناسبين.
-          </p>
-          <Link
-            to="/list-property"
-            className="shine rounded-xl bg-gold px-8 py-3.5 text-[14px] font-bold text-gold-foreground"
-          >
-            اعرض | اطلب عقارك
-          </Link>
-        </div>
-      </section>
     </SiteLayout>
   );
 }
