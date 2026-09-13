@@ -3106,6 +3106,7 @@ export type Database = {
         Args: { _code?: string; _limit?: number; _purpose?: string }
         Returns: Json
       }
+      get_public_settings: { Args: never; Returns: Json }
       has_perm: {
         Args: { _action: string; _module: string; _user_id: string }
         Returns: boolean
