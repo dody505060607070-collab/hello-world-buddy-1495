@@ -9,7 +9,7 @@ const PropertyMap = lazy(() =>
 
 const Placeholder = () => (
   <section className="mx-auto max-w-6xl px-4 py-14">
-    <div className="mx-auto aspect-square w-full max-w-[520px] animate-pulse rounded-full border border-border bg-secondary/60" />
+    <div className="h-[420px] w-full animate-pulse rounded-xl border border-border bg-secondary/60 sm:h-[520px] lg:h-[600px]" />
   </section>
 );
 

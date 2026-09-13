@@ -2,7 +2,9 @@ import { Link } from "@tanstack/react-router";
 import { MapPinned, Search } from "lucide-react";
 
 import desktopHero from "@/assets/home-hero-desktop.jpg";
+import desktopHeroVideo from "@/assets/hero-desktop.mp4.asset.json";
 import mobileHero from "@/assets/home-hero-mobile.jpg";
+import mobileHeroVideo from "@/assets/hero-mobile.mp4.asset.json";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -37,16 +39,22 @@ export function HeroVideo({
 
   return (
     <section className="relative isolate min-h-[760px] overflow-hidden bg-foreground md:min-h-[760px] lg:min-h-[calc(100svh-74px)]">
-      <picture>
+      <video
+        aria-hidden
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        poster={desktopHero}
+        className="absolute inset-0 -z-20 size-full object-cover object-center"
+      >
+        <source media="(max-width: 767px)" src={mobileHeroVideo.url} type="video/mp4" />
+        <source src={desktopHeroVideo.url} type="video/mp4" />
+      </video>
+      <picture aria-hidden className="pointer-events-none absolute inset-0 -z-30">
         <source media="(max-width: 767px)" srcSet={mobileHero} />
-        <img
-          src={desktopHero}
-          alt="فلل سكنية حديثة في بريدة وقت الغروب"
-          width={1920}
-          height={1080}
-          fetchPriority="high"
-          className="absolute inset-0 -z-20 size-full object-cover object-center"
-        />
+        <img src={desktopHero} alt="" className="size-full object-cover object-center" />
       </picture>
       <span
         aria-hidden
@@ -58,7 +66,7 @@ export function HeroVideo({
           <div className="animate-pop-in flex w-full max-w-lg items-center justify-center gap-4 text-primary-foreground/90 md:max-w-2xl md:gap-6">
             <span className="h-px flex-1 bg-primary-foreground/55" />
             <p className="shrink-0 font-hero text-[12px] font-bold md:text-[17px]">
-              خبرة محلية.. وقرار عقاري أوضح
+              خبرةٌ محلية.. وقرارٌ عقاري أوضح
             </p>
             <span className="h-px flex-1 bg-primary-foreground/55" />
           </div>
