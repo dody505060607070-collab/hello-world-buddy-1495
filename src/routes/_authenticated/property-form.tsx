@@ -18,7 +18,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { Field, inputClass, textareaClass } from "@/components/kit/Modal";
@@ -139,6 +139,44 @@ function PropertyFormPage() {
 
 
   const set = (patch: Partial<FormState>) => setForm((prev) => ({ ...prev, ...patch }));
+
+  // تحديد خط الطول والعرض تلقائياً من رابط خرائط جوجل
+  const [geoBusy, setGeoBusy] = useState(false);
+  const mapUrlValue = form.map_url.trim();
+  const lastResolvedUrl = useRef("");
+
+  useEffect(() => {
+    if (!mapUrlValue || !/^https?:\/\//i.test(mapUrlValue)) return;
+    if (lastResolvedUrl.current === mapUrlValue) return;
+    let cancelled = false;
+    const timer = window.setTimeout(async () => {
+      lastResolvedUrl.current = mapUrlValue;
+      setGeoBusy(true);
+      try {
+        const coords = await resolvePropertyCoordinates({ data: { mapUrl: mapUrlValue } });
+        if (cancelled) return;
+        if (coords) {
+          setForm((prev) => ({
+            ...prev,
+            latitude: String(coords.latitude),
+            longitude: String(coords.longitude),
+          }));
+          toast.success("تم تحديد موقع العقار من الرابط");
+        } else {
+          toast.error("تعذّر استخراج الموقع من هذا الرابط، أدخل الإحداثيات يدوياً");
+        }
+      } catch {
+        if (!cancelled) toast.error("تعذّر قراءة الرابط الآن");
+      } finally {
+        if (!cancelled) setGeoBusy(false);
+      }
+    }, 700);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [mapUrlValue]);
+
 
   const property = useQuery({
     queryKey: ["property", id],
@@ -771,7 +809,13 @@ function PropertyFormPage() {
               onChange={(e) => set({ map_url: e.target.value })}
               placeholder="https://maps.google.com/..."
             />
+            <p className="mt-1 text-[12px] text-muted-foreground">
+              {geoBusy
+                ? "جارٍ تحديد الموقع من الرابط..."
+                : "الصق الرابط وسيتم ملء خط الطول والعرض تلقائياً."}
+            </p>
           </Field>
+
           <Field label="خط العرض (Latitude)">
             <input
               className={inputClass}
