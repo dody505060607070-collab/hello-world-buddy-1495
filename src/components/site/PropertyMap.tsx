@@ -98,7 +98,7 @@ export function PropertyMap({
         iconAnchor: [20, 50],
         popupAnchor: [0, -46],
         html: `<div class="mithra-marker-pin" style="--marker-color:${color};display:flex;flex-direction:column;align-items:center;filter:drop-shadow(0 3px 5px rgba(0,0,0,.35))">
-          <div style="background:${color};border:2px solid #fff;border-radius:12px;width:36px;height:36px;display:flex;align-items:center;justify-content:center">
+          <div style="background:${color};border:2px solid #fff;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/>
             </svg>
@@ -177,13 +177,11 @@ export function PropertyMap({
         <span>{points.length} عقار على الخريطة</span>
       </div>
 
-      <div className="flex justify-center">
-        <div className="relative aspect-square w-full max-w-[340px] rounded-full p-[6px] ring-2 ring-primary/40 shadow-float sm:max-w-[520px] lg:max-w-[620px]">
-          <div
-            ref={containerRef}
-            className="size-full overflow-hidden rounded-full border border-border"
-          />
-        </div>
+      <div className="relative h-[420px] w-full overflow-hidden rounded-xl border border-border shadow-float sm:h-[520px] lg:h-[600px]">
+        <div
+          ref={containerRef}
+          className="size-full"
+        />
       </div>
     </section>
   );
