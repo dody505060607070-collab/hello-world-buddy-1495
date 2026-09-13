@@ -21,7 +21,7 @@ import {
   expireReservations,
   extendReservation,
 } from "@/lib/reservations.functions";
-import { reservationTone, toneBadgeClass, toneRowClass } from "@/lib/status-tone";
+import { reservationTone, toneRowClass } from "@/lib/status-tone";
 
 type Row = {
   id: string;
@@ -257,7 +257,7 @@ function ReservationsPage() {
               value: (row) => reservationStatusLabels[row.status] ?? row.status,
               cell: (row) => {
                 const tone = reservationTone(row.status);
-                return <span className={`inline-flex rounded-md border px-2 py-0.5 text-[11.5px] font-semibold ${toneBadgeClass[tone]}`}>{reservationStatusLabels[row.status] ?? row.status}</span>;
+                return <Chip tone={tone}>{reservationStatusLabels[row.status] ?? row.status}</Chip>;
               },
             },
             {
