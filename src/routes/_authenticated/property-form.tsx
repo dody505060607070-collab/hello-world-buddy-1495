@@ -386,6 +386,24 @@ function PropertyFormPage() {
         is_featured: form.is_featured,
         needs_review: form.needs_review,
       };
+      if (payload.latitude == null || payload.longitude == null) {
+        try {
+          const coords = await resolvePropertyCoordinates({
+            data: {
+              mapUrl: payload.map_url,
+              hint: [payload.name, payload.district, payload.city, "بريدة، السعودية"]
+                .filter(Boolean)
+                .join("، "),
+            },
+          });
+          if (coords) {
+            payload.latitude = coords.latitude;
+            payload.longitude = coords.longitude;
+          }
+        } catch {
+          /* الموقع اختياري — لا نمنع الحفظ */
+        }
+      }
       if (id) {
         const { error } = await supabase.from("properties").update(payload).eq("id", id);
         if (error) throw error;
