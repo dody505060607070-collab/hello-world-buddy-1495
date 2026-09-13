@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
 
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
@@ -220,12 +221,10 @@ ${SCOPE_RULE}
 
 export const askAdminAi = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(
-    (input: {
-      messages: { role: "user" | "assistant"; content: string }[];
-      context?: string;
-    }) => input,
-  )
+  .inputValidator((input: unknown) => z.object({
+    messages: z.array(z.object({ role: z.enum(["user", "assistant"]), content: z.string().trim().min(1).max(4000) })).min(1).max(20),
+    context: z.string().max(12000).optional(),
+  }).parse(input))
   .handler(async ({ data, context }) => {
     const { requireUnlocked } = await import("./kill-switch.server");
     await requireUnlocked();
@@ -275,7 +274,11 @@ export const askAdminAi = createServerFn({ method: "POST" })
 
 export const analyzeContractPdf = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { fileName: string; dataUrl?: string; extractedText?: string }) => input)
+  .inputValidator((input: unknown) => z.object({
+    fileName: z.string().trim().min(1).max(255).refine((name) => name.toLowerCase().endsWith(".pdf"), "PDF فقط"),
+    dataUrl: z.string().max(30_000_000).optional(),
+    extractedText: z.string().max(100_000).optional(),
+  }).refine((value) => Boolean(value.dataUrl || value.extractedText), "ملف العقد فارغ").parse(input))
   .handler(async ({ data }) => {
     const { requireUnlocked } = await import("./kill-switch.server");
     await requireUnlocked();
@@ -392,7 +395,9 @@ ${SCOPE_RULE}
 أجب بالعربية الفصحى المبسطة بإجابات قصيرة ومهذبة. لا تذكر بيانات داخلية أو أسعار غير مؤكدة، وإن لزم التفاصيل اطلب من الزائر التواصل عبر صفحة «تواصل معنا» أو الواتساب.`;
 
 export const askPublicAi = createServerFn({ method: "POST" })
-  .inputValidator((input: { messages: { role: "user" | "assistant"; content: string }[] }) => input)
+  .inputValidator((input: unknown) => z.object({
+    messages: z.array(z.object({ role: z.enum(["user", "assistant"]), content: z.string().trim().min(1).max(2000) })).min(1).max(12),
+  }).parse(input))
   .handler(async ({ data }) => {
     const { requireUnlocked } = await import("./kill-switch.server");
     await requireUnlocked();
