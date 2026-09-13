@@ -12,6 +12,7 @@
 @theme inline {
   --font-sans: "Tajawal", "Cairo", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Cairo", "Tajawal", ui-sans-serif, sans-serif;
+  --font-hero: "Noto Kufi Arabic", "Cairo", ui-sans-serif, system-ui, sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

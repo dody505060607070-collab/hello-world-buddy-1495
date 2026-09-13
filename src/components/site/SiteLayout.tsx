@@ -7,6 +7,7 @@ import logoAsset from "@/assets/rashudi-logo.webp.asset.json";
 import logoWhiteAsset from "@/assets/rashudi-logo-navbar.png.asset.json";
 import { FloatingActions, ScrollProgress } from "@/components/site/Chrome";
 import { AiWidget } from "@/components/site/AiWidget";
+import { Button } from "@/components/ui/button";
 import { useSession } from "@/hooks/useAuth";
 import { COMPANY_EMAIL, COMPANY_PHONE } from "@/lib/site-data";
 import { ThemeToggle } from "@/lib/theme";
@@ -27,7 +28,7 @@ function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-primary-foreground/10 bg-primary text-primary-foreground shadow-md">
-      <div className="relative mx-auto flex h-[74px] max-w-6xl items-center justify-between gap-4 px-4">
+      <div className="relative mx-auto grid h-[86px] max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 lg:flex lg:h-[74px] lg:justify-between lg:px-4">
         {/* يمين الشريط: روابط الصفحات */}
         <nav className="hidden items-center gap-7 lg:flex">
           {navLinks.map((item) => (
@@ -50,22 +51,22 @@ function SiteHeader() {
         <Link
           to="/"
           aria-label="الرشودي للعقارات"
-          className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center gap-4 border-x border-primary-foreground/20 px-5"
+          className="flex min-w-0 items-center justify-start lg:absolute lg:left-1/2 lg:top-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:border-x lg:border-primary-foreground/20 lg:px-5"
         >
           <img
             src={logoWhiteAsset.url}
             alt="الرشودي للعقارات"
             width={360}
             height={112}
-            className="h-11 w-auto transition-transform duration-300 hover:scale-105 md:h-14"
+            className="h-[54px] w-auto max-w-[245px] object-contain object-right transition-transform duration-300 hover:scale-105 sm:h-[60px] lg:h-14"
           />
         </Link>
 
         {/* يسار الشريط: زر اعرض/اطلب + أدوات */}
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2 lg:order-none">
           <Link
             to="/list-property"
-            className="inline-flex shrink-0 whitespace-nowrap rounded-full border border-primary-foreground/40 px-4 py-2 text-[13px] font-semibold transition-colors hover:bg-primary-foreground/10"
+            className="hidden shrink-0 whitespace-nowrap rounded-full border border-primary-foreground/40 px-4 py-2 text-[13px] font-semibold transition-colors hover:bg-primary-foreground/10 lg:inline-flex"
           >
             اعرض | اطلب عقارك
           </Link>
@@ -83,26 +84,32 @@ function SiteHeader() {
           >
             {session ? "لوحة التحكم" : "تسجيل الدخول"}
           </Link>
-          <button
+          <Button
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-label="القائمة"
-            className="grid size-9 place-items-center rounded-full border border-primary-foreground/30 lg:hidden"
+            aria-expanded={open}
+            variant="outline"
+            size="icon"
+            className="size-12 rounded-xl border-primary-foreground/35 bg-primary-foreground/5 text-primary-foreground shadow-none hover:bg-primary-foreground/10 hover:text-primary-foreground lg:hidden"
           >
-            {open ? <X className="size-5" /> : <Menu className="size-5" />}
-          </button>
+            {open ? <X className="size-7" /> : <Menu className="size-7" />}
+          </Button>
         </div>
       </div>
 
       {open ? (
-        <nav className="border-t border-primary-foreground/15 lg:hidden">
-          <ul className="mx-auto max-w-6xl px-4 py-3">
+        <nav className="absolute inset-x-0 top-[86px] z-50 border-t border-primary-foreground/15 bg-primary shadow-float lg:hidden">
+          <ul className="mx-auto grid max-w-6xl gap-1 px-5 py-5">
             {navLinks.map((item) => (
               <li key={item.to}>
                 <Link
                   to={item.to}
                   onClick={() => setOpen(false)}
-                  className="block rounded-lg px-2 py-2.5 text-[14px] hover:bg-primary-foreground/10"
+                  className={cn(
+                    "block rounded-lg px-4 py-3 text-right text-[15px] transition-colors hover:bg-primary-foreground/10",
+                    pathname === item.to && "bg-primary-foreground/10 font-bold",
+                  )}
                 >
                   {item.label}
                 </Link>
@@ -112,7 +119,7 @@ function SiteHeader() {
               <Link
                 to="/list-property"
                 onClick={() => setOpen(false)}
-                className="block rounded-lg px-2 py-2.5 text-[14px] hover:bg-primary-foreground/10"
+                className="block rounded-lg px-4 py-3 text-right text-[15px] hover:bg-primary-foreground/10"
               >
                 اعرض | اطلب عقارك
               </Link>
