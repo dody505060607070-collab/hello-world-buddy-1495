@@ -99,12 +99,20 @@ export const publicServicesQuery = queryOptions({
 export const publicSettingsQuery = queryOptions({
   queryKey: ["public-settings"],
   queryFn: async () => {
-    const { data, error } = await supabase
-      .from("app_settings")
-      .select("company_name, phone, whatsapp_number, email, address, about, stats, social_links")
-      .maybeSingle();
+    const { data, error } = await supabase.rpc("get_public_settings");
     if (error) throw error;
-    return data;
+    return data && typeof data === "object" && !Array.isArray(data)
+      ? data as {
+          company_name?: string;
+          phone?: string | null;
+          whatsapp_number?: string | null;
+          email?: string | null;
+          address?: string | null;
+          about?: string | null;
+          stats?: Record<string, unknown>;
+          social_links?: Record<string, unknown>;
+        }
+      : null;
   },
   staleTime: 300_000,
 });
