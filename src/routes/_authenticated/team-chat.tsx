@@ -464,7 +464,7 @@ function TeamChatPage() {
 }
 
 /** بطاقة ربط حساب الشات المشترك (قاعدة مثراء). */
-function MithraaSignIn({ fullName }: { fullName?: string }) {
+function MithraaSignIn({ fullName }: { fullName?: string | undefined }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
