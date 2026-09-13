@@ -3,7 +3,7 @@ import { MapPinned, Search } from "lucide-react";
 
 import desktopHero from "@/assets/home-hero-desktop.jpg";
 import desktopHeroVideo from "@/assets/hero-desktop.mp4.asset.json";
-import heroHeadline from "@/assets/hero-type/hero-headline.png";
+
 import mobileHero from "@/assets/home-hero-mobile.jpg";
 import mobileHeroVideo from "@/assets/hero-mobile.mp4.asset.json";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -73,16 +73,16 @@ export function HeroVideo({
 
       <div className="mx-auto flex min-h-[760px] w-full max-w-7xl flex-col justify-between px-4 pb-7 pt-14 text-center md:min-h-[760px] md:px-8 md:pb-10 md:pt-20 lg:min-h-[calc(100svh-74px)]">
         <div className="mx-auto flex max-w-5xl flex-1 flex-col items-center justify-center py-8 md:py-12">
-          <h1 className="animate-pop-in flex w-full justify-center">
-            <span className="sr-only">
-              خبرةٌ محلية.. وقرارٌ عقاري أوضح — الرشودي للعقارات — تعرف بريدة.. ونفهم العقار
+          <h1 className="animate-pop-in flex w-full flex-col items-center gap-1 font-hero font-bold leading-none md:gap-2">
+            <span className="text-[13px] tracking-wide text-primary-foreground/80 sm:text-[15px] md:text-[19px]">
+              خبرةٌ محلية.. وقرارٌ عقاري أوضح
             </span>
-            <img
-              src={heroHeadline}
-              alt=""
-              aria-hidden
-              className="hero-type-image h-auto w-full max-w-[340px] object-contain sm:max-w-[520px] md:max-w-[760px] lg:max-w-[900px]"
-            />
+            <span className="hero-title-shadow mt-1 text-[42px] text-primary-foreground sm:text-[64px] md:mt-2 md:text-[92px] lg:text-[110px]">
+              الرشودي للعقارات
+            </span>
+            <span className="hero-accent-text mt-1 text-[22px] sm:text-[30px] md:mt-2 md:text-[44px] lg:text-[52px]">
+              تعرف بريدة.. ونفهم العقار
+            </span>
           </h1>
           <p className="animate-pop-in mt-5 max-w-4xl text-[15px] font-medium leading-8 text-primary-foreground/85 sm:text-[17px] md:mt-7 md:text-[22px] md:leading-10">
             نسمع احتياجك، ونرشح لك الأنسب للبيع أو الإيجار، ونمشي معك حتى اكتمال الصفقة بخبرة تمتد لأكثر من 8 سنوات.
