@@ -48,7 +48,7 @@ const EMOJIS = ["👍", "🙏", "🔥", "✅", "❤️", "😀", "😅", "🎉",
 
 function TeamChatPage() {
   const qc = useQueryClient();
-  const { userId, isSuperAdmin } = useCurrentUser();
+  const { userId, isSuperAdmin, profile } = useCurrentUser();
   const { mithraaUser, ready } = useMithraaSession();
   const chatUserId = mithraaUser?.id;
   const [activeChannel, setActiveChannel] = useState<"rashoudi" | "shared">("rashoudi");
@@ -238,7 +238,7 @@ function TeamChatPage() {
         stats={[{ value: String(all.length), label: "رسالة" }]}
       />
 
-      {ready && !chatUserId ? <MithraaSignIn /> : null}
+      {ready && !chatUserId ? <MithraaSignIn fullName={profile?.full_name} /> : null}
 
       <div className="surface-card flex h-[calc(100dvh-15rem)] min-h-[560px] flex-col overflow-hidden">
         <nav className="flex items-center gap-2 overflow-x-auto border-b border-border p-3">
