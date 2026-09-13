@@ -279,8 +279,8 @@ function RemindersPage() {
               />
             </Field>
             <Field label="معاينة الرسالة كما تصل للعميل">
-              <div className="min-h-[120px] rounded-xl bg-[#ece5dd] p-3">
-                <div className="ms-auto max-w-[92%] whitespace-pre-wrap rounded-xl bg-[#dcf8c6] p-3 text-[13px] leading-6 text-[#111b21] shadow-sm">
+              <div className="min-h-[120px] rounded-xl bg-whatsapp-preview p-3">
+                <div className="ms-auto max-w-[92%] whitespace-pre-wrap rounded-xl bg-whatsapp-bubble p-3 text-[13px] leading-6 text-whatsapp-foreground shadow-sm">
                   {body.trim() || "اكتب نص الرسالة أو اختر قالبًا جاهزًا لتظهر المعاينة هنا."}
                 </div>
               </div>

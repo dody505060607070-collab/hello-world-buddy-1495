@@ -85,13 +85,14 @@ function errorMessage(error: unknown, fallback: string) {
 
 function ReservationsPage() {
   const { newReservation } = Route.useSearch();
-  const { userId, can } = useCurrentUser();
+  const { userId, roles, isSuperAdmin, loading: authLoading } = useCurrentUser();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [open, setOpen] = useState(newReservation);
   const [form, setForm] = useState(emptyForm);
-  const canView = can("reservations", "view");
-  const canBook = can("reservations", "book");
+  const isStaff = isSuperAdmin || roles.includes("employee");
+  const canView = isStaff;
+  const canBook = isStaff;
 
   useEffect(() => {
     if (userId && !form.employee_id) setForm((current) => ({ ...current, employee_id: userId }));
@@ -125,13 +126,19 @@ function ReservationsPage() {
     queryKey: ["reservation-options"],
     enabled: canBook,
     queryFn: async () => {
-      const [properties, staff, contacts] = await Promise.all([
+      const [properties, staff, contacts, activeReservations] = await Promise.all([
         supabase.from("properties").select("id,name,code").eq("status", "available").order("name"),
         supabase.from("profiles").select("id,full_name").eq("is_active", true).order("full_name"),
         supabase.from("contacts").select("id,full_name").order("full_name").limit(500),
+        supabase.from("reservations").select("property_id").in("status", ["hold", "active"]).gt("ends_at", new Date().toISOString()),
       ]);
-      for (const result of [properties, staff, contacts]) if (result.error) throw result.error;
-      return { properties: properties.data ?? [], staff: staff.data ?? [], contacts: contacts.data ?? [] };
+      for (const result of [properties, staff, contacts, activeReservations]) if (result.error) throw result.error;
+      const reservedPropertyIds = new Set((activeReservations.data ?? []).map((row) => row.property_id));
+      return {
+        properties: (properties.data ?? []).filter((property) => !reservedPropertyIds.has(property.id)),
+        staff: staff.data ?? [],
+        contacts: contacts.data ?? [],
+      };
     },
   });
 
@@ -184,6 +191,15 @@ function ReservationsPage() {
     },
     onError: (error) => toast.error(errorMessage(error, "تعذّر تحديث الحجز")),
   });
+
+  if (authLoading) {
+    return (
+      <div className="surface-card grid place-items-center gap-2 px-6 py-16 text-center">
+        <Loader2 className="size-6 animate-spin text-primary" />
+        <p className="text-[13px] text-muted-foreground">جاري التحقق من الصلاحية…</p>
+      </div>
+    );
+  }
 
   if (!canView) {
     return <EmptyState text="لا تملك صلاحية عرض الحجوزات" hint="اطلب من مدير النظام منحك صلاحية الحجوزات." />;

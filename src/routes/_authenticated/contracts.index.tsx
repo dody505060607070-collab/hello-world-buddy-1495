@@ -313,8 +313,11 @@ function ContractsPage() {
       />
 
       {tab === "imports" ? (
-        <DataTable<ImportRow>
+        <div className="space-y-3">
+          <StatusLegend />
+          <DataTable<ImportRow>
           rows={imports.data ?? []}
+          rowClassName={(r) => toneRowClass[rowTone(r.status)]}
           searchPlaceholder="بحث باسم الملف"
           emptyState={
             <EmptyState
@@ -347,7 +350,8 @@ function ContractsPage() {
             { header: "تحذيرات", cell: (r) => (r.warnings?.length ?? 0) || "—" },
             { header: "التاريخ", sortable: true, value: (r) => r.created_at, cell: (r) => formatDate(r.created_at) },
           ]}
-        />
+          />
+        </div>
       ) : isLoading ? (
         <div className="surface-card grid place-items-center gap-2 px-6 py-16 text-center">
           <Loader2 className="size-6 animate-spin text-primary" />
