@@ -104,9 +104,9 @@ function AuthPage() {
   return (
     <main className="min-h-screen bg-muted/40 p-4 sm:grid sm:place-items-center sm:p-8" dir="rtl">
       <div className="relative mx-auto w-full max-w-5xl">
-        <div className="absolute inset-y-6 -start-3 hidden w-24 rounded-[2rem] bg-primary/80 lg:block" />
+        <div className="absolute inset-y-6 -end-3 hidden w-24 rounded-[2rem] bg-primary/80 lg:block" />
         <div className="relative grid overflow-hidden rounded-[1.75rem] bg-card shadow-2xl lg:grid-cols-2">
-          <aside className="relative flex flex-col justify-between overflow-hidden bg-primary p-8 text-primary-foreground sm:p-10">
+          <aside className="relative flex flex-col justify-between lg:order-2 overflow-hidden bg-primary p-8 text-primary-foreground sm:p-10">
             <div className="pointer-events-none absolute -bottom-24 -start-20 size-80 rounded-full border border-primary-foreground/10" />
             <div className="pointer-events-none absolute -bottom-40 -start-10 size-96 rounded-full border border-primary-foreground/10" />
 
