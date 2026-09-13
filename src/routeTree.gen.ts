@@ -46,6 +46,7 @@ import { Route as AuthenticatedRemindersRouteImport } from './routes/_authentica
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedRequestsRouteImport } from './routes/_authenticated/requests'
 import { Route as AuthenticatedReservationsRouteImport } from './routes/_authenticated/reservations'
+import { Route as AuthenticatedReserveRouteImport } from './routes/_authenticated/reserve'
 import { Route as AuthenticatedRolesRouteImport } from './routes/_authenticated/roles'
 import { Route as AuthenticatedServicesRouteImport } from './routes/_authenticated/services'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
@@ -262,6 +263,11 @@ const AuthenticatedReservationsRoute =
     path: '/reservations',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedReserveRoute = AuthenticatedReserveRouteImport.update({
+  id: '/reserve',
+  path: '/reserve',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedRolesRoute = AuthenticatedRolesRouteImport.update({
   id: '/roles',
   path: '/roles',
@@ -430,6 +436,7 @@ export interface FileRoutesByFullPath {
   '/reports': typeof AuthenticatedReportsRoute
   '/requests': typeof AuthenticatedRequestsRoute
   '/reservations': typeof AuthenticatedReservationsRoute
+  '/reserve': typeof AuthenticatedReserveRoute
   '/roles': typeof AuthenticatedRolesRoute
   '/services': typeof AuthenticatedServicesRoute
   '/settings': typeof AuthenticatedSettingsRoute
@@ -491,6 +498,7 @@ export interface FileRoutesByTo {
   '/reports': typeof AuthenticatedReportsRoute
   '/requests': typeof AuthenticatedRequestsRoute
   '/reservations': typeof AuthenticatedReservationsRoute
+  '/reserve': typeof AuthenticatedReserveRoute
   '/roles': typeof AuthenticatedRolesRoute
   '/services': typeof AuthenticatedServicesRoute
   '/settings': typeof AuthenticatedSettingsRoute
@@ -555,6 +563,7 @@ export interface FileRoutesById {
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/requests': typeof AuthenticatedRequestsRoute
   '/_authenticated/reservations': typeof AuthenticatedReservationsRoute
+  '/_authenticated/reserve': typeof AuthenticatedReserveRoute
   '/_authenticated/roles': typeof AuthenticatedRolesRoute
   '/_authenticated/services': typeof AuthenticatedServicesRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
@@ -619,6 +628,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/requests'
     | '/reservations'
+    | '/reserve'
     | '/roles'
     | '/services'
     | '/settings'
@@ -680,6 +690,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/requests'
     | '/reservations'
+    | '/reserve'
     | '/roles'
     | '/services'
     | '/settings'
@@ -743,6 +754,7 @@ export interface FileRouteTypes {
     | '/_authenticated/reports'
     | '/_authenticated/requests'
     | '/_authenticated/reservations'
+    | '/_authenticated/reserve'
     | '/_authenticated/roles'
     | '/_authenticated/services'
     | '/_authenticated/settings'
@@ -1052,6 +1064,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedReservationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/reserve': {
+      id: '/_authenticated/reserve'
+      path: '/reserve'
+      fullPath: '/reserve'
+      preLoaderRoute: typeof AuthenticatedReserveRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/roles': {
       id: '/_authenticated/roles'
       path: '/roles'
@@ -1260,6 +1279,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
   AuthenticatedRequestsRoute: typeof AuthenticatedRequestsRoute
   AuthenticatedReservationsRoute: typeof AuthenticatedReservationsRoute
+  AuthenticatedReserveRoute: typeof AuthenticatedReserveRoute
   AuthenticatedRolesRoute: typeof AuthenticatedRolesRoute
   AuthenticatedServicesRoute: typeof AuthenticatedServicesRoute
   AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
@@ -1299,6 +1319,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
   AuthenticatedRequestsRoute: AuthenticatedRequestsRoute,
   AuthenticatedReservationsRoute: AuthenticatedReservationsRoute,
+  AuthenticatedReserveRoute: AuthenticatedReserveRoute,
   AuthenticatedRolesRoute: AuthenticatedRolesRoute,
   AuthenticatedServicesRoute: AuthenticatedServicesRoute,
   AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,

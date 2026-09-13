@@ -9,8 +9,10 @@ import { DataTable } from "@/components/kit/DataTable";
 import { EmptyState, formatDate, useTableRows } from "@/components/kit/LiveTable";
 import { Field, PrimaryButton, inputClass, textareaClass } from "@/components/kit/Modal";
 import { PageHero } from "@/components/kit/PageHero";
+import { StatusLegend } from "@/components/kit/StatusLegend";
 import { supabase } from "@/integrations/supabase/client";
 import { followupStatusLabels } from "@/lib/labels";
+import { rowTone, toneRowClass } from "@/lib/status-tone";
 import { sendWhatsAppMessage } from "@/lib/whatsapp.functions";
 
 type FollowupRow = {
@@ -277,8 +279,8 @@ function RemindersPage() {
               />
             </Field>
             <Field label="معاينة الرسالة كما تصل للعميل">
-              <div className="min-h-[120px] rounded-xl bg-[#ece5dd] p-3">
-                <div className="ms-auto max-w-[92%] whitespace-pre-wrap rounded-xl bg-[#dcf8c6] p-3 text-[13px] leading-6 text-[#111b21] shadow-sm">
+              <div className="min-h-[120px] rounded-xl bg-whatsapp-preview p-3">
+                <div className="ms-auto max-w-[92%] whitespace-pre-wrap rounded-xl bg-whatsapp-bubble p-3 text-[13px] leading-6 text-whatsapp-foreground shadow-sm">
                   {body.trim() || "اكتب نص الرسالة أو اختر قالبًا جاهزًا لتظهر المعاينة هنا."}
                 </div>
               </div>
@@ -327,8 +329,10 @@ function RemindersPage() {
           <BellRing className="size-4 text-primary" />
           <h2 className="text-[14px] font-bold text-foreground">المتابعات النشطة</h2>
         </div>
+        <StatusLegend />
         <DataTable<FollowupRow>
           rows={rows}
+          rowClassName={(r) => toneRowClass[rowTone(r.status, r.next_send_at)]}
           draggableRows
           dragLabel="تذكير"
           searchPlaceholder="بحث بالمستلم أو رقم العقد"
@@ -360,17 +364,7 @@ function RemindersPage() {
             {
               header: "الحالة",
               cell: (r) => (
-                <Chip
-                  tone={
-                    r.status === "sent"
-                      ? "success"
-                      : r.status === "failed"
-                        ? "danger"
-                        : r.status === "pending"
-                          ? "warning"
-                          : "neutral"
-                  }
-                >
+                <Chip tone={rowTone(r.status, r.next_send_at)}>
                   {followupStatusLabels[r.status] ?? r.status}
                 </Chip>
               ),
@@ -410,8 +404,10 @@ function RemindersPage() {
           <MessageSquare className="size-4 text-primary" />
           <h2 className="text-[14px] font-bold text-foreground">سجل التواصل</h2>
         </div>
+        <StatusLegend />
         <DataTable<LogRow>
           rows={log.data ?? []}
+          rowClassName={(r) => toneRowClass[rowTone(r.result)]}
           searchPlaceholder="بحث في سجل الرسائل"
           emptyState={
             <EmptyState
@@ -426,9 +422,7 @@ function RemindersPage() {
             {
               header: "النتيجة",
               cell: (r) => (
-                <Chip
-                  tone={r.result === "sent" ? "success" : r.result === "failed" ? "danger" : "warning"}
-                >
+                <Chip tone={rowTone(r.result)}>
                   {r.result === "sent" ? "تم الإرسال" : r.result === "failed" ? "تعذّر الإرسال" : "في الانتظار"}
                 </Chip>
               ),

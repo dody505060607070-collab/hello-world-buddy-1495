@@ -7,8 +7,10 @@ import { Chip } from "@/components/kit/Chip";
 import { DataTable } from "@/components/kit/DataTable";
 import { EmptyState, formatCurrency, formatDate } from "@/components/kit/LiveTable";
 import { PageHero } from "@/components/kit/PageHero";
+import { StatusLegend } from "@/components/kit/StatusLegend";
 import { supabase } from "@/integrations/supabase/client";
 import { invoiceStatusLabels } from "@/lib/labels";
+import { rowTone, toneRowClass } from "@/lib/status-tone";
 
 type Row = {
   id: string;
@@ -63,16 +65,16 @@ function InvoicesPage() {
       <nav className="text-[12.5px] text-muted-foreground">الفواتير &nbsp; / &nbsp; القائمة</nav>
     </div>
     {list.isLoading ? <div className="surface-card grid place-items-center py-20"><Loader2 className="size-6 animate-spin text-primary" /></div> :
-      <DataTable<Row> rows={rows} onRowClick={(r) => navigate({ to: "/invoices/$invoiceId", params: { invoiceId: r.id } })} showColumnsButton selectable dragLabel="فاتورة" exportFileName="قائمة الفواتير" searchPlaceholder="بحث برقم الفاتورة أو المالك" emptyState={<EmptyState text="لا توجد فواتير" hint="أنشئ فاتورة جديدة لتظهر هنا مع حالة السداد." />} columns={[
+      <div className="space-y-3"><StatusLegend /><DataTable<Row> rows={rows} rowClassName={(r) => toneRowClass[rowTone(r.status, r.due_date)]} onRowClick={(r) => navigate({ to: "/invoices/$invoiceId", params: { invoiceId: r.id } })} showColumnsButton selectable dragLabel="فاتورة" exportFileName="قائمة الفواتير" searchPlaceholder="بحث برقم الفاتورة أو المالك" emptyState={<EmptyState text="لا توجد فواتير" hint="أنشئ فاتورة جديدة لتظهر هنا مع حالة السداد." />} columns={[
         { header: "رقم الفاتورة", sortable: true, value: (r) => r.invoice_number, cell: (r) => <Link to="/invoices/$invoiceId" params={{ invoiceId: r.id }} dir="ltr" className="font-bold text-primary hover:underline">{r.invoice_number}</Link> },
         { header: "المالك", value: (r) => r.contact?.full_name, cell: (r) => r.contact?.full_name ?? "—" },
         { header: "التاريخ", sortable: true, value: (r) => r.issue_date, cell: (r) => formatDate(r.issue_date) },
         { header: "الاستحقاق", sortable: true, value: (r) => r.due_date, cell: (r) => formatDate(r.due_date) },
-        { header: "الحالة", value: (r) => invoiceStatusLabels[r.status] ?? r.status, cell: (r) => <Chip tone={r.status === "paid" ? "success" : r.status === "overdue" ? "danger" : r.status === "partial" ? "warning" : "neutral"}>{invoiceStatusLabels[r.status] ?? r.status}</Chip> },
+        { header: "الحالة", value: (r) => invoiceStatusLabels[r.status] ?? r.status, cell: (r) => <Chip tone={rowTone(r.status, r.due_date)}>{invoiceStatusLabels[r.status] ?? r.status}</Chip> },
         { header: "قبل الضريبة", sortable: true, value: (r) => r.subtotal, cell: (r) => formatCurrency(r.subtotal) },
         { header: "الضريبة", sortable: true, value: (r) => r.vat_amount, cell: (r) => formatCurrency(r.vat_amount) },
         { header: "الإجمالي", sortable: true, value: (r) => r.total, cell: (r) => <strong>{formatCurrency(r.total)}</strong> },
         { header: "إجراءات", cell: (r) => <div className="flex items-center gap-1"><Link to="/invoices/$invoiceId" params={{ invoiceId: r.id }} className="grid size-8 place-items-center rounded-lg text-muted-foreground hover:bg-muted hover:text-primary" aria-label="عرض الفاتورة" title="عرض وتسجيل دفعة"><Eye className="size-4" /></Link><Link to="/invoice-form" search={{ id: r.id, ownerId: "" }} className="grid size-8 place-items-center rounded-lg text-muted-foreground hover:bg-muted hover:text-primary" aria-label="تعديل الفاتورة" title="تعديل"><Pencil className="size-4" /></Link></div> },
-      ]} />}
+      ]} /></div>}
   </>;
 }

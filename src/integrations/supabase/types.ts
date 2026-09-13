@@ -2349,6 +2349,9 @@ export type Database = {
           cancelled_at: string | null
           cancelled_by: string | null
           contact_id: string | null
+          contract_id: string | null
+          converted_at: string | null
+          converted_by: string | null
           created_at: string
           created_by: string | null
           employee_id: string | null
@@ -2366,6 +2369,9 @@ export type Database = {
           cancelled_at?: string | null
           cancelled_by?: string | null
           contact_id?: string | null
+          contract_id?: string | null
+          converted_at?: string | null
+          converted_by?: string | null
           created_at?: string
           created_by?: string | null
           employee_id?: string | null
@@ -2383,6 +2389,9 @@ export type Database = {
           cancelled_at?: string | null
           cancelled_by?: string | null
           contact_id?: string | null
+          contract_id?: string | null
+          converted_at?: string | null
+          converted_by?: string | null
           created_at?: string
           created_by?: string | null
           employee_id?: string | null
@@ -2402,6 +2411,13 @@ export type Database = {
             columns: ["contact_id"]
             isOneToOne: false
             referencedRelation: "contacts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reservations_contract_id_fkey"
+            columns: ["contract_id"]
+            isOneToOne: false
+            referencedRelation: "contracts"
             referencedColumns: ["id"]
           },
           {
@@ -2983,6 +2999,104 @@ export type Database = {
       can_view_activity: {
         Args: { _activity_id: string; _user_id: string }
         Returns: boolean
+      }
+      cancel_reservation: {
+        Args: { _reservation_id: string }
+        Returns: {
+          cancelled_at: string | null
+          cancelled_by: string | null
+          contact_id: string | null
+          contract_id: string | null
+          converted_at: string | null
+          converted_by: string | null
+          created_at: string
+          created_by: string | null
+          employee_id: string | null
+          ends_at: string
+          extended_count: number
+          id: string
+          notes: string | null
+          property_id: string | null
+          starts_at: string
+          status: string
+          unit_id: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "reservations"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      convert_reservation_to_contract: {
+        Args: { _reservation_id: string }
+        Returns: string
+      }
+      create_reservation: {
+        Args: {
+          _contact_id?: string
+          _duration_hours?: number
+          _employee_id: string
+          _notes?: string
+          _property_id: string
+        }
+        Returns: {
+          cancelled_at: string | null
+          cancelled_by: string | null
+          contact_id: string | null
+          contract_id: string | null
+          converted_at: string | null
+          converted_by: string | null
+          created_at: string
+          created_by: string | null
+          employee_id: string | null
+          ends_at: string
+          extended_count: number
+          id: string
+          notes: string | null
+          property_id: string | null
+          starts_at: string
+          status: string
+          unit_id: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "reservations"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      expire_reservations: { Args: never; Returns: number }
+      extend_reservation: {
+        Args: { _reservation_id: string }
+        Returns: {
+          cancelled_at: string | null
+          cancelled_by: string | null
+          contact_id: string | null
+          contract_id: string | null
+          converted_at: string | null
+          converted_by: string | null
+          created_at: string
+          created_by: string | null
+          employee_id: string | null
+          ends_at: string
+          extended_count: number
+          id: string
+          notes: string | null
+          property_id: string | null
+          starts_at: string
+          status: string
+          unit_id: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "reservations"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       finish_automation_lease: {
         Args: { _error?: string; _job_name: string }

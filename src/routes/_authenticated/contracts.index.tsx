@@ -17,11 +17,13 @@ import {
 } from "@/components/kit/Modal";
 import { PageHero } from "@/components/kit/PageHero";
 import { Pills } from "@/components/kit/Pills";
+import { StatusLegend } from "@/components/kit/StatusLegend";
 import { supabase } from "@/integrations/supabase/client";
 import { analyzeContractPdf } from "@/lib/ai.functions";
 import { finalizeContractImport } from "@/lib/contracts.functions";
 import { ensureClientAccount } from "@/lib/portal.functions";
 import { contractStatusLabels, importStatusLabels } from "@/lib/labels";
+import { rowTone, toneRowClass } from "@/lib/status-tone";
 
 type Row = {
   id: string;
@@ -311,8 +313,11 @@ function ContractsPage() {
       />
 
       {tab === "imports" ? (
-        <DataTable<ImportRow>
+        <div className="space-y-3">
+          <StatusLegend />
+          <DataTable<ImportRow>
           rows={imports.data ?? []}
+          rowClassName={(r) => toneRowClass[rowTone(r.status)]}
           searchPlaceholder="بحث باسم الملف"
           emptyState={
             <EmptyState
@@ -345,15 +350,19 @@ function ContractsPage() {
             { header: "تحذيرات", cell: (r) => (r.warnings?.length ?? 0) || "—" },
             { header: "التاريخ", sortable: true, value: (r) => r.created_at, cell: (r) => formatDate(r.created_at) },
           ]}
-        />
+          />
+        </div>
       ) : isLoading ? (
         <div className="surface-card grid place-items-center gap-2 px-6 py-16 text-center">
           <Loader2 className="size-6 animate-spin text-primary" />
           <p className="text-[13px] text-muted-foreground">جاري تحميل العقود…</p>
         </div>
       ) : (
-        <DataTable<Row>
+        <div className="space-y-3">
+          <StatusLegend />
+          <DataTable<Row>
           rows={filtered}
+          rowClassName={(r) => toneRowClass[rowTone(r.status, r.end_date)]}
           onRowClick={(r) => navigate({ to: "/contracts/$contractId", params: { contractId: r.id } })}
           draggableRows
           dragLabel="عقد"
@@ -404,15 +413,7 @@ function ContractsPage() {
             {
               header: "الحالة",
               cell: (r) => (
-                <Chip
-                  tone={
-                    r.status === "active"
-                      ? "success"
-                      : r.status === "expired" || r.status === "terminated"
-                        ? "danger"
-                        : "warning"
-                  }
-                >
+                <Chip tone={rowTone(r.status, r.end_date)}>
                   {contractStatusLabels[r.status] ?? r.status}
                 </Chip>
               ),
@@ -451,7 +452,8 @@ function ContractsPage() {
               ),
             },
           ]}
-        />
+          />
+        </div>
       )}
 
       <Modal
