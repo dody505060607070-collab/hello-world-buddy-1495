@@ -161,8 +161,8 @@ export const sendWhatsAppMessage = createServerFn({ method: "POST" })
     (input: unknown) =>
       z
         .object({
-          to: z.string().min(5),
-          body: z.string().min(1),
+          to: z.string().trim().regex(/^\+?[0-9\s()-]{8,20}$/),
+          body: z.string().trim().min(1).max(4000),
         })
         .parse(input),
   )

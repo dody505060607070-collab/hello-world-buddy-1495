@@ -11,8 +11,7 @@ export const Route = createFileRoute("/api/public/n8n")({
       // تشغيل دوري (cron كل ساعة): GET مع الترويسة X-Mithra-Token
       GET: async ({ request }) => {
         const { verifyAutomationToken } = await import("@/lib/automation.server");
-        const url = new URL(request.url);
-        const token = request.headers.get("x-mithra-token") ?? url.searchParams.get("token");
+        const token = request.headers.get("x-mithra-token");
         if (!(await verifyAutomationToken(token))) {
           return new Response(JSON.stringify({ ok: false, error: "unauthorized" }), {
             status: 401,
@@ -45,6 +44,8 @@ export const Route = createFileRoute("/api/public/n8n")({
 
         let body: Record<string, unknown>;
         try {
+          const length = Number(request.headers.get("content-length") ?? 0);
+          if (length > 100_000) return new Response(JSON.stringify({ ok: false, error: "payload too large" }), { status: 413, headers: { "Content-Type": "application/json" } });
           body = (await request.json()) as Record<string, unknown>;
         } catch {
           return new Response(JSON.stringify({ ok: false, error: "invalid json" }), {
@@ -70,7 +71,7 @@ export const Route = createFileRoute("/api/public/n8n")({
           if (action === "send_whatsapp") {
             const to = String(body["to"] ?? "");
             const text = String(body["body"] ?? "");
-            if (!to || !text) return json({ ok: false, error: "to/body مطلوبان" }, 400);
+            if (!/^\+?[0-9]{8,15}$/.test(to.replace(/[\s()-]/g, "")) || !text.trim() || text.length > 4000) return json({ ok: false, error: "بيانات الرسالة غير صالحة" }, 400);
             const { twilioSend } = await import("@/lib/whatsapp.functions");
             const result = await twilioSend({ to, body: text });
             await supabaseAdmin.from("automation_events").insert({
@@ -87,6 +88,7 @@ export const Route = createFileRoute("/api/public/n8n")({
             const title = String(body["title"] ?? "تنبيه من الأتمتة");
             const text = body["body"] ? String(body["body"]) : null;
             const link = body["link"] ? String(body["link"]) : null;
+            if (title.length > 160 || (text?.length ?? 0) > 2000 || (link?.length ?? 0) > 500 || (link && !link.startsWith("/"))) return json({ ok: false, error: "بيانات التنبيه غير صالحة" }, 400);
             const { data: staff } = await supabaseAdmin.from("user_roles").select("user_id");
             const ids = Array.from(new Set((staff ?? []).map((r) => r.user_id)));
             if (ids.length > 0) {
