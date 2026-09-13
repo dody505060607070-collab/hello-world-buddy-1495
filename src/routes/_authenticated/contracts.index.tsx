@@ -409,15 +409,7 @@ function ContractsPage() {
             {
               header: "الحالة",
               cell: (r) => (
-                <Chip
-                  tone={
-                    r.status === "active"
-                      ? "success"
-                      : r.status === "expired" || r.status === "terminated"
-                        ? "danger"
-                        : "warning"
-                  }
-                >
+                <Chip tone={rowTone(r.status, r.end_date)}>
                   {contractStatusLabels[r.status] ?? r.status}
                 </Chip>
               ),

@@ -70,7 +70,7 @@ function InvoicesPage() {
         { header: "المالك", value: (r) => r.contact?.full_name, cell: (r) => r.contact?.full_name ?? "—" },
         { header: "التاريخ", sortable: true, value: (r) => r.issue_date, cell: (r) => formatDate(r.issue_date) },
         { header: "الاستحقاق", sortable: true, value: (r) => r.due_date, cell: (r) => formatDate(r.due_date) },
-        { header: "الحالة", value: (r) => invoiceStatusLabels[r.status] ?? r.status, cell: (r) => <Chip tone={r.status === "paid" ? "success" : r.status === "overdue" ? "danger" : r.status === "partial" ? "warning" : "neutral"}>{invoiceStatusLabels[r.status] ?? r.status}</Chip> },
+        { header: "الحالة", value: (r) => invoiceStatusLabels[r.status] ?? r.status, cell: (r) => <Chip tone={rowTone(r.status, r.due_date)}>{invoiceStatusLabels[r.status] ?? r.status}</Chip> },
         { header: "قبل الضريبة", sortable: true, value: (r) => r.subtotal, cell: (r) => formatCurrency(r.subtotal) },
         { header: "الضريبة", sortable: true, value: (r) => r.vat_amount, cell: (r) => formatCurrency(r.vat_amount) },
         { header: "الإجمالي", sortable: true, value: (r) => r.total, cell: (r) => <strong>{formatCurrency(r.total)}</strong> },

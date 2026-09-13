@@ -27,13 +27,14 @@ export const createReservation = createServerFn({ method: "POST" })
       .parse(input),
   )
   .handler(async ({ context, data }) => {
-    const { data: reservation, error } = await context.supabase.rpc("create_reservation", {
+    const args = {
       _property_id: data.propertyId,
       _employee_id: data.employeeId,
-      _contact_id: data.contactId ?? undefined,
       _duration_hours: data.durationHours,
-      _notes: data.notes ?? undefined,
-    });
+      ...(data.contactId ? { _contact_id: data.contactId } : {}),
+      ...(data.notes ? { _notes: data.notes } : {}),
+    };
+    const { data: reservation, error } = await context.supabase.rpc("create_reservation", args);
     if (error) throw error;
     return reservation;
   });

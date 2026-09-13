@@ -31,9 +31,10 @@ export const toneDotClass: Record<Tone, string> = {
   neutral: "bg-border",
 };
 
-const DONE = ["completed", "done", "approved", "paid", "closed", "signed", "active"];
-const CANCELLED = ["cancelled", "canceled", "rejected", "expired", "archived", "closed_lost"];
-const OVERDUE = ["overdue", "late", "failed", "unpaid_overdue"];
+const DONE = ["completed", "done", "approved", "paid", "closed", "signed", "sent", "converted", "won"];
+const CANCELLED = ["cancelled", "canceled", "expired", "archived", "terminated", "stopped", "closed_lost"];
+const OVERDUE = ["overdue", "late", "failed", "rejected", "unpaid_overdue"];
+const ACTIVE = ["active", "hold", "new", "in_progress", "pending", "unpaid", "partial", "submitted", "draft"];
 
 function startOfDay(d: Date) {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
@@ -54,9 +55,10 @@ export function rowTone(status?: string | null, dueDate?: string | null): Tone {
     const today = startOfDay(new Date());
     if (!Number.isNaN(due)) {
       if (due < today) return "danger";
-      if (due === today) return "warning";
+      if (due <= today + 2 * 24 * 60 * 60 * 1000) return "warning";
     }
   }
+  if (ACTIVE.includes(s)) return "info";
   return "neutral";
 }
 
@@ -70,8 +72,9 @@ export function reservationTone(status?: string | null): Tone {
 }
 
 export const legendItems: { tone: Tone; label: string }[] = [
-  { tone: "danger", label: "متأخر" },
-  { tone: "warning", label: "مستحق اليوم" },
+  { tone: "danger", label: "متأخر / فشل" },
+  { tone: "warning", label: "اليوم / خلال يومين" },
   { tone: "success", label: "مكتمل / مدفوع" },
-  { tone: "muted", label: "ملغي" },
+  { tone: "info", label: "نشط / قيد التنفيذ" },
+  { tone: "muted", label: "ملغي / منتهي" },
 ];

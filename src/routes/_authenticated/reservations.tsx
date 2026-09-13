@@ -33,6 +33,7 @@ type Row = {
   property_id: string | null;
   employee_id: string | null;
   contact_id: string | null;
+  created_by: string | null;
   created_at: string;
   creator: { full_name: string } | null;
   properties: { name: string; code: string | null } | null;
@@ -58,6 +59,9 @@ const emptyForm = {
 };
 
 export const Route = createFileRoute("/_authenticated/reservations")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    newReservation: search["newReservation"] === true || search["newReservation"] === "true",
+  }),
   head: () => ({
     meta: [
       { title: "إدارة الحجوزات | الرشودي للعقارات" },
@@ -80,10 +84,11 @@ function errorMessage(error: unknown, fallback: string) {
 }
 
 function ReservationsPage() {
+  const { newReservation } = Route.useSearch();
   const { userId, can } = useCurrentUser();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(newReservation);
   const [form, setForm] = useState(emptyForm);
   const canView = can("reservations", "view");
   const canBook = can("reservations", "book");
@@ -96,14 +101,23 @@ function ReservationsPage() {
     queryKey: ["reservations"],
     enabled: canView,
     queryFn: async () => {
-      await expireReservations();
+      if (canBook) await expireReservations();
       const { data, error } = await supabase
         .from("reservations")
-        .select("id,status,starts_at,ends_at,extended_count,notes,property_id,employee_id,contact_id,created_at,creator:created_by(full_name),properties:property_id(name,code),employee:employee_id(full_name),contact:contact_id(full_name)")
+        .select("id,status,starts_at,ends_at,extended_count,notes,property_id,employee_id,contact_id,created_by,created_at,properties:property_id(name,code),employee:employee_id(full_name),contact:contact_id(full_name)")
         .order("created_at", { ascending: false })
         .limit(300);
       if (error) throw error;
-      return (data ?? []) as Row[];
+      const creatorIds = Array.from(new Set((data ?? []).map((row) => row.created_by).filter((id): id is string => Boolean(id))));
+      const creators = creatorIds.length
+        ? await supabase.from("profiles").select("id,full_name").in("id", creatorIds)
+        : { data: [], error: null };
+      if (creators.error) throw creators.error;
+      const creatorNames = new Map((creators.data ?? []).map((profile) => [profile.id, profile.full_name]));
+      return (data ?? []).map((row) => ({
+        ...row,
+        creator: row.created_by ? { full_name: creatorNames.get(row.created_by) ?? "—" } : null,
+      })) as Row[];
     },
   });
 

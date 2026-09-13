@@ -2,10 +2,12 @@ import { cn } from "@/lib/utils";
 import { toneBadgeClass, type Tone } from "@/lib/status-tone";
 import type { ReactNode } from "react";
 
-export type ChipTone = "neutral" | "warning" | "success" | "danger" | "primary" | "gold";
+export type ChipTone = Tone | "primary" | "gold";
 
 const toneMap: Record<ChipTone, Tone> = {
-  neutral: "muted",
+  neutral: "neutral",
+  muted: "muted",
+  info: "info",
   warning: "warning",
   success: "success",
   danger: "danger",

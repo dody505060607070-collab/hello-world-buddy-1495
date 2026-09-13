@@ -64,6 +64,13 @@
       "when": 1789260892325,
       "tag": "0008_harden_reservation_workflow",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1789261041676,
+      "tag": "0009_enforce_staff_reservation_actions",
+      "breakpoints": true
     }
   ]
 }

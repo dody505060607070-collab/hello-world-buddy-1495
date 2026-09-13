@@ -364,17 +364,7 @@ function RemindersPage() {
             {
               header: "الحالة",
               cell: (r) => (
-                <Chip
-                  tone={
-                    r.status === "sent"
-                      ? "success"
-                      : r.status === "failed"
-                        ? "danger"
-                        : r.status === "pending"
-                          ? "warning"
-                          : "neutral"
-                  }
-                >
+                <Chip tone={rowTone(r.status, r.next_send_at)}>
                   {followupStatusLabels[r.status] ?? r.status}
                 </Chip>
               ),
@@ -432,9 +422,7 @@ function RemindersPage() {
             {
               header: "النتيجة",
               cell: (r) => (
-                <Chip
-                  tone={r.result === "sent" ? "success" : r.result === "failed" ? "danger" : "warning"}
-                >
+                <Chip tone={rowTone(r.result)}>
                   {r.result === "sent" ? "تم الإرسال" : r.result === "failed" ? "تعذّر الإرسال" : "في الانتظار"}
                 </Chip>
               ),
