@@ -17,8 +17,10 @@ import {
 } from "@/components/kit/Modal";
 import { PageHero } from "@/components/kit/PageHero";
 import { Pills } from "@/components/kit/Pills";
+import { StatusLegend } from "@/components/kit/StatusLegend";
 import { supabase } from "@/integrations/supabase/client";
 import { priorityLabels, taskStatusLabels } from "@/lib/labels";
+import { rowTone, toneBadgeClass, toneRowClass } from "@/lib/status-tone";
 
 type Row = {
   id: string;
@@ -35,16 +37,6 @@ type Row = {
   location_lat: number | null;
   location_lng: number | null;
   created_at: string;
-};
-
-const STATUS_STYLE: Record<string, string> = {
-  new: "border-sky-300 bg-sky-50 text-sky-700",
-  in_progress: "border-amber-300 bg-amber-50 text-amber-800",
-  submitted: "border-violet-300 bg-violet-50 text-violet-700",
-  approved: "border-emerald-300 bg-emerald-50 text-emerald-700",
-  done: "border-emerald-300 bg-emerald-50 text-emerald-700",
-  rejected: "border-destructive/30 bg-destructive/10 text-destructive",
-  cancelled: "border-slate-300 bg-slate-100 text-slate-600",
 };
 
 export const Route = createFileRoute("/_authenticated/tasks")({
@@ -277,7 +269,9 @@ function TasksPage() {
           <p className="text-[13px] text-muted-foreground">جاري تحميل المهام…</p>
         </div>
       ) : (
-        <DataTable<Row>
+        <div className="space-y-3">
+          <StatusLegend />
+          <DataTable<Row>
           rows={filtered}
           onRowClick={(r) => navigate({ to: "/task-form", search: { id: r.id } })}
           selectable
@@ -285,13 +279,7 @@ function TasksPage() {
           draggableRows
           dragLabel="مهمة"
           searchPlaceholder="بحث بعنوان المهمة"
-          rowClassName={(r) =>
-            r.due_date != null &&
-            new Date(r.due_date) < new Date() &&
-            !["approved", "done", "cancelled"].includes(r.status)
-              ? "bg-destructive/5"
-              : undefined
-          }
+          rowClassName={(r) => toneRowClass[rowTone(r.status, r.due_date)]}
           emptyState={
             <EmptyState
               text="لا توجد مهام"
@@ -346,9 +334,7 @@ function TasksPage() {
                 <select
                   value={r.status}
                   onChange={(e) => changeStatus.mutate({ id: r.id, status: e.target.value })}
-                  className={`h-9 rounded-lg border px-2 text-[12.5px] font-semibold outline-none ${
-                    STATUS_STYLE[r.status] ?? "border-border bg-card text-foreground"
-                  }`}
+                  className={`h-9 rounded-lg border px-2 text-[12.5px] font-semibold outline-none ${toneBadgeClass[rowTone(r.status, r.due_date)]}`}
                   aria-label="حالة المهمة"
                 >
                   {statusOrder.map((s) => (
@@ -381,7 +367,8 @@ function TasksPage() {
               ),
             },
           ]}
-        />
+          />
+        </div>
       )}
 
       <Modal

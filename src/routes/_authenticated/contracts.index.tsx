@@ -17,11 +17,13 @@ import {
 } from "@/components/kit/Modal";
 import { PageHero } from "@/components/kit/PageHero";
 import { Pills } from "@/components/kit/Pills";
+import { StatusLegend } from "@/components/kit/StatusLegend";
 import { supabase } from "@/integrations/supabase/client";
 import { analyzeContractPdf } from "@/lib/ai.functions";
 import { finalizeContractImport } from "@/lib/contracts.functions";
 import { ensureClientAccount } from "@/lib/portal.functions";
 import { contractStatusLabels, importStatusLabels } from "@/lib/labels";
+import { rowTone, toneRowClass } from "@/lib/status-tone";
 
 type Row = {
   id: string;
@@ -352,8 +354,11 @@ function ContractsPage() {
           <p className="text-[13px] text-muted-foreground">جاري تحميل العقود…</p>
         </div>
       ) : (
-        <DataTable<Row>
+        <div className="space-y-3">
+          <StatusLegend />
+          <DataTable<Row>
           rows={filtered}
+          rowClassName={(r) => toneRowClass[rowTone(r.status, r.end_date)]}
           onRowClick={(r) => navigate({ to: "/contracts/$contractId", params: { contractId: r.id } })}
           draggableRows
           dragLabel="عقد"
@@ -451,7 +456,8 @@ function ContractsPage() {
               ),
             },
           ]}
-        />
+          />
+        </div>
       )}
 
       <Modal

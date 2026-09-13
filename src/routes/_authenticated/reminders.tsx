@@ -9,8 +9,10 @@ import { DataTable } from "@/components/kit/DataTable";
 import { EmptyState, formatDate, useTableRows } from "@/components/kit/LiveTable";
 import { Field, PrimaryButton, inputClass, textareaClass } from "@/components/kit/Modal";
 import { PageHero } from "@/components/kit/PageHero";
+import { StatusLegend } from "@/components/kit/StatusLegend";
 import { supabase } from "@/integrations/supabase/client";
 import { followupStatusLabels } from "@/lib/labels";
+import { rowTone, toneRowClass } from "@/lib/status-tone";
 import { sendWhatsAppMessage } from "@/lib/whatsapp.functions";
 
 type FollowupRow = {
@@ -327,8 +329,10 @@ function RemindersPage() {
           <BellRing className="size-4 text-primary" />
           <h2 className="text-[14px] font-bold text-foreground">المتابعات النشطة</h2>
         </div>
+        <StatusLegend />
         <DataTable<FollowupRow>
           rows={rows}
+          rowClassName={(r) => toneRowClass[rowTone(r.status, r.next_send_at)]}
           draggableRows
           dragLabel="تذكير"
           searchPlaceholder="بحث بالمستلم أو رقم العقد"
@@ -410,8 +414,10 @@ function RemindersPage() {
           <MessageSquare className="size-4 text-primary" />
           <h2 className="text-[14px] font-bold text-foreground">سجل التواصل</h2>
         </div>
+        <StatusLegend />
         <DataTable<LogRow>
           rows={log.data ?? []}
+          rowClassName={(r) => toneRowClass[rowTone(r.result)]}
           searchPlaceholder="بحث في سجل الرسائل"
           emptyState={
             <EmptyState

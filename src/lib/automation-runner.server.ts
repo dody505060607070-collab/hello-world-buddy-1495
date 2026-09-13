@@ -105,6 +105,9 @@ export async function runHourlyAutomation(): Promise<RunResult> {
 
   let runError: string | null = null;
   try {
+    const { error: expiryError } = await supabaseAdmin.rpc("expire_reservations");
+    if (expiryError) throw expiryError;
+
     const { data: due, error: dueError } = await supabaseAdmin
       .from("reminder_followups")
       .select(

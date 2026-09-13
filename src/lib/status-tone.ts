@@ -60,6 +60,15 @@ export function rowTone(status?: string | null, dueDate?: string | null): Tone {
   return "neutral";
 }
 
+/** Reservations stay primary while active and become muted after cancellation/expiry. */
+export function reservationTone(status?: string | null): Tone {
+  const s = (status ?? "").toLowerCase();
+  if (s === "converted") return "success";
+  if (s === "cancelled" || s === "expired") return "muted";
+  if (s === "hold" || s === "active") return "info";
+  return "neutral";
+}
+
 export const legendItems: { tone: Tone; label: string }[] = [
   { tone: "danger", label: "متأخر" },
   { tone: "warning", label: "مستحق اليوم" },
