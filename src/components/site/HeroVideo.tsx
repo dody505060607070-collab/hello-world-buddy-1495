@@ -3,9 +3,7 @@ import { MapPinned, Search } from "lucide-react";
 
 import desktopHero from "@/assets/home-hero-desktop.jpg";
 import desktopHeroVideo from "@/assets/hero-desktop.mp4.asset.json";
-import heroAccentType from "@/assets/hero-type/accent-hd.png";
-import heroEyebrowType from "@/assets/hero-type/eyebrow-hd.png";
-import heroTitleType from "@/assets/hero-type/title-hd.png";
+import heroHeadline from "@/assets/hero-type/hero-headline.png";
 import mobileHero from "@/assets/home-hero-mobile.jpg";
 import mobileHeroVideo from "@/assets/hero-mobile.mp4.asset.json";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -75,34 +73,17 @@ export function HeroVideo({
 
       <div className="mx-auto flex min-h-[760px] w-full max-w-7xl flex-col justify-between px-4 pb-7 pt-14 text-center md:min-h-[760px] md:px-8 md:pb-10 md:pt-20 lg:min-h-[calc(100svh-74px)]">
         <div className="mx-auto flex max-w-5xl flex-1 flex-col items-center justify-center py-8 md:py-12">
-          <div className="animate-pop-in flex w-full justify-center">
-            <p className="sr-only">خبرةٌ محلية.. وقرارٌ عقاري أوضح</p>
+          <h1 className="animate-pop-in flex w-full justify-center">
+            <span className="sr-only">
+              خبرةٌ محلية.. وقرارٌ عقاري أوضح — الرشودي للعقارات — نعرف بريدة.. ونفهم العقار
+            </span>
             <img
-              src={heroEyebrowType}
+              src={heroHeadline}
               alt=""
               aria-hidden
-              className="hero-type-image h-auto w-[290px] object-contain sm:w-[350px] md:w-[440px]"
-            />
-          </div>
-
-          <h1 className="animate-pop-in mt-7 flex w-full justify-center md:mt-9">
-            <span className="sr-only">الرشودي للعقارات</span>
-            <img
-              src={heroTitleType}
-              alt=""
-              aria-hidden
-              className="hero-type-image h-auto w-full max-w-[370px] object-contain sm:max-w-[520px] md:max-w-[700px] lg:max-w-[780px]"
+              className="hero-type-image h-auto w-full max-w-[340px] object-contain sm:max-w-[520px] md:max-w-[760px] lg:max-w-[900px]"
             />
           </h1>
-          <div className="animate-pop-in mt-3 flex w-full justify-center md:mt-4">
-            <p className="sr-only">نعرف بريدة.. ونفهم العقار</p>
-            <img
-              src={heroAccentType}
-              alt=""
-              aria-hidden
-              className="hero-type-image h-auto w-[265px] object-contain sm:w-[330px] md:w-[420px]"
-            />
-          </div>
           <p className="animate-pop-in mt-5 max-w-4xl text-[15px] font-medium leading-8 text-primary-foreground/85 sm:text-[17px] md:mt-7 md:text-[22px] md:leading-10">
             نسمع احتياجك، ونرشح لك الأنسب للبيع أو الإيجار، ونمشي معك حتى اكتمال الصفقة بخبرة تمتد لأكثر من 8 سنوات.
           </p>
