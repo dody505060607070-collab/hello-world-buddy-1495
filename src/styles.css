@@ -169,7 +169,7 @@
 
 .hero-type-image {
   image-rendering: auto;
-  filter: drop-shadow(0 2px 2px oklch(0.08 0.01 25 / 65%)) contrast(1.16) saturate(1.08);
+  filter: drop-shadow(0 2px 3px oklch(0.08 0.01 25 / 75%));
   transform: translateZ(0);
 }
 

@@ -3,7 +3,6 @@ import { Clock, Heart, Mail, MapPin, Menu, Phone, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 
 import footerImage from "@/assets/bg-footer.jpg";
-import logoAsset from "@/assets/rashudi-logo.webp.asset.json";
 import logoWhiteAsset from "@/assets/rashudi-logo-navbar.png.asset.json";
 import { FloatingActions, ScrollProgress } from "@/components/site/Chrome";
 import { AiWidget } from "@/components/site/AiWidget";
@@ -158,18 +157,7 @@ function SiteFooter() {
       <div aria-hidden className="absolute inset-0 -z-10 bg-primary/80" />
 
       <div className="mx-auto max-w-3xl px-4 py-16 text-center">
-        <Link to="/" aria-label="الرشودي للعقارات" className="inline-block">
-          <img
-            src={logoAsset.url}
-            alt="الرشودي للعقارات"
-            width={680}
-            height={510}
-            loading="lazy"
-            className="mx-auto h-24 w-auto md:h-32"
-          />
-        </Link>
-
-        <p className="mt-5 text-[14px] leading-7 text-white/85">
+        <p className="text-[14px] leading-7 text-white/85">
           الرشودي للعقارات — إيجار وبيع وإدارة أملاك في بريدة، القصيم.
         </p>
 
