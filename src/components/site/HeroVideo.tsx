@@ -3,6 +3,9 @@ import { MapPinned, Search } from "lucide-react";
 
 import desktopHero from "@/assets/home-hero-desktop.jpg";
 import desktopHeroVideo from "@/assets/hero-desktop.mp4.asset.json";
+import heroAccentType from "@/assets/hero-type/accent.png";
+import heroEyebrowType from "@/assets/hero-type/eyebrow.png";
+import heroTitleType from "@/assets/hero-type/title.png";
 import mobileHero from "@/assets/home-hero-mobile.jpg";
 import mobileHeroVideo from "@/assets/hero-mobile.mp4.asset.json";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -72,20 +75,34 @@ export function HeroVideo({
 
       <div className="mx-auto flex min-h-[760px] w-full max-w-7xl flex-col justify-between px-4 pb-7 pt-14 text-center md:min-h-[760px] md:px-8 md:pb-10 md:pt-20 lg:min-h-[calc(100svh-74px)]">
         <div className="mx-auto flex max-w-5xl flex-1 flex-col items-center justify-center py-8 md:py-12">
-          <div className="animate-pop-in flex w-full max-w-lg items-center justify-center gap-4 text-primary-foreground/90 md:max-w-2xl md:gap-6">
-            <span className="h-px flex-1 bg-primary-foreground/55" />
-            <p className="shrink-0 font-hero text-[12px] font-bold md:text-[17px]">
-              خبرةٌ محلية.. وقرارٌ عقاري أوضح
-            </p>
-            <span className="h-px flex-1 bg-primary-foreground/55" />
+          <div className="animate-pop-in flex w-full justify-center">
+            <p className="sr-only">خبرةٌ محلية.. وقرارٌ عقاري أوضح</p>
+            <img
+              src={heroEyebrowType}
+              alt=""
+              aria-hidden
+              className="h-auto w-[270px] object-contain sm:w-[330px] md:w-[420px]"
+            />
           </div>
 
-          <h1 className="animate-pop-in mt-7 whitespace-nowrap font-hero text-[37px] font-black leading-[1.45] text-primary-foreground drop-shadow-lg sm:text-[54px] md:mt-9 md:text-[70px] lg:text-[82px]">
-            الرشودي للعقارات
+          <h1 className="animate-pop-in mt-7 flex w-full justify-center md:mt-9">
+            <span className="sr-only">الرشودي للعقارات</span>
+            <img
+              src={heroTitleType}
+              alt=""
+              aria-hidden
+              className="h-auto w-full max-w-[350px] object-contain drop-shadow-lg sm:max-w-[500px] md:max-w-[680px] lg:max-w-[760px]"
+            />
           </h1>
-          <p className="animate-pop-in mt-1 font-hero text-[19px] font-extrabold leading-9 text-hero-accent md:mt-2 md:text-[27px] md:leading-10">
-            نعرف بريدة.. ونفهم العقار
-          </p>
+          <div className="animate-pop-in mt-3 flex w-full justify-center md:mt-4">
+            <p className="sr-only">نعرف بريدة.. ونفهم العقار</p>
+            <img
+              src={heroAccentType}
+              alt=""
+              aria-hidden
+              className="h-auto w-[245px] object-contain sm:w-[310px] md:w-[400px]"
+            />
+          </div>
           <p className="animate-pop-in mt-5 max-w-4xl text-[15px] font-medium leading-8 text-primary-foreground/85 sm:text-[17px] md:mt-7 md:text-[22px] md:leading-10">
             نسمع احتياجك، ونرشح لك الأنسب للبيع أو الإيجار، ونمشي معك حتى اكتمال الصفقة بخبرة تمتد لأكثر من 8 سنوات.
           </p>
