@@ -46,12 +46,21 @@ export function HeroVideo({
         loop
         playsInline
         preload="metadata"
+        poster={mobileHero}
+        src={mobileHeroVideo.url}
+        className="absolute inset-0 -z-20 size-full object-cover object-center md:hidden"
+      />
+      <video
+        aria-hidden
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
         poster={desktopHero}
-        className="absolute inset-0 -z-20 size-full object-cover object-center"
-      >
-        <source media="(max-width: 767px)" src={mobileHeroVideo.url} type="video/mp4" />
-        <source src={desktopHeroVideo.url} type="video/mp4" />
-      </video>
+        src={desktopHeroVideo.url}
+        className="absolute inset-0 -z-20 hidden size-full object-cover object-center md:block"
+      />
       <picture aria-hidden className="pointer-events-none absolute inset-0 -z-30">
         <source media="(max-width: 767px)" srcSet={mobileHero} />
         <img src={desktopHero} alt="" className="size-full object-cover object-center" />
