@@ -80,7 +80,7 @@ export function HeroVideo({
             <span className="hero-title-shadow mt-1 text-[42px] text-primary-foreground sm:text-[64px] md:mt-2 md:text-[92px] lg:text-[110px]">
               الرشودي للعقارات
             </span>
-            <span className="hero-title-shadow mt-1 text-[22px] text-primary sm:text-[30px] md:mt-2 md:text-[44px] lg:text-[52px]">
+            <span className="hero-accent-text mt-1 text-[22px] sm:text-[30px] md:mt-2 md:text-[44px] lg:text-[52px]">
               تعرف بريدة.. ونفهم العقار
             </span>
           </h1>

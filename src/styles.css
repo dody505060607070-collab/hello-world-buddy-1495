@@ -167,10 +167,13 @@
   --map-sale: oklch(0.68 0.015 250);
 }
 
-.hero-type-image {
-  image-rendering: auto;
-  filter: drop-shadow(0 3px 10px oklch(0.08 0.01 25 / 55%));
-  transform: translateZ(0);
+.hero-title-shadow {
+  text-shadow: 0 3px 14px oklch(0.08 0.01 25 / 60%);
+}
+
+.hero-accent-text {
+  color: var(--hero-accent);
+  text-shadow: 0 3px 14px oklch(0.08 0.01 25 / 60%);
 }
 
 @layer base {
