@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "b620caae-8576-43f6-a186-17d9dba54dcc",
-  "project_id": "2e74975c-3d16-4b5e-92ba-a03578d5022c",
-  "url": "/__l5e/assets-v1/b620caae-8576-43f6-a186-17d9dba54dcc/rashudi-logo.webp",
-  "r2_key": "a/v1/2e74975c-3d16-4b5e-92ba-a03578d5022c/b620caae-8576-43f6-a186-17d9dba54dcc/rashudi-logo.webp",
-  "original_filename": "rashudi-logo.webp",
-  "size": 172832,
   "content_type": "image/webp",
-  "created_at": "2026-09-12T20:24:53Z"
+  "created_at": "2026-09-12T20:24:53Z",
+  "original_filename": "rashudi-logo.webp",
+  "project_id": "6ff4bc29-57e0-4997-b2e5-adc9be3458ac",
+  "r2_key": "a/v1/6ff4bc29-57e0-4997-b2e5-adc9be3458ac/b620caae-8576-43f6-a186-17d9dba54dcc/rashudi-logo.webp",
+  "size": 172832,
+  "url": "/__l5e/assets-v1/b620caae-8576-43f6-a186-17d9dba54dcc/rashudi-logo.webp",
+  "version": 1
 }
